@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import CarousalImage from "../../components/Users/CarousalImage";
 import CarousalContent from "../../components/Users/CarousalContent";
 import CarouselButton from "../../components/Users/CarouselButton";
 import defBanner from "../../assets/images/slide-02.jpg";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const [banners, setBanners] = useState([]);
 
   useEffect(() => {

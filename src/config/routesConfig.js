@@ -15,6 +15,7 @@ export const userRoutesToCheck = [
     "/become-laborer-form",
     "/account",
     "/profile",
+    "/edit-profile",
     "/manage-subscription",
     "/notifications",
     /^\/notifications\/[\w-]+?$/,

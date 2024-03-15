@@ -3,8 +3,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signupSchema } from "../../../validations/userValidations/signUpSchema";
-import { setUserData } from "../../../redux/slices/userSlice";
-import { userSignUp } from "../../../api/shared/auth";
 import handleInputChange from "../../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
@@ -40,13 +38,7 @@ const SignUp = () => {
             const response =await axios.post(`http://localhost:3000/api/user/register`, formData);
             console.log(response.data.message);
 
-            if (response.data.message === "User already exists.") {
-                // User already exists, handle the error
-                setServerResponse({ message:"User already exists." });
-            } else {
-                // Signup successful
-                navigate('/otp');
-            }
+            navigate(`/verify-otp?purpose=signup&email=${formData.email}`);
 
         } catch (error) {
             handleFormErrors(error, setErrors, setServerResponse);

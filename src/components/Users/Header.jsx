@@ -12,12 +12,12 @@ const Header = () => {
     <header className="bg-gray-800 py-4 px-6 flex justify-between items-center">
       <h1 className="text-white text-2xl font-bold">MBooking</h1>
       <div className="hidden md:flex gap-6 items-center">
-        <NavLink to="/dashboard" className="text-white hover:text-gray-300">Home</NavLink>
+        <NavLink to="/home" className="text-white hover:text-gray-300">Home</NavLink>
         <NavLink to="/theaters" className="text-white hover:text-gray-300">Shows</NavLink>
         <NavLink to="/users" className="text-white hover:text-gray-300">Users</NavLink>
         <NavLink to="/banner" className="text-white hover:text-gray-300">Banner</NavLink>
         {/* Circle Icon */}
-        <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+        <NavLink to="/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>
       <div className="md:hidden">
         <button onClick={toggleMenu} className="text-white">

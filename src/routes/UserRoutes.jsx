@@ -10,7 +10,8 @@ import Home from "../pages/Users/Home";
 // const Laborers = lazy(() => import("../pages/Users/Laborer/Laborers"));
 // import Form from "../pages/Users/Laborer/BecomeLaborerForm/Form";
 // const Account = lazy(() => import("../pages/Users/Account"));
-// const Profile = lazy(() => import("../pages/Users/Profile"));
+const Profile = lazy(() => import("../pages/Users/Profile"));
+const EditProfile = lazy(() => import("../pages/Users/EditProfile"));
 // const Subscription = lazy(() => import("../pages/Users/Subscription"));
 // const Success = lazy(() => import("../pages/Users/Success"));
 // const Cancel = lazy(() => import("../pages/Users/Cancel"));
@@ -35,14 +36,14 @@ const UserRoutes = ({ isLoggedIn }) => {
     // const routes = [
     //     { path: "/", element: <Home /> },
     //     { path: "/home", element: <Home /> },
-
     // ];
 
     const protectedRoutes = [
-        { path: "/", element: isLoggedIn ? <Account /> : navigateToLogin() },
-        { path: "/home", element: isLoggedIn ? <Account /> : navigateToLogin() },
+        { path: "/", element: isLoggedIn ? <Home /> : navigateToLogin() },
+        { path: "/home", element: isLoggedIn ? <Home /> : navigateToLogin() },
         // { path: "/account", element: isLoggedIn ? <Account /> : navigateToLogin() },
-        // { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
+        { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
+        { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
         // { path: "/manage-subscription", element: isLoggedIn ? <Subscription /> : navigateToLogin() },
         // { path: "/success", element: isLoggedIn ? <Success /> : navigateToLogin() },
         // { path: "/cancel", element: isLoggedIn ? <Cancel /> : navigateToLogin() },
@@ -60,7 +61,7 @@ const UserRoutes = ({ isLoggedIn }) => {
     const authRoutes = [
         { path: "/login", element: !isLoggedIn ? <Login role={"user"} /> : navigateToHome() },
         { path: "/sign-up", element: !isLoggedIn ? <SignUp /> : navigateToHome() },
-        { path: "/otp", element: !isLoggedIn ? <OTP /> : navigateToHome() }
+        { path: "/verify-otp", element: !isLoggedIn ? <OTP /> : navigateToHome() },
         // { path: "/verify-email", element: !isLoggedIn ? <Email /> : navigateToHome() },
         // { path: "/verify-otp", element: !isLoggedIn ? <OTP /> : navigateToHome() },
         // { path: "/reset-password", element: !isLoggedIn ? <ResetPassword /> : navigateToHome() },

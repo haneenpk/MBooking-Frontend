@@ -7,7 +7,7 @@ const handleFormErrors = (error, setErrors, setServerResponse) => {
         setErrors(validationErrors);
     } else {
         console.error("Error:", error);
-        setServerResponse({ status: "failed", message: error.message });
+        setServerResponse({ status: "failed", message: error.response?.data?.message });
     }
 };
 

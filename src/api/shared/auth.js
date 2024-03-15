@@ -1,8 +1,8 @@
 import axios from "axios";
 import handleAxiosRequest from "../../utils/axiosUtil";
 
-export const checkAuth = async (data) =>
-    handleAxiosRequest(axios.get(`/auth/checkauth`, { params: data }), "check auth error: ");
+// export const checkAuth = async (data) =>
+//     handleAxiosRequest(axios.get(`/auth/checkauth`, { params: data }), "check auth error: ");
 
 export const login = async (data) =>
     handleAxiosRequest(axios.post(`/auth/login`, data), "login error: ");
