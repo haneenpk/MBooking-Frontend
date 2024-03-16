@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-// import Dashboard from "../pages/Admin/Dashboard";
-// const Users = lazy(() => import("../pages/Admin/Users/Users"));
+import Dashboard from "../pages/Admin/Dashboard";
+const Users = lazy(() => import("../pages/Admin/Users"));
 // const UserDetails = lazy(() => import("../pages/Admin/Users/UserDetails"));
 // const SubscriptionPlans = lazy(() => import("../pages/Admin/Plans/SubscriptionPlans"));
 // import AddPlan from "../pages/Admin/Plans/AddPlan";
@@ -24,17 +24,17 @@ const AdminRoutes = ({ isLoggedIn }) => {
     const routes = [
         { path: "/", element: isLoggedIn ? <Dashboard /> : navigateToLogin() },
         { path: "/users", element: isLoggedIn ? <Users /> : navigateToLogin() },
-        { path: "/users/:id", element: isLoggedIn ? <UserDetails /> : navigateToLogin() },
-        { path: "/laborer-requests", element: isLoggedIn ? <Requests /> : navigateToLogin() },
-        { path: "/laborer-requests/view-request-details/:id", element: isLoggedIn ? <RequestDetails /> : navigateToLogin() },
-        { path: "/subscription-plans", element: isLoggedIn ? <SubscriptionPlans /> : navigateToLogin() },
-        { path: "/subscription-plans/add-plan", element: isLoggedIn ? <AddPlan /> : navigateToLogin() },
-        { path: "/subscription-plans/edit-plan/:id", element: isLoggedIn ? <EditPlan /> : navigateToLogin() },
-        { path: "/subscriptions", element: isLoggedIn ? <Subscriptions /> : navigateToLogin() },
-        { path: "/banners", element: isLoggedIn ? <Banners /> : navigateToLogin() },
-        { path: "/banners/add-banner", element: isLoggedIn ? <AddBanner /> : navigateToLogin() },
-        { path: "/banners/edit-banner/:id", element: isLoggedIn ? <EditBanner /> : navigateToLogin() },
-        { path: "/notifications", element: isLoggedIn ? <Notifications /> : navigateToLogin() },
+        // { path: "/users/:id", element: isLoggedIn ? <UserDetails /> : navigateToLogin() },
+        // { path: "/laborer-requests", element: isLoggedIn ? <Requests /> : navigateToLogin() },
+        // { path: "/laborer-requests/view-request-details/:id", element: isLoggedIn ? <RequestDetails /> : navigateToLogin() },
+        // { path: "/subscription-plans", element: isLoggedIn ? <SubscriptionPlans /> : navigateToLogin() },
+        // { path: "/subscription-plans/add-plan", element: isLoggedIn ? <AddPlan /> : navigateToLogin() },
+        // { path: "/subscription-plans/edit-plan/:id", element: isLoggedIn ? <EditPlan /> : navigateToLogin() },
+        // { path: "/subscriptions", element: isLoggedIn ? <Subscriptions /> : navigateToLogin() },
+        // { path: "/banners", element: isLoggedIn ? <Banners /> : navigateToLogin() },
+        // { path: "/banners/add-banner", element: isLoggedIn ? <AddBanner /> : navigateToLogin() },
+        // { path: "/banners/edit-banner/:id", element: isLoggedIn ? <EditBanner /> : navigateToLogin() },
+        // { path: "/notifications", element: isLoggedIn ? <Notifications /> : navigateToLogin() },
         // Auth Route
         { path: "/login", element: !isLoggedIn ? <Login role={"admin"} /> : navigateDashboard() },
         // Error Page

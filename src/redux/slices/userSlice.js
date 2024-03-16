@@ -4,7 +4,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialUserState = {
   isLoggedIn: localStorage.getItem("userAccessToken") ? true : false,
   userData: null,
-  userNotificationCount: 0,
   searchResults: {
     searchOn: null,
     results: null,

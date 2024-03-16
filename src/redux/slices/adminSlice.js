@@ -3,9 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const adminSlice = createSlice({
     name: "admin",
     initialState: {
-        isLoggedIn: false,
+        isLoggedIn: localStorage.getItem("adminAccessToken") ? true : false,
         adminData: null,
-        adminNotificationCount: 0,
         searchResults: {
             searchOn: null,
             results: null,

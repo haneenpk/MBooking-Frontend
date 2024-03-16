@@ -1,16 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { signupSchema } from "../../../validations/userValidations/signUpSchema";
-import handleInputChange from "../../../utils/formUtils/handleInputChange";
-import handleFormErrors from "../../../utils/formUtils/handleFormErrors";
-import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
+import { registerTheatreSchema } from "../../validations/userValidations/registerTheatreSchema";
+import handleInputChange from "../../utils/formUtils/handleInputChange";
+import handleFormErrors from "../../utils/formUtils/handleFormErrors";
+import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 
-const SignUp = () => {
+const Register = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: "",
+        name: "",
+        theatreName: "",
         email: "",
         mobile: "",
         password: ""
@@ -23,17 +24,17 @@ const SignUp = () => {
         handleInputChange(e, formData, setFormData, setServerResponse, setErrors);
     };
 
-    const handleSignUp = async (e) => {
+    const handleRegistre = async (e) => {
         e.preventDefault();
 
         try {
             // Validate formData against the signup schema
-            await signupSchema.validate(formData, { abortEarly: false });
+            await registerTheatreSchema.validate(formData, { abortEarly: false });
 
             setErrors({}); // Clear previous validation errors
 
             // If validation passes, proceed with signup
-            const response = await axios.post(`http://localhost:3000/api/user/register`, formData);
+            const response = await axios.post(`http://localhost:3000/api/theatre/register`, formData);
             console.log(response.data.message);
 
             navigate(`/verify-otp?purpose=signup&email=${formData.email}`);
@@ -47,14 +48,22 @@ const SignUp = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up</h2>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Register</h2>
                 </div>
                 <div className="rounded-md shadow-sm ">
                     <div className="mb-3">
-                        <label htmlFor="username">Username</label>
-                        <input name={"username"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Username" />
-                        {errors.username &&
-                            <FormErrorDisplay error={errors.username} />
+                        <label htmlFor="name">name</label>
+                        <input name={"name"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Name" />
+                        {errors.name &&
+                            <FormErrorDisplay error={errors.name} />
+                        }
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="theatreName">Theatre Name</label>
+                        <input name={"theatreName"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Theatre Name" />
+                        {errors.theatreName &&
+                            <FormErrorDisplay error={errors.theatreName} />
                         }
                     </div>
 
@@ -67,10 +76,10 @@ const SignUp = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="phone">Phone</label>
+                        <label htmlFor="mobile">Mobile</label>
                         <input name={"mobile"} onChange={handleChange} type={"tel"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Phone" />
-                        {errors.phone &&
-                            <FormErrorDisplay error={errors.phone} />
+                        {errors.mobile &&
+                            <FormErrorDisplay error={errors.mobile} />
                         }
                     </div>
 
@@ -102,15 +111,15 @@ const SignUp = () => {
                 )}
 
                 <div>
-                    <button onClick={handleSignUp} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                    <button onClick={handleRegistre} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
                         Sign up
                     </button>
                 </div>
 
                 <div>
                     <p className="mt-2 text-center text-sm text-gray-600">
-                        <Link to="/login" className="font-medium text-blue-600 hover:text-blue-400">
-                            I have already account
+                        <Link to="/theatre/login" className="font-medium text-blue-600 hover:text-blue-400">
+                            I have already registered
                         </Link>
                     </p>
                 </div>
@@ -120,7 +129,7 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default Register;
 
 
 

@@ -9,7 +9,6 @@ import { loginSchema } from "../../../validations/userValidations/loginSchema";
 import { setLoading } from "../../../redux/slices/commonSlice";
 import { setLoggedIn, setAdminData } from "../../../redux/slices/adminSlice";
 import { setLoggedIn as setUserLoggedIn, setUserData } from "../../../redux/slices/userSlice";
-// import { login } from "../../../api/shared/auth";
 
 const Login = ({ role }) => {
 
@@ -30,19 +29,19 @@ const Login = ({ role }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-    
+
         try {
             await loginSchema.validate(formData, { abortEarly: false });
             setErrors({});
-    
+
             const response = await axios.post(`http://localhost:3000/api/${role}/login`, formData);
-    
+
             console.log("response:", response);
-    
+
             if (response && response.status === 200) {
                 localStorage.setItem(`${role}AccessToken`, response?.data?.accessToken);
-                localStorage.setItem("data", response?.data?.data?._id);
-    
+                localStorage.setItem(`${role}Data`, response?.data?.data?._id);
+
                 // Dispatch actions to update state
                 dispatch(setLoading(true));
                 if (role === "admin") {
@@ -53,7 +52,7 @@ const Login = ({ role }) => {
                     dispatch(setUserData(response?.data?.data?.username));
                 }
                 dispatch(setLoading(false));
-    
+
                 // Navigate after state updates
                 if (role === "admin") {
                     navigate("/admin");
@@ -95,7 +94,7 @@ const Login = ({ role }) => {
 
                 </div>
 
-                {role === "user" &&
+                {role !== "admin" &&
                     <div className="flex items-center justify-between">
                         <div className="text-sm">
                             <Link to="/verify-email" className="font-medium text-blue-600 hover:text-blue-400">
@@ -119,13 +118,20 @@ const Login = ({ role }) => {
                         Sign in
                     </button>
                 </div>
-                {role === "user" &&
+                {role !== "admin" &&
                     (
                         <div>
                             <p className="mt-2 text-center text-sm text-gray-600">
-                                <Link to="/sign-up" className="font-medium text-blue-600 hover:text-blue-400">
-                                    sign up for a new account
-                                </Link>
+                                {role === "user" && (
+                                    <Link to="/sign-up" className="font-medium text-blue-600 hover:text-blue-400">
+                                        sign up for a new account
+                                    </Link>
+                                )}
+                                {role === "theatre" && (
+                                    <Link to="/theatre/register" className="font-medium text-blue-600 hover:text-blue-400">
+                                        register for a theatre account
+                                    </Link>
+                                )}
                             </p>
                         </div>
                     )

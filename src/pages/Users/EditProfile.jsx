@@ -5,10 +5,13 @@ import { editSchema } from "../../validations/userValidations/editSchema";
 import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
+import { resetUserState } from '../../redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 
 const EditProfile = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // State to manage form fields
     const [formData, setFormData] = useState({
@@ -24,14 +27,6 @@ const EditProfile = () => {
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
 
-    // // Handle form input changes
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value
-    //     });
-    // };
 
     const handleChange = (e) => {
         handleInputChange(e, formData, setFormData, setServerResponse, setErrors);
@@ -65,7 +60,7 @@ const EditProfile = () => {
     useLayoutEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userId = localStorage.getItem('data');
+                const userId = localStorage.getItem('userData');
 
                 if (!userId) {
                     navigate('/login');
@@ -86,12 +81,13 @@ const EditProfile = () => {
     if (error) {
         console.log(error.response.status);
         if (error.response.data.message === "You are blocked") {
-            localStorage.clear();
-            dispatch(resetUserState());
-            console.log("Your account is blocked");
-            navigate("/login")
+          localStorage.removeItem('userData');
+          localStorage.removeItem('userAccessToken');
+          dispatch(resetUserState());
+          console.log("Your account is blocked");
+          navigate("/login")
         }
-    }
+      }
 
     if (!isBlocked) {
         return (

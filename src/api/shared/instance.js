@@ -6,7 +6,17 @@ const Axios = axios.create({
 
 Axios.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("userAccessToken");
+    let accessToken;
+    const pathName = window.location.pathname;
+
+    if (pathName.startsWith("/admin/")) {
+      accessToken = localStorage.getItem("adminAccessToken");
+    } else if (pathName.startsWith("/theatre/")) {
+      accessToken = localStorage.getItem("theatreAccessToken");
+    } else {
+      accessToken = localStorage.getItem("userAccessToken");
+    }
+    
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }

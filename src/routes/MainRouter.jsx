@@ -5,12 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import AdminRoutes from "./AdminRoutes";
 import UserRoutes from "./UserRoutes";
+import TheatreRoutes from "./TheatreRoutes";
 
 const MainRouter = () => {
 
   const isLoading = useSelector(state => state.common.loading);
   const isAdminLoggedIn = useSelector(state => state.admin.isLoggedIn);
   const isUserLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const isTheatreLoggedIn = useSelector(state => state.theatre.isLoggedIn);
 
 
   if (isLoading) {
@@ -23,6 +25,10 @@ const MainRouter = () => {
         <Route
           path="/admin/*"
           element={<AdminRoutes isLoggedIn={isAdminLoggedIn} />}
+        />
+        <Route
+          path="/theatre/*"
+          element={<TheatreRoutes isLoggedIn={isTheatreLoggedIn} />}
         />
         <Route
           path="/*"

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
@@ -30,21 +30,23 @@ const UserProfile = () => {
   };
 
   // Function to handle profile update
-  const handleUpdateProfile = () => {
+  const handleFileChange = () => {
     // Add logic for profile update here
     alert('Profile updated!');
   };
 
   // Function to handle logout
   const handleLogout = () => {
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem('userData');
+    localStorage.removeItem('userAccessToken');
     dispatch(resetUserState());
   };
 
   useLayoutEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = localStorage.getItem('data');
+        const userId = localStorage.getItem('userData');
 
         if (!userId) {
           navigate('/login');
@@ -65,7 +67,8 @@ const UserProfile = () => {
   if (error) {
     console.log(error.response.status);
     if (error.response.data.message === "You are blocked") {
-      localStorage.clear();
+      localStorage.removeItem('userData');
+      localStorage.removeItem('userAccessToken');
       dispatch(resetUserState());
       console.log("Your account is blocked");
       navigate("/login")
@@ -78,16 +81,24 @@ const UserProfile = () => {
       <div className="flex justify-center mt-10">
         {/* Profile Picture */}
         <div className="mr-10">
-          <img src={userData.profilePic} alt="Profile" className="w-50 h-50 rounded-full" />
-          <div className="mt-4 flex">
+          <div className="mt-4 ml-36">
+            <img src={userData.profilePic} alt="Profile" className="rounded-full" />
+
             {/* Delete Profile Button */}
-            <button onClick={handleDeleteProfile} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+            <button onClick={handleDeleteProfile} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ml-1 mt-2">
               Delete Profile
             </button>
+          </div>
+          <div className="mt-4 ">
             {/* Update Profile Button */}
-            <button onClick={handleUpdateProfile} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              Update Profile
-            </button>
+            <label htmlFor="">Update profile:</label>
+            <input
+              id="profilePicInput"
+              className="border border-gray-300 rounded p-2 ml-2"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
           </div>
         </div>
         {/* User Details */}

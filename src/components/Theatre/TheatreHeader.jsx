@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const AdminHeader = () => {
+const TheatreHeader = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -29,8 +29,8 @@ const AdminHeader = () => {
       {showMenu && (
         <div className="md:hidden absolute bg-gray-800 top-full left-0 right-0 py-2 px-4">
           <ul className="flex flex-col gap-2">
-            <NavLink to="/dashboard" className="text-white hover:text-gray-300">Dashboard</NavLink>
-            <NavLink to="/theaters" className="text-white hover:text-gray-300">Theaters</NavLink>
+            <NavLink to="/dashboard" className="text-white hover:text-gray-300">Screen</NavLink>
+            <NavLink to="/theaters" className="text-white hover:text-gray-300">Movies</NavLink>
             <NavLink to="/users" className="text-white hover:text-gray-300">Users</NavLink>
             <NavLink to="/banner" className="text-white hover:text-gray-300">Banner</NavLink>
           </ul>
@@ -40,4 +40,4 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default TheatreHeader;
