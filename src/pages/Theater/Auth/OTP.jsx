@@ -6,10 +6,10 @@ import { otpSchema } from "../../../validations/userValidations/otpSchema";
 
 const OTP = () => {
     const navigate = useNavigate();
+    // const dispatch = useDispatch();
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const purpose = queryParams.get("purpose");
     const email = queryParams.get("email");
 
     const [otp, setOtp] = useState("");
@@ -30,7 +30,7 @@ const OTP = () => {
             console.log(otp, email);
 
             // If validation passes, proceed with OTP verification
-            const response = await axios.post(`http://localhost:3000/api/user/validateOtp`, { otp, email });
+            const response = await axios.post(`http://localhost:3000/api/theater/validateOTP`, { otp, email });
             // await verifyOtp({ otp, email });
 
             if (response) {
@@ -38,11 +38,7 @@ const OTP = () => {
 
                 if (response.status === 200) {
                     localStorage.removeItem("otpTimer");
-                    if (purpose === "forgot-password") {
-                        navigate("/reset-password");
-                    } else if (purpose === "signup") {
-                        navigate("/login");
-                    }
+                    navigate("/theater/login");
                 }
             }
         } catch (error) {
@@ -57,8 +53,9 @@ const OTP = () => {
     };
 
     const handleResend = async () => {
+        console.log(email);
 
-        const response = await axios.post(`http://localhost:3000/api/user/resendOtp`, { email });
+        const response = await axios.post(`http://localhost:3000/api/theater/resendOTP`, { email });
 
         setServerResponse("");
         // await resendOtp({ email });

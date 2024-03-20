@@ -46,11 +46,11 @@ const EditProfile = () => {
             // If validation passes, proceed with signup
             const response = await Axios.put(`/api/user/update/${formData._id}`, formData);
             console.log(response.data.message);
-            setServerResponse({ status:"success", message:"Update Successfully"  })
+            setServerResponse({ status: "success", message: "Update Successfully" })
             setTimeout(() => {
                 setServerResponse({})
                 navigate("/profile")
-            },2000)
+            }, 2000)
 
         } catch (error) {
             handleFormErrors(error, setErrors, setServerResponse);
@@ -81,13 +81,13 @@ const EditProfile = () => {
     if (error) {
         console.log(error.response.status);
         if (error.response.data.message === "You are blocked") {
-          localStorage.removeItem('userData');
-          localStorage.removeItem('userAccessToken');
-          dispatch(resetUserState());
-          console.log("Your account is blocked");
-          navigate("/login")
+            localStorage.removeItem('userData');
+            localStorage.removeItem('userAccessToken');
+            dispatch(resetUserState());
+            console.log("Your account is blocked");
+            navigate("/login")
         }
-      }
+    }
 
     if (!isBlocked) {
         return (

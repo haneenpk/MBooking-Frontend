@@ -1,18 +1,17 @@
-import React, { Suspense, useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-// import initializeUser from "../utils/initializeUser";
+import React, { Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import AdminRoutes from "./AdminRoutes";
 import UserRoutes from "./UserRoutes";
-import TheatreRoutes from "./TheatreRoutes";
+import TheaterRoutes from "./TheaterRoutes";
 
 const MainRouter = () => {
 
   const isLoading = useSelector(state => state.common.loading);
   const isAdminLoggedIn = useSelector(state => state.admin.isLoggedIn);
   const isUserLoggedIn = useSelector(state => state.user.isLoggedIn);
-  const isTheatreLoggedIn = useSelector(state => state.theatre.isLoggedIn);
+  const isTheaterLoggedIn = useSelector(state => state.theater.isLoggedIn);
 
 
   if (isLoading) {
@@ -27,8 +26,8 @@ const MainRouter = () => {
           element={<AdminRoutes isLoggedIn={isAdminLoggedIn} />}
         />
         <Route
-          path="/theatre/*"
-          element={<TheatreRoutes isLoggedIn={isTheatreLoggedIn} />}
+          path="/theater/*"
+          element={<TheaterRoutes isLoggedIn={isTheaterLoggedIn} />}
         />
         <Route
           path="/*"

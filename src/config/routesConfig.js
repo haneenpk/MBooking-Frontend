@@ -2,9 +2,6 @@
 export const userRoutesToCheck = [
     "/",
     "/home",
-    "/about",
-    "/contact",
-    "/account",
     "/profile",
     "/edit-profile",
 ];
@@ -15,15 +12,15 @@ export const adminRoutesToCheck = [
     "/admin/",
     "/admin/dashboard",
     "/admin/users",
-    "/admin/subscriptions",
-    "/admin/banners",
-    "/admin/banners/add-banner",
+    "/admin/theaters",
 ];
 
-export const theatreRoutesToCheck = [
-    "/theatre",
-    "/theatre/",
-    "/theatre/screen",
-    "/theatre/profile",
-    "/theatre/edit-profile",
+export const theaterRoutesToCheck = [
+    "/theater",
+    "/theater/",
+    "/theater/dashboard",
+    "/theater/screens",
+    "/theater/screens/add",
+    "/theater/profile",
+    "/theater/edit-profile",
 ];

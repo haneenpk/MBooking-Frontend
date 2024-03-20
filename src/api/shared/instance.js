@@ -11,8 +11,8 @@ Axios.interceptors.request.use(
 
     if (pathName.startsWith("/admin/")) {
       accessToken = localStorage.getItem("adminAccessToken");
-    } else if (pathName.startsWith("/theatre/")) {
-      accessToken = localStorage.getItem("theatreAccessToken");
+    } else if (pathName.startsWith("/theater/")) {
+      accessToken = localStorage.getItem("theaterAccessToken");
     } else {
       accessToken = localStorage.getItem("userAccessToken");
     }

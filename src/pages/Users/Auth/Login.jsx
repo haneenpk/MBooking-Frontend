@@ -9,6 +9,7 @@ import { loginSchema } from "../../../validations/userValidations/loginSchema";
 import { setLoading } from "../../../redux/slices/commonSlice";
 import { setLoggedIn, setAdminData } from "../../../redux/slices/adminSlice";
 import { setLoggedIn as setUserLoggedIn, setUserData } from "../../../redux/slices/userSlice";
+import { setLoggedIn as setTheaterLoggedIn, setTheaterData } from "../../../redux/slices/theaterSlice";
 
 const Login = ({ role }) => {
 
@@ -47,17 +48,22 @@ const Login = ({ role }) => {
                 if (role === "admin") {
                     dispatch(setLoggedIn(true));
                     dispatch(setAdminData(response?.data?.data?.username));
-                } else {
+                } else if (role === "user") {
                     dispatch(setUserLoggedIn(true));
                     dispatch(setUserData(response?.data?.data?.username));
+                } else {
+                    dispatch(setTheaterLoggedIn(true));
+                    dispatch(setTheaterData(response?.data?.data?.username));
                 }
                 dispatch(setLoading(false));
 
                 // Navigate after state updates
                 if (role === "admin") {
                     navigate("/admin");
-                } else {
+                } else if (role === "user") {
                     navigate("/home");
+                } else {
+                    navigate("/theater");
                 }
             } else {
                 // Handle server response errors
@@ -94,16 +100,6 @@ const Login = ({ role }) => {
 
                 </div>
 
-                {role !== "admin" &&
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm">
-                            <Link to="/verify-email" className="font-medium text-blue-600 hover:text-blue-400">
-                                Forgot your password?
-                            </Link>
-                        </div>
-                    </div>
-                }
-
                 {serverResponse && (
                     <div
                         className={`mt-2 p-2 text-center font-bold ${serverResponse.status === "failed" ? "text-red-600 " : "text-green-500"}`}
@@ -127,8 +123,8 @@ const Login = ({ role }) => {
                                         sign up for a new account
                                     </Link>
                                 )}
-                                {role === "theatre" && (
-                                    <Link to="/theatre/register" className="font-medium text-blue-600 hover:text-blue-400">
+                                {role === "theater" && (
+                                    <Link to="/theater/register" className="font-medium text-blue-600 hover:text-blue-400">
                                         register for a theatre account
                                     </Link>
                                 )}

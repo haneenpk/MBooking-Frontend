@@ -1,9 +1,7 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
-import { useNavigate } from 'react-router-dom';
 
 const UserList = () => {
-  const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
 
@@ -29,10 +27,6 @@ const UserList = () => {
       console.log(error);
       // Handle error
     }
-  }
-
-  const handleNavigation = () => {
-    navigate('/admin/users');
   }
 
   return (

@@ -1,36 +1,36 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import MainRouter from "../routes/MainRouter";
 import AdminHeader from "../components/Admin/AdminHeader";
-import TheatreHeader from "../components/Theatre/TheatreHeader";
+import TheaterHeader from "../components/Theater/TheaterHeader";
 import Header from "../components/Users/Header";
 import Footer from "../components/Users/Footer";
 import { setLoggedIn, setAdminData } from "../redux/slices/adminSlice";
 import { setLoggedIn as setUserLoggedIn, setUserData } from "../redux/slices/userSlice";
-import { setLoggedIn as setTheatreLoggedIn, setTheatreData } from "../redux/slices/theatreSlice";
+import { setLoggedIn as setTheaterLoggedIn, setTheaterData } from "../redux/slices/theaterSlice";
 import { checkToDisplayHeaderFooter } from "../utils/routeUtil";
-import { userRoutesToCheck, adminRoutesToCheck, theatreRoutesToCheck } from "../config/routesConfig";
+import { userRoutesToCheck, adminRoutesToCheck, theaterRoutesToCheck } from "../config/routesConfig";
 
 const Layout = () => {
 
   const dispatch = useDispatch();
   const isUserLoggedIn = useSelector(state => state.user.isLoggedIn);
-  const isTheatreLoggedIn = useSelector(state => state.theatre.isLoggedIn);
+  const isTheaterLoggedIn = useSelector(state => state.theater.isLoggedIn);
   const isAdminLoggedIn = useSelector(state => state.admin.isLoggedIn);
 
   const location = useLocation();
   let userRole;
   if (location.pathname.startsWith("/admin")) {
     userRole = "admin"
-  } else if (location.pathname.startsWith("/theatre")) {
-    userRole = "theatre"
+  } else if (location.pathname.startsWith("/theater")) {
+    userRole = "theater"
   } else {
     userRole = "user"
   }
   // const userRole = location.pathname.startsWith("/admin") ? "admin" : "user";
   const shouldDisplayHeaderFooter = checkToDisplayHeaderFooter(
-    userRole === "admin" ? adminRoutesToCheck : userRole === "user" ? userRoutesToCheck : theatreRoutesToCheck,
+    userRole === "admin" ? adminRoutesToCheck : userRole === "user" ? userRoutesToCheck : theaterRoutesToCheck,
     location
   );
 
@@ -45,12 +45,12 @@ const Layout = () => {
         console.log("changed:", isUserLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
         dispatch(setUserData(localStorage.getItem("userData")));
       } else {
-        dispatch(setTheatreLoggedIn(true));
-        console.log("changed:", isTheatreLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
-        dispatch(setTheatreData(localStorage.getItem("theatreData")));
+        dispatch(setTheaterLoggedIn(true));
+        console.log("changed:", isTheaterLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
+        dispatch(setTheaterData(localStorage.getItem("theaterData")));
       }
     }
-  }, [isUserLoggedIn, isAdminLoggedIn, isTheatreLoggedIn])
+  }, [isUserLoggedIn, isAdminLoggedIn, isTheaterLoggedIn])
 
 
   return (
@@ -58,12 +58,12 @@ const Layout = () => {
       {shouldDisplayHeaderFooter && (
         userRole === "admin" ? <AdminHeader /> :
           userRole === "user" ? <Header /> :
-            <TheatreHeader />
+            <TheaterHeader />
       )}
       <main className="flex-1" style={{ paddingTop: shouldDisplayHeaderFooter ? 0 : 0 }}>
         <MainRouter />
       </main>
-      {shouldDisplayHeaderFooter && (userRole === "user" || userRole === "theatre") && !location.pathname.includes("chat") && <Footer />}
+      {shouldDisplayHeaderFooter && (userRole === "user" || userRole === "theater") && !location.pathname.includes("chat") && <Footer />}
     </div>
   );
 };

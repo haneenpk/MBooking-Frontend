@@ -1,20 +1,23 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { registerTheatreSchema } from "../../validations/userValidations/registerTheatreSchema";
-import handleInputChange from "../../utils/formUtils/handleInputChange";
-import handleFormErrors from "../../utils/formUtils/handleFormErrors";
-import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
+import { registerTheaterSchema } from "../../../validations/theaterValidations/registerTheaterSchema";
+import handleInputChange from "../../../utils/formUtils/handleInputChange";
+import handleFormErrors from "../../../utils/formUtils/handleFormErrors";
+import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
 
 const Register = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: "",
-        theatreName: "",
         email: "",
         mobile: "",
-        password: ""
+        password: "",
+        country: "",
+        state: "",
+        district: "",
+        city: ""
     });
 
     const [errors, setErrors] = useState({});
@@ -29,15 +32,15 @@ const Register = () => {
 
         try {
             // Validate formData against the signup schema
-            await registerTheatreSchema.validate(formData, { abortEarly: false });
+            await registerTheaterSchema.validate(formData, { abortEarly: false });
 
             setErrors({}); // Clear previous validation errors
 
             // If validation passes, proceed with signup
-            const response = await axios.post(`http://localhost:3000/api/theatre/register`, formData);
+            const response = await axios.post(`http://localhost:3000/api/theater/register`, formData);
             console.log(response.data.message);
 
-            navigate(`/verify-otp?purpose=signup&email=${formData.email}`);
+            navigate(`/theatre/verify-otp?email=${formData.email}`);
 
         } catch (error) {
             handleFormErrors(error, setErrors, setServerResponse);
@@ -52,18 +55,10 @@ const Register = () => {
                 </div>
                 <div className="rounded-md shadow-sm ">
                     <div className="mb-3">
-                        <label htmlFor="name">name</label>
-                        <input name={"name"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Name" />
+                        <label htmlFor="name">Name</label>
+                        <input name={"name"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Name of Theater" />
                         {errors.name &&
                             <FormErrorDisplay error={errors.name} />
-                        }
-                    </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="theatreName">Theatre Name</label>
-                        <input name={"theatreName"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Theatre Name" />
-                        {errors.theatreName &&
-                            <FormErrorDisplay error={errors.theatreName} />
                         }
                     </div>
 
@@ -99,6 +94,39 @@ const Register = () => {
                         }
                     </div>
 
+                    <div className="mb-3 flex flex-wrap justify-between">
+                        <div className="w-full md:w-48">
+                            <label htmlFor="country">Country</label>
+                            <input name={"country"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Country" />
+                            {errors.country &&
+                                <FormErrorDisplay error={errors.country} />
+                            }
+                        </div>
+
+                        <div className="w-full md:w-48">
+                            <label htmlFor="state">State</label>
+                            <input name={"state"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="State" />
+                            {errors.state &&
+                                <FormErrorDisplay error={errors.state} />
+                            }
+                        </div>
+
+                        <div className="w-full md:w-48">
+                            <label htmlFor="district">District</label>
+                            <input name={"district"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="District" />
+                            {errors.district &&
+                                <FormErrorDisplay error={errors.district} />
+                            }
+                        </div>
+
+                        <div className="w-full md:w-48">
+                            <label htmlFor="city">City</label>
+                            <input name={"city"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="City" />
+                            {errors.city &&
+                                <FormErrorDisplay error={errors.city} />
+                            }
+                        </div>
+                    </div>
                 </div>
 
                 {serverResponse && (
@@ -118,7 +146,7 @@ const Register = () => {
 
                 <div>
                     <p className="mt-2 text-center text-sm text-gray-600">
-                        <Link to="/theatre/login" className="font-medium text-blue-600 hover:text-blue-400">
+                        <Link to="/theater/login" className="font-medium text-blue-600 hover:text-blue-400">
                             I have already registered
                         </Link>
                     </p>
@@ -130,7 +158,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-
-

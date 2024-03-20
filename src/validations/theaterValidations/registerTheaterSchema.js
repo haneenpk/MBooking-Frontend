@@ -1,12 +1,9 @@
 import * as Yup from "yup";
 
-export const registerTheatreSchema = Yup.object({
+export const registerTheaterSchema = Yup.object({
     name: Yup
         .string()
         .required("name is required"),
-    theatreName: Yup
-        .string()
-        .required("Theatre name is required"),
     email: Yup
         .string()
         .email("Invalid email address")
@@ -26,4 +23,16 @@ export const registerTheatreSchema = Yup.object({
     confirmPassword: Yup
         .string()
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    country: Yup
+        .string()
+        .required("Theatre country is required"),
+    state: Yup
+        .string()
+        .required("Theatre state is required"),
+    district: Yup
+        .string()
+        .required("Theatre district is required"),
+    city: Yup
+        .string()
+        .required("Theatre city is required"),
 });

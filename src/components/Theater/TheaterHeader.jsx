@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const TheatreHeader = () => {
+const TheaterHeader = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -12,12 +12,12 @@ const TheatreHeader = () => {
     <header className="bg-gray-800 py-4 px-6 flex justify-between items-center">
       <h1 className="text-white text-2xl font-bold">MBooking</h1>
       <div className="hidden md:flex gap-6 items-center">
-        <NavLink to="/admin/" className="text-white hover:text-gray-300">Dashboard</NavLink>
-        <NavLink to="/admin/users" className="text-white hover:text-gray-300">Users</NavLink>
-        <NavLink to="/admin/theatres" className="text-white hover:text-gray-300">Theatres</NavLink>
-        <NavLink to="/admin/banner" className="text-white hover:text-gray-300">Banner</NavLink>
+        <NavLink to="/theater/dashboard" className="text-white hover:text-gray-300">Dashboard</NavLink>
+        <NavLink to="/theater/screens" className="text-white hover:text-gray-300">Screens</NavLink>
+        <NavLink to="/theater/theatres" className="text-white hover:text-gray-300">Shows</NavLink>
+        <NavLink to="/theater/banner" className="text-white hover:text-gray-300">Banner</NavLink>
         {/* Circle Icon */}
-        <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+        <NavLink to="/theater/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>
       <div className="md:hidden">
         <button onClick={toggleMenu} className="text-white">
@@ -29,7 +29,7 @@ const TheatreHeader = () => {
       {showMenu && (
         <div className="md:hidden absolute bg-gray-800 top-full left-0 right-0 py-2 px-4">
           <ul className="flex flex-col gap-2">
-            <NavLink to="/dashboard" className="text-white hover:text-gray-300">Screen</NavLink>
+            <NavLink to="/theater/dashboard" className="text-white hover:text-gray-300">Screen</NavLink>
             <NavLink to="/theaters" className="text-white hover:text-gray-300">Movies</NavLink>
             <NavLink to="/users" className="text-white hover:text-gray-300">Users</NavLink>
             <NavLink to="/banner" className="text-white hover:text-gray-300">Banner</NavLink>
@@ -40,4 +40,4 @@ const TheatreHeader = () => {
   );
 };
 
-export default TheatreHeader;
+export default TheaterHeader;

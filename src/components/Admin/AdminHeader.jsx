@@ -14,7 +14,7 @@ const AdminHeader = () => {
       <div className="hidden md:flex gap-6 items-center">
         <NavLink to="/admin/" className="text-white hover:text-gray-300">Dashboard</NavLink>
         <NavLink to="/admin/users" className="text-white hover:text-gray-300">Users</NavLink>
-        <NavLink to="/admin/theatres" className="text-white hover:text-gray-300">Theatres</NavLink>
+        <NavLink to="/admin/theaters" className="text-white hover:text-gray-300">Theaters</NavLink>
         <NavLink to="/admin/banner" className="text-white hover:text-gray-300">Banner</NavLink>
         {/* Circle Icon */}
         <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
