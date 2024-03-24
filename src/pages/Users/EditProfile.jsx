@@ -102,14 +102,6 @@ const EditProfile = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email</label>
-                    <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder='Email' />
-                    {errors.email &&
-                        <FormErrorDisplay error={errors.email} />
-                    }
-                </div>
-
-                <div className="mb-4">
                     <label htmlFor="mobile" className="block text-gray-700 font-semibold mb-2">Mobile</label>
                     <input type="tel" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder='Mobile' />
                     {errors.mobile &&

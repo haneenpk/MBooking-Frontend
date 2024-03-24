@@ -21,6 +21,8 @@ export const theaterRoutesToCheck = [
     "/theater/dashboard",
     "/theater/screens",
     "/theater/screens/add",
+    "/theater/screens/view",
+    "/theater/screen/edit",
     "/theater/profile",
     "/theater/edit-profile",
 ];

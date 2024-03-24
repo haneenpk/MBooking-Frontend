@@ -1,4 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Axios from "../../api/shared/instance";
@@ -27,7 +28,7 @@ const TheaterScreensList = () => {
                 setIsBlocked(response.data.data.isBlocked);
 
                 const responseScreen = await Axios.get(`/api/theater/screens/${theaterId}`);
-                console.log("Screen", responseScreen);
+
                 setListScreen(responseScreen.data.data); // Correct the state variable name
             } catch (error) {
                 setError(error);
@@ -37,6 +38,26 @@ const TheaterScreensList = () => {
         fetchTheaterData();
 
     }, [navigate]);
+
+    const handleDelete = async (screenId) => {
+        try {
+            await Axios.delete(`/api/theater/screens/delete/${screenId}`);
+            // If delete is successful, update the screen list
+            setListScreen(listScreen.filter(screen => screen._id !== screenId));
+        } catch (error) {
+            setError(error);
+        }
+    };
+
+    const handleButton = async (screenId) => {
+        try {
+            await Axios.delete(`/api/theater/screens/delete/${screenId}`);
+            // If delete is successful, update the screen list
+            setListScreen(listScreen.filter(screen => screen._id !== screenId));
+        } catch (error) {
+            setError(error);
+        }
+    }
 
     if (error) {
         if (error.response && error.response.data.message === "You are blocked") {
@@ -50,7 +71,7 @@ const TheaterScreensList = () => {
 
     if (!isBlocked) {
         return (
-            <div className='ml-20 mt-'>
+            <div className='px-8 mt-'>
                 <h2 className="text-2xl font-bold mb-4 mt-5">Theater Screens List</h2>
                 <Link to="/theater/screens/add" className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Screen
@@ -62,6 +83,12 @@ const TheaterScreensList = () => {
                             <p className="text-sm">Rows: {screen.rows}</p>
                             <p className="text-sm">Cols: {screen.cols}</p>
                             <p className="text-sm">Seats Count: {screen.seatsCount}</p>
+                            <div className="flex justify-between mt-2">
+                                <NavLink to={`/theater/screen/edit?seatId=${screen.seatId}`} className="text-blue-500 hover:underline">
+                                    Edit seats
+                                </NavLink>
+                                <button onClick={() => handleDelete(screen._id)} className="text-red-500 hover:underline">Delete</button>
+                            </div>
                         </div>
                     ))}
                 </div>

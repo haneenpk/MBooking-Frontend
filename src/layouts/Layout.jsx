@@ -38,15 +38,15 @@ const Layout = () => {
     if (localStorage.getItem(`${userRole}AccessToken`)) {
       if (userRole === "admin") {
         dispatch(setLoggedIn(true));
-        console.log("changed:", isAdminLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
+        console.log("changedA:", isAdminLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
         dispatch(setAdminData(localStorage.getItem("adminData")));
       } else if (userRole === "user") {
         dispatch(setUserLoggedIn(true));
-        console.log("changed:", isUserLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
+        console.log("changedU:", isUserLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
         dispatch(setUserData(localStorage.getItem("userData")));
       } else {
         dispatch(setTheaterLoggedIn(true));
-        console.log("changed:", isTheaterLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
+        console.log("changedT:", isTheaterLoggedIn, localStorage.getItem(`${userRole}AccessToken`));
         dispatch(setTheaterData(localStorage.getItem("theaterData")));
       }
     }

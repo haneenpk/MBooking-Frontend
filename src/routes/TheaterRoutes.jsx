@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../pages/Theater/Dashboard";
 const ListScreen = lazy(() => import("../pages/Theater/ListScreen"));
 const AddScreen = lazy(() => import("../pages/Theater/AddScreen"));
+const ViewScreen = lazy(() => import("../pages/Theater/ViewScreen"));
 const Profile = lazy(() => import("../pages/Theater/Profile"));
 const EditProfile = lazy(() => import("../pages/Theater/EditProfile"));
 
@@ -22,6 +23,7 @@ const TheaterRoutes = ({ isLoggedIn }) => {
         { path: "/dashboard", element: isLoggedIn ? <Dashboard /> : navigateToLogin() },
         { path: "/screens", element: isLoggedIn ? <ListScreen /> : navigateToLogin() },
         { path: "/screens/add", element: isLoggedIn ? <AddScreen /> : navigateToLogin() },
+        { path: "/screen/edit", element: isLoggedIn ? <ViewScreen /> : navigateToLogin() },
         { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
         { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
     ];
