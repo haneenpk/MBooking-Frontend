@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Axios from "../../api/shared/instance";
@@ -10,16 +10,8 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
   const [error, setError] = useState(null);
-  const [userDetails, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [isBlocked, setIsBlocked] = useState(true); // New state to track user block status
-
-  // Sample user data
-  const userData = {
-    username: 'JohnDoe',
-    email: 'johndoe@example.com',
-    mobile: '123-456-7890',
-    profilePic: 'https://via.placeholder.com/150', // Sample URL for profile picture
-  };
 
   // Function to handle logout
   const handleLogout = () => {
@@ -30,26 +22,7 @@ const UserProfile = () => {
     navigate("/login")
   };
 
-  useLayoutEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userId = localStorage.getItem('userData');
 
-        if (!userId) {
-          navigate('/login');
-          return;
-        }
-
-        const response = await Axios.get(`/api/user/get/${userId}`);
-        setUser(response.data.data);
-        setIsBlocked(response.data.data.isBlocked); // Set isBlocked based on user data
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    fetchUserData();
-  }, [navigate]);
 
   if (error) {
     console.log(error.response.status);
@@ -62,13 +35,88 @@ const UserProfile = () => {
     }
   }
 
+  // Function to handle profile picture change
+  const handleProfilePicChange = async (event) => {
+
+    try {
+      const userId = localStorage.getItem('userData');
+
+      const formData = new FormData();
+      formData.append('profilePicture', event.target.files[0]);
+
+      const response = await Axios.patch(`/api/user/update/profileimage/${userId}`, formData);
+
+      fetchUserData()
+
+      console.log(response);
+
+
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+
+  };
+
+
+  // Function to delete profile picture
+  const deleteProfilePic = async () => {
+    try {
+      const userId = localStorage.getItem('userData');
+
+      const response = await Axios.patch(`/api/user/remove/profileimage/${userId}`);
+
+      fetchUserData()
+
+      console.log(response);
+
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const userId = localStorage.getItem('userData');
+
+      console.log(`${import.meta.env.VITE_AXIOS_BASE_URL}`);
+
+      if (!userId) {
+        navigate('/login');
+        return;
+      }
+
+      const response = await Axios.get(`/api/user/get/${userId}`);
+      setUserDetails(response.data.data);
+      setIsBlocked(response.data.data.isBlocked); // Set isBlocked based on user data
+
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  useLayoutEffect(() => {
+
+    fetchUserData();
+
+  }, [navigate]);
+
   // Conditionally render profile component only if user is not blocked
   if (!isBlocked) {
     return (
       <div className="flex justify-center mt-10">
-    
+        <div className="flex flex-col items-center">
+          <img src={userDetails.profilePic ? `${import.meta.env.VITE_AXIOS_BASE_URL}/${userDetails.profilePic}` : 'https://via.placeholder.com/150'} alt="Profile" className="w-32 h-32 rounded-full mb-4" />
+          <div className="relative">
+            <input type="file" accept="image/*" onChange={handleProfilePicChange} className="hidden" id="profilePicInput" />
+            <label htmlFor="profilePicInput" className="mb-2 border border-gray-300 rounded-md p-2 cursor-pointer">Update Profile</label>
+          </div>
+          <button onClick={deleteProfilePic} className="mt-3 text-sm text-red-600 hover:text-red-700 hover:underline">
+            Delete Profile
+          </button>
+        </div>
+
         {/* User Details */}
-        <div>
+        <div className="ml-6">
           <h1 className="text-3xl font-bold mb-4">{userDetails.username}</h1>
           <p className="mb-2"><span className="font-semibold">Email:</span> {userDetails.email}</p>
           <p className="mb-2"><span className="font-semibold">Mobile:</span> {userDetails.mobile}</p>

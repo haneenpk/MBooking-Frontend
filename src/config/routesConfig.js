@@ -13,6 +13,9 @@ export const adminRoutesToCheck = [
     "/admin/dashboard",
     "/admin/users",
     "/admin/theaters",
+    "/admin/upcoming/add",
+    "/admin/upcoming",
+    "/admin/upcoming/edit",
 ];
 
 export const theaterRoutesToCheck = [

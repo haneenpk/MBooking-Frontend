@@ -3,6 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "../pages/Admin/Dashboard";
 const Users = lazy(() => import("../pages/Admin/Users"));
 const Theaters = lazy(() => import("../pages/Admin/Theaters"));
+const AddUpcomingMovie = lazy(() => import("../pages/Admin/AddUpcomingMovie"));
+const EditUpcomingMovie = lazy(() => import("../pages/Admin/EditUpcomingMovie"));
+const UpcomingMovies = lazy(() => import("../pages/Admin/UpcomingMovies"));
 import Login from "../pages/Users/Auth/Login";
 import ErrorPage from "../pages/ErrorPage";
 
@@ -15,6 +18,9 @@ const AdminRoutes = ({ isLoggedIn }) => {
         { path: "/", element: isLoggedIn ? <Dashboard /> : navigateToLogin() },
         { path: "/users", element: isLoggedIn ? <Users /> : navigateToLogin() },
         { path: "/theaters", element: isLoggedIn ? <Theaters /> : navigateToLogin() },
+        { path: "/upcoming/add", element: isLoggedIn ? <AddUpcomingMovie /> : navigateToLogin() },
+        { path: "/upcoming", element: isLoggedIn ? <UpcomingMovies /> : navigateToLogin() },
+        { path: "/upcoming/edit", element: isLoggedIn ? <EditUpcomingMovie /> : navigateToLogin() },
 
         // Auth Route
         { path: "/login", element: !isLoggedIn ? <Login role={"admin"} /> : navigateDashboard() },
