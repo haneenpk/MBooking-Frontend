@@ -17,6 +17,9 @@ const adminSlice = createSlice({
         setAdminData: (state, action) => {
             state.adminData = action.payload;
         },
+        resetAdminState: (state) => {
+            state.isLoggedIn = false
+        }, // Reset user state to initial state
     },
 });
 
@@ -24,6 +27,7 @@ const adminSlice = createSlice({
 export const {
     setLoggedIn,
     setAdminData,
+    resetAdminState,
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

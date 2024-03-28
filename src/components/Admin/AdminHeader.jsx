@@ -16,9 +16,8 @@ const AdminHeader = () => {
         <NavLink to="/admin/users" className="text-white hover:text-gray-300">Users</NavLink>
         <NavLink to="/admin/theaters" className="text-white hover:text-gray-300">Theaters</NavLink>
         <NavLink to="/admin/upcoming" className="text-white hover:text-gray-300">Upcoming</NavLink>
-        <NavLink to="/admin/banner" className="text-white hover:text-gray-300">Banner</NavLink>
         {/* Circle Icon */}
-        <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+        <NavLink to="/admin/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>
       <div className="md:hidden">
         <button onClick={toggleMenu} className="text-white">
@@ -27,6 +26,7 @@ const AdminHeader = () => {
           </svg>
         </button>
       </div>
+
       {showMenu && (
         <div className="md:hidden absolute bg-gray-800 top-full left-0 right-0 py-2 px-4">
           <ul className="flex flex-col gap-2">

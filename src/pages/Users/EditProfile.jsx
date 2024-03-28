@@ -16,7 +16,6 @@ const EditProfile = () => {
     // State to manage form fields
     const [formData, setFormData] = useState({
         username: '',
-        email: '',
         mobile: ''
     });
 
@@ -99,6 +98,11 @@ const EditProfile = () => {
                     {errors.username &&
                         <FormErrorDisplay error={errors.username} />
                     }
+                </div>
+
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder='Email' disabled />
                 </div>
 
                 <div className="mb-4">

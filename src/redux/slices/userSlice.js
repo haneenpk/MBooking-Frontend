@@ -21,7 +21,9 @@ const userSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload;
     },
-    resetUserState: () => initialUserState, // Reset user state to initial state
+    resetUserState: (state) =>  {
+      state.isLoggedIn = false
+    }, // Reset user state to initial state
   },
 });
 

@@ -6,6 +6,8 @@ const Theaters = lazy(() => import("../pages/Admin/Theaters"));
 const AddUpcomingMovie = lazy(() => import("../pages/Admin/AddUpcomingMovie"));
 const EditUpcomingMovie = lazy(() => import("../pages/Admin/EditUpcomingMovie"));
 const UpcomingMovies = lazy(() => import("../pages/Admin/UpcomingMovies"));
+const Profile = lazy(() => import("../pages/Admin/Profile"));
+const EditProfile = lazy(() => import("../pages/Admin/EditProfile"));
 import Login from "../pages/Users/Auth/Login";
 import ErrorPage from "../pages/ErrorPage";
 
@@ -21,6 +23,8 @@ const AdminRoutes = ({ isLoggedIn }) => {
         { path: "/upcoming/add", element: isLoggedIn ? <AddUpcomingMovie /> : navigateToLogin() },
         { path: "/upcoming", element: isLoggedIn ? <UpcomingMovies /> : navigateToLogin() },
         { path: "/upcoming/edit", element: isLoggedIn ? <EditUpcomingMovie /> : navigateToLogin() },
+        { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
+        { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
 
         // Auth Route
         { path: "/login", element: !isLoggedIn ? <Login role={"admin"} /> : navigateDashboard() },

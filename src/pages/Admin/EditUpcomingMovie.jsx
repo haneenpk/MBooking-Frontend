@@ -99,28 +99,28 @@ const EditUpcomingMovie = () => {
             <h2 className="text-xl font-semibold mb-4 text-center">Edit Upcoming Movies</h2>
             <div className="mb-4">
                 <label htmlFor="moviename" className="block mb-1">Movie Name</label>
-                <input type="text" id="moviename" name="moviename" value={movieData.moviename} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+                <input type="text" id="moviename" name="moviename" value={movieData.moviename} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Name' />
                 {errors.moviename &&
                     <FormErrorDisplay error={errors.moviename} />
                 }
             </div>
             <div className="mb-4">
                 <label htmlFor="languages" className="block mb-1">Languages</label>
-                <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+                <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma'/>
                 {errors.languages &&
                     <FormErrorDisplay error={errors.languages} />
                 }
             </div>
             <div className="mb-4">
                 <label htmlFor="genre" className="block mb-1">Genre</label>
-                <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+                <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma'/>
                 {errors.genre &&
                     <FormErrorDisplay error={errors.genre} />
                 }
             </div>
             <div className="mb-4">
                 <label htmlFor="description" className="block mb-1">Description</label>
-                <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+                <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie'/>
                 {errors.description &&
                     <FormErrorDisplay error={errors.description} />
                 }
@@ -151,7 +151,7 @@ const EditUpcomingMovie = () => {
             <button onClick={handleUpdate} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit Upcoming Movie</button>
             <div className='mt-3'>
                 <h1 className="text-xl font-semibold mb-4">Image</h1>
-                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${upcomingImage}`} alt={movieData.moviename} className="h-60 w-60 object-cover" />
+                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${upcomingImage}`} alt={movieData.moviename} className="h-72 w-64 object-cover rounded-lg" />
                 <div className="relative mt-4">
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="profilePicInput" />
                     <label htmlFor="profilePicInput" className="mb-2 border border-gray-300 rounded-md p-2 cursor-pointer">Update Image</label>

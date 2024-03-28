@@ -21,7 +21,9 @@ const theaterSlice = createSlice({
     setTheaterData: (state, action) => {
       state.theaterData = action.payload;
     },
-    resetTheaterState: () => initialTheaterState, // Reset user state to initial state
+    resetTheaterState: (state) =>  {
+      state.isLoggedIn = false
+    },// Reset user state to initial state
   },
 });
 

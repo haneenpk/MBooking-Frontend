@@ -26,6 +26,7 @@ const UserProfile = () => {
     localStorage.removeItem('theaterData');
     localStorage.removeItem('theaterAccessToken');
     dispatch(resetTheaterState());
+    navigate('/theater/login')
   };
 
   useEffect(() => {
@@ -58,10 +59,13 @@ const UserProfile = () => {
   }, [isBlocked, navigate]);
 
   if (error) {
-    // Handle network errors
-    console.error("Error fetching theater data:", error);
-    
-    return <div>Error fetching theater data</div>;
+    if (error.response && error.response.data.message === "You are blocked") {
+      localStorage.removeItem('theaterData');
+      localStorage.removeItem('theaterAccessToken');
+      dispatch(resetTheaterState());
+      console.log("Your account is blocked");
+      navigate("/theater/login")
+    }
   }
 
   if (!theaterDetails) {

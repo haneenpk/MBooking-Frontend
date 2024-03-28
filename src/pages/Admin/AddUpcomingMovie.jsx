@@ -60,7 +60,7 @@ const AddMovieForm = () => {
       <h2 className="text-xl font-semibold mb-4 text-center">Add Upcoming Movies</h2>
       <div className="mb-4">
         <label htmlFor="moviename" className="block mb-1">Movie Name</label>
-        <input type="text" id="moviename" name="moviename" value={movieData.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+        <input type="text" id="moviename" name="moviename" value={movieData.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Name' />
         {errors.moviename &&
           <FormErrorDisplay error={errors.moviename} />
         }
@@ -74,21 +74,21 @@ const AddMovieForm = () => {
       </div>
       <div className="mb-4">
         <label htmlFor="languages" className="block mb-1">Languages</label>
-        <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+        <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma'/>
         {errors.languages &&
           <FormErrorDisplay error={errors.languages} />
         }
       </div>
       <div className="mb-4">
         <label htmlFor="genre" className="block mb-1">Genre</label>
-        <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+        <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma'/>
         {errors.genre &&
           <FormErrorDisplay error={errors.genre} />
         }
       </div>
       <div className="mb-4">
         <label htmlFor="description" className="block mb-1">Description</label>
-        <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+        <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie'/>
         {errors.description &&
           <FormErrorDisplay error={errors.description} />
         }

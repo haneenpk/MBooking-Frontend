@@ -1,12 +1,19 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
+import { useDispatch } from 'react-redux';
+import { resetTheaterState } from '../../redux/slices/theaterSlice';
 
 const MovieTicketBooking = () => {
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const seatId = queryParams.get("seatId");
+
+  const [error, setError] = useState(null);
 
   // State for diamond category seats
   const [diamondRows, setDiamondRows] = useState({});
@@ -19,12 +26,18 @@ const MovieTicketBooking = () => {
 
   const [screenData, setScreenData] = useState({})
 
+  const [updated, setUpdated] = useState('')
+
   const applyChange = async () => {
     console.log("fir: ", screenData);
     try {
 
       const responseScreen = await Axios.put(`/api/theater/screens/seat/update/${seatId}`, { screenData });
       console.log(responseScreen);
+      setUpdated('Updated Successfully')
+      setTimeout(() => {
+        navigate('/theater/screens')
+      },1000)
 
     } catch (error) {
       console.log(error);
@@ -179,11 +192,11 @@ const MovieTicketBooking = () => {
   const deleteRow = (category) => {
     let updatedRows;
     if (category === "diamond") {
-        updatedRows = { ...diamondRows };
+      updatedRows = { ...diamondRows };
     } else if (category === "gold") {
-        updatedRows = { ...goldRows };
+      updatedRows = { ...goldRows };
     } else {
-        updatedRows = { ...silverRows };
+      updatedRows = { ...silverRows };
     }
 
     let lastKey = Object.keys(updatedRows)[Object.keys(updatedRows).length - 1].charCodeAt(0)
@@ -198,66 +211,66 @@ const MovieTicketBooking = () => {
 
     if (category === "diamond") {
 
-        setDiamondRows(updatedRows);
+      setDiamondRows(updatedRows);
 
-        updateScreenData.diamond.seats = updatedRows
+      updateScreenData.diamond.seats = updatedRows
 
-        alphaLeng = lastKey;
+      alphaLeng = lastKey;
 
-        for (let key in goldRows) {
-            let alpha = String.fromCharCode(alphaLeng);
-            updatedGoldRows[alpha] = goldRows[key];
-            delete updatedGoldRows[key];
-            alphaLeng += 1;
-        }
+      for (let key in goldRows) {
+        let alpha = String.fromCharCode(alphaLeng);
+        updatedGoldRows[alpha] = goldRows[key];
+        delete updatedGoldRows[key];
+        alphaLeng += 1;
+      }
 
-        for (let key in silverRows) {
-            let alpha = String.fromCharCode(alphaLeng);
-            updatedSilverRows[alpha] = silverRows[key];
-            delete updatedSilverRows[key];
-            alphaLeng += 1;
-        }
+      for (let key in silverRows) {
+        let alpha = String.fromCharCode(alphaLeng);
+        updatedSilverRows[alpha] = silverRows[key];
+        delete updatedSilverRows[key];
+        alphaLeng += 1;
+      }
 
-        setGoldRows(updatedGoldRows);
-        setSilverRows(updatedSilverRows);
+      setGoldRows(updatedGoldRows);
+      setSilverRows(updatedSilverRows);
 
-        console.log(updatedGoldRows);
-        console.log(updatedSilverRows);
+      console.log(updatedGoldRows);
+      console.log(updatedSilverRows);
 
-        updateScreenData.gold.seats = updatedGoldRows
-        updateScreenData.silver.seats = updatedSilverRows
+      updateScreenData.gold.seats = updatedGoldRows
+      updateScreenData.silver.seats = updatedSilverRows
 
-        setScreenData(updateScreenData)
+      setScreenData(updateScreenData)
 
     } else if (category === "gold") {
 
-        setGoldRows(updatedRows);
+      setGoldRows(updatedRows);
 
-        updateScreenData.gold.seats = updatedRows
+      updateScreenData.gold.seats = updatedRows
 
-        alphaLeng = lastKey;
+      alphaLeng = lastKey;
 
-        for (let key in silverRows) {
-            let alpha = String.fromCharCode(alphaLeng);
-            updatedSilverRows[alpha] = silverRows[key];
-            delete updatedSilverRows[key];
-            alphaLeng += 1;
-        }
+      for (let key in silverRows) {
+        let alpha = String.fromCharCode(alphaLeng);
+        updatedSilverRows[alpha] = silverRows[key];
+        delete updatedSilverRows[key];
+        alphaLeng += 1;
+      }
 
-        setSilverRows(updatedSilverRows);
+      setSilverRows(updatedSilverRows);
 
-        updateScreenData.silver.seats = updatedSilverRows
+      updateScreenData.silver.seats = updatedSilverRows
 
-        setScreenData(updateScreenData)
+      setScreenData(updateScreenData)
 
     } else {
-        setSilverRows(updatedRows);
+      setSilverRows(updatedRows);
 
-        updateScreenData.silver.seats = updatedRows
+      updateScreenData.silver.seats = updatedRows
 
-        setScreenData(updateScreenData)
+      setScreenData(updateScreenData)
     }
-};
+  };
 
   useLayoutEffect(() => {
 
@@ -280,6 +293,15 @@ const MovieTicketBooking = () => {
 
   }, [])
 
+  if (error) {
+    if (error.response && error.response.data.message === "You are blocked") {
+      localStorage.removeItem('theaterData');
+      localStorage.removeItem('theaterAccessToken');
+      dispatch(resetTheaterState());
+      console.log("Your account is blocked");
+      navigate("/theater/login")
+    }
+  }
 
   const renderSeats = (row, category) => {
     const seats = [];
@@ -305,7 +327,8 @@ const MovieTicketBooking = () => {
 
   return (
     <div className="container mx-auto mt-8 px-1">
-      <button onClick={applyChange} className="px-2 py-1 mb-4 bg-blue-500 text-white rounded">Apply Changes</button>
+      <button onClick={applyChange} className="px-2 py-1 mb-4 bg-blue-500 text-white rounded hover:bg-blue-400">Apply Changes</button>
+      <span className='text-green-500 font-semibold ml-2'>{updated}</span>
       <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold text-center">Diamond</h2>
 

@@ -22,18 +22,15 @@ const UserProfile = () => {
     navigate("/login")
   };
 
-
-
-  if (error) {
-    console.log(error.response.status);
-    if (error.response.data.message === "You are blocked") {
+  useEffect(() => {
+    if (error && error.response.data.message === "You are blocked") {
       localStorage.removeItem('userData');
       localStorage.removeItem('userAccessToken');
       dispatch(resetUserState());
       console.log("Your account is blocked");
-      navigate("/login")
+      navigate("/login");
     }
-  }
+  }, [error, navigate]);
 
   // Function to handle profile picture change
   const handleProfilePicChange = async (event) => {
@@ -77,18 +74,20 @@ const UserProfile = () => {
   const fetchUserData = async () => {
     try {
       const userId = localStorage.getItem('userData');
-
+  
       console.log(`${import.meta.env.VITE_AXIOS_BASE_URL}`);
-
+  
       if (!userId) {
         navigate('/login');
         return;
       }
-
+  
       const response = await Axios.get(`/api/user/get/${userId}`);
-      setUserDetails(response.data.data);
-      setIsBlocked(response.data.data.isBlocked); // Set isBlocked based on user data
-
+      const userData = response.data.data;
+  
+      setUserDetails(userData);
+      setIsBlocked(userData.isBlocked);
+  
     } catch (error) {
       setError(error);
     }

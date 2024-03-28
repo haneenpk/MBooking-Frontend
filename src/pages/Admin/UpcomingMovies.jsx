@@ -63,7 +63,7 @@ const UpcomingMovies = () => {
               {upcomings.map((movie, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">{movie.moviename}</td>
-                  <td className="px-6 py-4 whitespace-nowrap"><img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="h-16 w-16 object-cover" /></td>
+                  <td className="px-6 py-4 whitespace-nowrap"><img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="h-20 w-16 object-cover rounded-sm" /></td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {movie.languages.map((language, index) => (
                       <div key={index}>{language}</div>

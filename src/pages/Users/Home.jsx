@@ -1,4 +1,41 @@
+import Axios from "../../api/shared/instance";
+import { useNavigate } from 'react-router-dom';
+import { resetUserState } from '../../redux/slices/userSlice';
+import { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
+
 const Home = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const fetchUserData = async () => {
+    try {
+      const userId = localStorage.getItem('userData');
+  
+      if (!userId) {
+        navigate('/login');
+        return;
+      }
+  
+      const response = await Axios.get(`/api/user/get/${userId}`);
+
+    } catch (error) {
+      if (error && error.response.data.message === "You are blocked") {
+        localStorage.removeItem('userData');
+        localStorage.removeItem('userAccessToken');
+        dispatch(resetUserState());
+        console.log("Your account is blocked");
+        navigate("/login");
+      }
+    }
+  };
+
+  useLayoutEffect(() => {
+
+    fetchUserData();
+
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100">
