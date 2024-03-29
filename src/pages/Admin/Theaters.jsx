@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -57,7 +57,12 @@ const UserList = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{theater.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{theater.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{theater.mobile}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{theater.screenCount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {theater.screenCount}
+                    <NavLink to={`/admin/theater-screens?theaterId=${theater._id}&name=${theater.name}`} className="ml-2 text-blue-500 hover:underline">
+                      Edit screens
+                    </NavLink>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button onClick={() => handleAction(theater._id)} className={theater.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-red-600 hover:text-red-900'}>
                       {theater.isBlocked ? 'Unblock' : 'Block'}

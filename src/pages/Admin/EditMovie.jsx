@@ -1,21 +1,21 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
-import { editUpcomingSchema } from "../../validations/adminValidations/editUpcoming";
+import { editMovieSchema } from "../../validations/adminValidations/editMovie";
 import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const EditUpcomingMovie = () => {
+const EditMovie = () => {
 
     const navigate = useNavigate()
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const upcomingId = queryParams.get("upcomingId");
+    const movieId = queryParams.get("movieId");
 
     const [movieData, setMovieData] = useState({});
-    const [upcomingImage, setUpcomingImage] = useState("");
+    const [movieImage, setMovieImage] = useState("");
 
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
@@ -27,12 +27,12 @@ const EditUpcomingMovie = () => {
     const handleUpdate = async () => {
         try {
 
-            await editUpcomingSchema.validate(movieData, { abortEarly: false });
-            console.log(upcomingId);
+            await editMovieSchema.validate(movieData, { abortEarly: false });
+            console.log(movieId);
 
-            const response = await Axios.put(`/api/admin/upcoming/edit/${upcomingId}`, movieData);
+            const response = await Axios.put(`/api/admin/movie/edit/${movieId}`, movieData);
             console.log(response);
-            navigate('/admin/upcoming')
+            navigate('/admin/movie')
         } catch (error) {
             handleFormErrors(error, setErrors, setServerResponse);
         }
@@ -45,9 +45,9 @@ const EditUpcomingMovie = () => {
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
       
-            const response = await Axios.patch(`/api/admin/upcoming/edit/image/${upcomingId}`, formData);
+            const response = await Axios.patch(`/api/admin/movie/edit/image/${movieId}`, formData);
       
-            fetchUpcomingMovieData()
+            fetchMovieData()
       
             console.log(response);
       
@@ -57,23 +57,24 @@ const EditUpcomingMovie = () => {
 
     }
 
-    const fetchUpcomingMovieData = async () => {
+    const fetchMovieData = async () => {
         try {
 
-            const responseScreen = await Axios.get(`/api/admin/upcoming/get/${upcomingId}`);
+            const responseScreen = await Axios.get(`/api/admin/movie/get/${movieId}`);
 
-            let upcoming = responseScreen.data.data
+            let movie = responseScreen.data.data
 
-            upcoming.languages = upcoming.languages.join(',')
-            upcoming.genre = upcoming.genre.join(',')
+            movie.languages = movie.languages.join(',')
+            movie.genre = movie.genre.join(',')
+            movie.cast = movie.cast.join(',')
 
-            setUpcomingImage(upcoming.image)
+            setMovieImage(movie.image)
 
-            delete upcoming.image
+            delete movie.image
 
-            setMovieData(upcoming)
+            setMovieData(movie)
 
-            console.log(upcoming);
+            console.log(movie);
 
         } catch (error) {
             setErrors(error);
@@ -82,13 +83,13 @@ const EditUpcomingMovie = () => {
 
     useLayoutEffect(() => {
 
-        fetchUpcomingMovieData();
+        fetchMovieData();
 
     }, [])
 
     return (
         <div className="max-w-md mx-auto py-5">
-            <h2 className="text-xl font-semibold mb-4 text-center">Edit Upcoming Movies</h2>
+            <h2 className="text-xl font-semibold mb-4 text-center">Edit Movies</h2>
             <div className="mb-4">
                 <label htmlFor="moviename" className="block mb-1">Movie Name</label>
                 <input type="text" id="moviename" name="moviename" value={movieData.moviename} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Name' />
@@ -108,6 +109,37 @@ const EditUpcomingMovie = () => {
                 <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma'/>
                 {errors.genre &&
                     <FormErrorDisplay error={errors.genre} />
+                }
+            </div>
+            <div className="mb-4">
+                <label htmlFor="cast" className="block mb-1">Cast</label>
+                <input type="text" id="cast" name="cast" value={movieData.cast} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Cast seperated by coma' />
+                {errors.cast &&
+                    <FormErrorDisplay error={errors.cast} />
+                }
+            </div>
+            <div className="mb-4">
+                <label htmlFor="duration" className="block mb-1">Duration</label>
+                <input
+                    type="text"
+                    id="duration"
+                    name="duration"
+                    value={movieData.duration}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2"
+                    required
+                    pattern="\d{2}:\d{2}:\d{2}" // Added pattern for validation
+                    placeholder='Duration of the movie (HH:MM:SS)' // Added placeholder with format information
+                />
+                {errors.duration &&
+                    <FormErrorDisplay error={errors.duration} />
+                }
+            </div>
+            <div className="mb-4">
+                <label htmlFor="type" className="block mb-1">Type</label>
+                <input type="text" id="type" name="type" value={movieData.type} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Type of the movie' />
+                {errors.type &&
+                    <FormErrorDisplay error={errors.type} />
                 }
             </div>
             <div className="mb-4">
@@ -143,7 +175,7 @@ const EditUpcomingMovie = () => {
             <button onClick={handleUpdate} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit Upcoming Movie</button>
             <div className='mt-3'>
                 <h1 className="text-xl font-semibold mb-4">Image</h1>
-                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${upcomingImage}`} alt={movieData.moviename} className="h-72 w-64 object-cover rounded-lg" />
+                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movieImage}`} alt={movieData.moviename} className="h-72 w-64 object-cover rounded-lg" />
                 <div className="relative mt-4">
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="profilePicInput" />
                     <label htmlFor="profilePicInput" className="mb-2 border border-gray-300 rounded-md p-2 cursor-pointer">Update Image</label>
@@ -153,4 +185,4 @@ const EditUpcomingMovie = () => {
     );
 };
 
-export default EditUpcomingMovie;
+export default EditMovie;

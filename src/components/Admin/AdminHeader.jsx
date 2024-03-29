@@ -16,6 +16,7 @@ const AdminHeader = () => {
         <NavLink to="/admin/users" className="text-white hover:text-gray-300">Users</NavLink>
         <NavLink to="/admin/theaters" className="text-white hover:text-gray-300">Theaters</NavLink>
         <NavLink to="/admin/upcoming" className="text-white hover:text-gray-300">Upcoming</NavLink>
+        <NavLink to="/admin/movie" className="text-white hover:text-gray-300">Movie</NavLink>
         {/* Circle Icon */}
         <NavLink to="/admin/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>

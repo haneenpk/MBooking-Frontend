@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
@@ -12,6 +12,8 @@ const MovieTicketBooking = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const seatId = queryParams.get("seatId");
+  const role = queryParams.get("role");
+  const theaterId = queryParams.get("theaterId");
 
   const [error, setError] = useState(null);
 
@@ -31,13 +33,21 @@ const MovieTicketBooking = () => {
   const applyChange = async () => {
     console.log("fir: ", screenData);
     try {
-
-      const responseScreen = await Axios.put(`/api/theater/screens/seat/update/${seatId}`, { screenData });
-      console.log(responseScreen);
-      setUpdated('Updated Successfully')
-      setTimeout(() => {
-        navigate('/theater/screens')
-      },1000)
+      if(role === "theater"){
+        const responseScreen = await Axios.put(`/api/theater/screens/seat/update/${seatId}`, { screenData });
+        console.log(responseScreen);
+        setUpdated('Updated Successfully')
+        setTimeout(() => {
+          navigate('/theater/screens')
+        },1000)
+      }else{
+        const responseScreen = await Axios.put(`/api/admin/screens/seat/update/${seatId}`, { screenData });
+        console.log(responseScreen);
+        setUpdated('Updated Successfully')
+        setTimeout(() => {
+          navigate(`/admin/theater-screens?theaterId=${theaterId}`)
+        },1000)
+      }
 
     } catch (error) {
       console.log(error);
@@ -277,7 +287,12 @@ const MovieTicketBooking = () => {
     const fetchTheaterScreenData = async () => {
       try {
 
-        const responseScreen = await Axios.get(`/api/theater/screens/seat/${seatId}`);
+        let responseScreen;
+        if(role === "theater"){
+          responseScreen = await Axios.get(`/api/theater/screens/seat/${seatId}`);
+        }else{
+          responseScreen = await Axios.get(`/api/admin/screens/seat/${seatId}`);
+        }
 
         setDiamondRows(responseScreen.data.data.diamond.seats)
         setGoldRows(responseScreen.data.data.gold.seats)
