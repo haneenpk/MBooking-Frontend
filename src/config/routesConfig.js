@@ -35,4 +35,5 @@ export const theaterRoutesToCheck = [
     "/theater/screen/edit",
     "/theater/profile",
     "/theater/edit-profile",
+    "/theater/show/add",
 ];

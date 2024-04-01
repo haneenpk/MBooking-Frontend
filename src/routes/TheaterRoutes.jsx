@@ -6,6 +6,7 @@ const AddScreen = lazy(() => import("../pages/Theater/AddScreen"));
 const ViewScreen = lazy(() => import("../pages/Theater/ViewScreen"));
 const Profile = lazy(() => import("../pages/Theater/Profile"));
 const EditProfile = lazy(() => import("../pages/Theater/EditProfile"));
+const AddShow = lazy(() => import("../pages/Theater/AddShow"));
 
 import Login from "../pages/Users/Auth/Login";
 import OTP from "../pages/Theater/Auth/OTP";
@@ -26,6 +27,7 @@ const TheaterRoutes = ({ isLoggedIn }) => {
         { path: "/screen/edit", element: isLoggedIn ? <ViewScreen /> : navigateToLogin() },
         { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
         { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
+        { path: "/show/add", element: isLoggedIn ? <AddShow /> : navigateToLogin() },
     ];
 
     const authRoutes = [
