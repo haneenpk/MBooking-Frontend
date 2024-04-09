@@ -12,6 +12,15 @@ export const signupSchema = Yup.object({
     .string()
     .matches(/^\d{10}$/, "Invalid phone number")
     .required("Phone number is required"),
+  country: Yup
+    .string()
+    .required("Country is required"),
+  state: Yup
+    .string()
+    .required("State is required"),
+  district: Yup
+    .string()
+    .required("District is required"),
   password: Yup
     .string()
     .min(8, "Password must be at least 8 characters")

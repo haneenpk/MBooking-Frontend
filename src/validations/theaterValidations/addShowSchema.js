@@ -3,7 +3,7 @@ import * as Yup from "yup";
 export const addShowSchema = Yup.object({
     screenId: Yup
         .string()
-        .required("Select a theater"),
+        .required("Select a screen"),
     movieId: Yup
         .string()
         .required("Select a movie"),

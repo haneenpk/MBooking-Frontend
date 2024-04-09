@@ -13,6 +13,9 @@ const SignUp = () => {
         username: "",
         email: "",
         mobile: "",
+        country: "",
+        state: "",
+        district: "",
         password: ""
     });
 
@@ -71,6 +74,32 @@ const SignUp = () => {
                         <input name={"mobile"} onChange={handleChange} type={"tel"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Phone" />
                         {errors.phone &&
                             <FormErrorDisplay error={errors.phone} />
+                        }
+                    </div>
+
+                    <div className="mb-3 flex flex-wrap justify-between">
+                        <div className="w-full md:w-52">
+                            <label htmlFor="country">Country</label>
+                            <input name={"country"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Country" />
+                            {errors.country &&
+                                <FormErrorDisplay error={errors.country} />
+                            }
+                        </div>
+
+                        <div className="w-full md:w-56">
+                            <label htmlFor="state">State</label>
+                            <input name={"state"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="State" />
+                            {errors.state &&
+                                <FormErrorDisplay error={errors.state} />
+                            }
+                        </div>
+                    </div>
+
+                    <div className="mb-3">
+                        <label htmlFor="district">District</label>
+                        <input name={"district"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="District" />
+                        {errors.district &&
+                            <FormErrorDisplay error={errors.district} />
                         }
                     </div>
 

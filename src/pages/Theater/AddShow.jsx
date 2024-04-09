@@ -27,7 +27,7 @@ function AddShow() {
     const [movies, setMovies] = useState([]);
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
-    
+
 
     useEffect(() => {
         // Fetch list of theaters
@@ -77,6 +77,7 @@ function AddShow() {
             // navigate("/theater/screens");
 
         } catch (error) {
+            console.log(error);
             handleFormErrors(error, setErrors, setServerResponse);
         }
     };
@@ -87,7 +88,7 @@ function AddShow() {
             <div className='my-3'>
                 <label htmlFor="screenId" className="block text-sm font-medium text-gray-700">Select Screen</label>
                 <select name="screenId" id="screenId" value={newShow.screenId} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full">
-                    <option value="">Select a theater</option>
+                    <option value="">Select a Screen</option>
                     {screens.map(screen => (
                         <option key={screen.id} value={screen._id}>{screen.name}</option>
                     ))}
@@ -143,7 +144,6 @@ function AddShow() {
                     <FormErrorDisplay error={errors.silverPrice} />
                 }
             </div>
-            <button onClick={handleAddShow} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-2">Add</button>
             {serverResponse && (
                 <div
                     className={`mt-2 p-2 text-center font-bold text-red-600`}
@@ -152,6 +152,8 @@ function AddShow() {
                     {serverResponse.message}
                 </div>
             )}
+            <button onClick={handleAddShow} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-2">Add</button>
+
         </div>
     )
 }

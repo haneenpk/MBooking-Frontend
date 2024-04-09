@@ -40,7 +40,7 @@ const Register = () => {
             const response = await axios.post(`http://localhost:3000/api/theater/register`, formData);
             console.log(response.data.message);
 
-            navigate(`/theatre/verify-otp?email=${formData.email}`);
+            navigate(`/theater/verify-otp?email=${formData.email}`);
 
         } catch (error) {
             handleFormErrors(error, setErrors, setServerResponse);

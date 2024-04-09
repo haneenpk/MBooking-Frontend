@@ -4,6 +4,8 @@ import Home from "../pages/Users/Home";
 
 const Profile = lazy(() => import("../pages/Users/Profile"));
 const EditProfile = lazy(() => import("../pages/Users/EditProfile"));
+const Upcoming = lazy(() => import("../pages/Users/upcoming"));
+const ShowTime = lazy(() => import("../pages/Users/showTime"));
 
 import Login from "../pages/Users/Auth/Login";
 import SignUp from "../pages/Users/Auth/SignUp";
@@ -21,6 +23,8 @@ const UserRoutes = ({ isLoggedIn }) => {
         { path: "/home", element: isLoggedIn ? <Home /> : navigateToLogin() },
         { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
         { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
+        { path: "/upcoming", element: isLoggedIn ? <Upcoming /> : navigateToLogin() },
+        { path: "/available", element: isLoggedIn ? <ShowTime /> : navigateToLogin() },
     ];
 
     const authRoutes = [
