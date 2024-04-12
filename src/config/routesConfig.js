@@ -6,6 +6,7 @@ export const userRoutesToCheck = [
     "/edit-profile",
     "/upcoming",
     "/available",
+    "/show/seats",
 ];
 
 // List of admin routes where Header and Footer should be displayed
@@ -38,5 +39,7 @@ export const theaterRoutesToCheck = [
     "/theater/profile",
     "/theater/edit-profile",
     "/theater/show/add",
+    "/theater/show/edit",
     "/theater/show",
+
 ];

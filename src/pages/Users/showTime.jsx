@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
 import Axios from "../../api/shared/instance";
@@ -8,10 +8,21 @@ function ShowTime() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [theaters, setTheaters] = useState([]);
+    const [dates, setDates] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(null); // State to keep track of the selected date
+    const [userLocation, setUserLocation] = useState({})
+    const [movie, setMovie] = useState({})
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const movieId = queryParams.get("movieId");
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
+        const day = date.getDate();
+        return { month, day };
+    };
 
     const handleTheaterId = async (theaterId) => {
         try {
@@ -24,6 +35,34 @@ function ShowTime() {
         }
     };
 
+    const formatTime = (time) => {
+        const hours = time.hour > 12 ? time.hour - 12 : time.hour;
+        const period = time.hour >= 12 ? 'PM' : 'AM';
+        return `${hours.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}${period}`;
+    };
+
+    const handleDate = async (date) => {
+        
+        const response = await Axios.get(`/api/user/selectShowTime?country=${userLocation.country}&district=${userLocation.district}&movieId=${movieId}&date=${date}`);
+
+        const theaterPromises = response.data.selectedShow.map(show => handleTheaterId(show.theaterId));
+
+        // Wait for all theater name promises to resolve
+        const theaterNames = await Promise.all(theaterPromises);
+
+        // Combine theater names with corresponding shows
+        const groupedShows = response.data.selectedShow.map((show, index) => ({
+            ...show,
+            theaterName: theaterNames[index]
+        }));
+
+        const groupedTheaters = await groupShowsByTheater(groupedShows); // Await here
+
+        setSelectedDate(date);
+
+        setTheaters(groupedTheaters);
+    }
+
     useEffect(() => {
         const fetchShowData = async () => {
             try {
@@ -33,6 +72,10 @@ function ShowTime() {
                     return;
                 }
                 const response = await Axios.get(`/api/user/get/${userId}`);
+                setUserLocation({
+                    district : response.data.data.district,
+                    country : response.data.data.country
+                })
                 const response2 = await Axios.get(`/api/user/showTime?country=${response.data.data.country}&district=${response.data.data.district}&movieId=${movieId}`);
 
                 // Collect promises for fetching theater names
@@ -49,6 +92,10 @@ function ShowTime() {
 
                 const groupedTheaters = await groupShowsByTheater(groupedShows); // Await here
 
+                setDates(response2.data.dates)
+
+                setSelectedDate(response2.data.dates[0]);
+
                 setTheaters(groupedTheaters);
             } catch (error) {
                 if (error && error.response && error.response.data.message === "You are blocked") {
@@ -61,7 +108,18 @@ function ShowTime() {
             }
         };
 
+        const fetchMovie = async () => {
+            try {
+                const response = await Axios.get(`/api/user/movie/get/${movieId}`);
+                console.log("mm:",response.data.data);
+                setMovie(response.data.data)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
         fetchShowData();
+        fetchMovie();
     }, [navigate, dispatch, movieId]);
 
     const groupShowsByTheater = async (shows) => {
@@ -89,22 +147,48 @@ function ShowTime() {
     };
 
     return (
-        <div className="container mx-auto mt-8">
-            <h1 className="text-2xl font-bold mb-4">Select Showtime</h1>
-            <div className="grid grid-cols-2 gap-8">
-                {theaters.map(([theaterName, shows]) => (
-                    <div key={theaterName}>
-                        <h2 className="text-xl font-semibold mb-4">Theater: {theaterName}</h2>                       
-                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-                            {shows.map((show, index) => (
-                                <div key={index} className="p-4 border rounded-lg">
-                                    <p className="text-lg font-semibold">{`${show.startTime.hour}:${show.startTime.minute} - ${show.endTime.hour}:${show.endTime.minute}`}</p>
-                                    <p className="text-sm text-gray-600 mt-1">{`Available Seats: ${show.availableSeatCount}/${show.totalSeatCount}`}</p>
-                                </div>
-                            ))}
+        <div className="container mx-auto mt-8 flex">
+            <div className="mr-8">
+                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="w-64 rounded-md h-auto mb-4" />
+                <h1 className="text-2xl font-bold mb-2">{movie.moviename}</h1>
+            </div>
+            <div className="w-full">
+                <h1 className="text-2xl font-bold mb-4">Select Showtime</h1>
+                <div className="flex space-x-4 mb-4">
+                    {dates.map((dateString, index) => {
+                        const { month, day } = formatDate(dateString);
+                        const isSelected = selectedDate === dateString;
+                        const bgColor = isSelected ? 'bg-blue-500' : 'bg-blue-300';
+                        console.log(bgColor);
+                        const dynamicClassName = `${bgColor} text-black text-white px-4 py-1 rounded-md cursor-pointer transition duration-300 hover:bg-blue-500`;
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => handleDate(dateString)}
+                                className={dynamicClassName}
+                            >
+                                <span className='font-semibold text-lg'>{month}</span>
+                                <div className='font-semibold'>{day}</div>
+                            </button>
+                        );
+                    })}
+                </div>
+                <div>
+                    {theaters.map(([theaterName, shows]) => (
+                        <div className="flex mt-5 w-full h-20 rounded-md bg-gray-200 p-3" key={theaterName}>
+                            <div className='w-32'> 
+                                <h2 className="text-xl font-semibold mt-4">{theaterName}</h2>
+                            </div>
+                            <div className="ml-8 flex">
+                                {shows.map((show, index) => (
+                                    <NavLink to={`/show/seats?seatId=${show.seatId}`} key={index} className="p-4 bg-blue-500 text-white rounded-lg mr-3">
+                                        <p className="text-lg font-semibold">{formatTime(show.startTime)}</p>
+                                    </NavLink>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );

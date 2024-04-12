@@ -4,12 +4,15 @@ import { addShowSchema } from "../../validations/theaterValidations/addShowSchem
 import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
-function AddShow() {
+function EditShow() {
 
     const navigate = useNavigate()
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const showId = queryParams.get("showId");
 
     const theaterId = localStorage.getItem("theaterData")
 
@@ -27,7 +30,43 @@ function AddShow() {
     const [movies, setMovies] = useState([]);
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
+    const [updateResponse, setUpdateResponse] = useState("")
 
+    const formatTime = (time) => {
+        const hours = time.hour > 12 ? time.hour - 12 : time.hour;
+        const period = time.hour >= 12 ? 'PM' : 'AM';
+        return `${hours.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}${period}`;
+    };
+
+    const handleChange = (e) => {
+        handleInputChange(e, newShow, setNewShow, setServerResponse, setErrors);
+    };
+
+    const handleEditShow = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Validate formData against the signup schema
+            await addShowSchema.validate(newShow, { abortEarly: false });
+
+            setErrors({}); // Clear previous validation errors
+
+            console.log(newShow);
+
+            // If validation passes, proceed with signup
+            const response = await Axios.post(`/api/theater/show/edit/${showId}`, newShow);
+            console.log(response.data.message);
+            setUpdateResponse("Update Successfully")
+
+            setTimeout(() => {
+                navigate("/theater/show");
+            },1000)
+
+        } catch (error) {
+            console.log(error);
+            handleFormErrors(error, setErrors, setServerResponse);
+        }
+    };
 
     useEffect(() => {
         // Fetch list of theaters
@@ -51,40 +90,34 @@ function AddShow() {
             }
         }
 
+        async function fetchShow() {
+            try {
+                const response = await Axios.get(`/api/theater/show/edit/${showId}`);
+                console.log(response.data);
+                let obj = {
+                    screenId: response.data.editShow.screenId, // Add theaterId field
+                    movieId: response.data.editShow.movieId, // Add movieId field
+                    startTime: formatTime(response.data.editShow.startTime),
+                    date: new Date(response.data.editShow.date).toISOString().substr(0, 10),
+                    diamondPrice: `${response.data.editShowScreen.diamond.price}`,
+                    goldPrice: `${response.data.editShowScreen.gold.price}`,
+                    silverPrice: `${response.data.editShowScreen.silver.price}`,
+                }
+                console.log(obj);
+                setNewShow(obj)
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
+        }
+
+        fetchShow()
         fetchScreens();
         fetchMovies();
     }, []);
 
-    const handleChange = (e) => {
-        handleInputChange(e, newShow, setNewShow, setServerResponse, setErrors);
-    };
-
-    const handleAddShow = async (e) => {
-        e.preventDefault();
-
-        try {
-            // Validate formData against the signup schema
-            await addShowSchema.validate(newShow, { abortEarly: false });
-
-            setErrors({}); // Clear previous validation errors
-
-            console.log(newShow);
-
-            // If validation passes, proceed with signup
-            const response = await Axios.post(`/api/theater/show/add/${theaterId}`, newShow);
-            console.log(response.data.message);
-
-            navigate("/theater/show");
-
-        } catch (error) {
-            console.log(error);
-            handleFormErrors(error, setErrors, setServerResponse);
-        }
-    };
-
     return (
         <div className='px-14 my-5'>
-            <h3 className="text-xl font-semibold mb-2">Add Show</h3>
+            <h3 className="text-xl font-semibold mb-2">Edit Show</h3>
             <div className='my-3'>
                 <label htmlFor="screenId" className="block text-sm font-medium text-gray-700">Select Screen</label>
                 <select name="screenId" id="screenId" value={newShow.screenId} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full">
@@ -152,10 +185,18 @@ function AddShow() {
                     {serverResponse.message}
                 </div>
             )}
-            <button onClick={handleAddShow} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-2">Add</button>
+            <button onClick={handleEditShow} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-2">Add</button>
+            {updateResponse && (
+                <div
+                    className={`mt-2 p-2 font-bold text-green-600`}
+                    role="alert"
+                >
+                    {updateResponse}
+                </div>
+            )}
 
         </div>
     )
 }
 
-export default AddShow;
+export default EditShow;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 
 const Show = () => {
@@ -32,27 +33,41 @@ const Show = () => {
         setSelectedDate(date); // Set the selected date
     };
 
-    useEffect(() => {
-        async function fetchDate() {
-            try {
-                const response = await Axios.get(`/api/theater/shows/first/${theaterId}`);
-                setDates(response.data.dates);
-                // Select the first date by default
-                if (response.data.dates.length > 0) {
-                    handleDate(response.data.dates[0]);
-                }
-            } catch (error) {
-                console.error("Error fetching theaters:", error);
+    async function fetchDate() {
+        try {
+            const response = await Axios.get(`/api/theater/shows/first/${theaterId}`);
+            setDates(response.data.dates);
+            // Select the first date by default
+            if (response.data.dates.length > 0) {
+                handleDate(response.data.dates[0]);
             }
+        } catch (error) {
+            console.error("Error fetching theaters:", error);
         }
+    }
 
+    async function handleDelete(showId) {
+        try {
+            console.log("Delete movie:", showId);
+            const response = await Axios.delete(`/api/theater/show/delete/${showId}`);
+            console.log(response);
+            fetchDate();
+        } catch (error) {
+            console.error("Error fetching theaters:", error);
+        }
+    }
+
+    useEffect(() => {
         fetchDate();
     }, [theaterId]);
 
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* Date selection */}
-            <div className="flex space-x-4 mb-4">
+            <h2 className="text-2xl font-bold ">Shows</h2>
+            <NavLink to="/theater/show/add" className="my-3 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Add Show
+            </NavLink>
+            <div className="flex space-x-4 mb-4 mt-2">
                 {dates.map((dateString, index) => {
                     const { month, day } = formatDate(dateString);
                     const isSelected = selectedDate === dateString;
@@ -84,10 +99,15 @@ const Show = () => {
                             <p>Total Seats: {show.totalSeatCount}</p>
                             <p>Available Seats: {show.availableSeatCount}</p>
                             {/* Add more details as needed */}
+                            <div className="flex justify-between mt-2">
+                                <NavLink to={`/theater/show/edit?showId=${show._id}`} className="text-blue-500 hover:underline">
+                                    Edit show
+                                </NavLink>
+                                <button onClick={() => handleDelete(show._id)} className="text-red-500 hover:underline">Delete</button>
+                            </div>
                         </div>
                     </div>
                 ))}
-
                 {shows.length === 0 && <p>No shows available for the selected date.</p>}
             </div>
         </div>

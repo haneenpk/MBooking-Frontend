@@ -23,7 +23,7 @@ const Movies = () => {
 
   const handleDelete = async (movieId) => {
     try {
-      console.log("Delete movie:", upcomingId);
+      console.log("Delete movie:", movieId);
       const response = await Axios.delete(`/api/admin/movie/delete/${movieId}`);
       console.log(response);
       fetchMovieData();
