@@ -26,6 +26,8 @@ const Show = () => {
         const response = await Axios.get(`/api/theater/shows/${theaterId}?date=${date}`);
         for (let i = 0; i < response.data.FirstShow.length; i++) {
             const response2 = await Axios.get(`/api/theater/movie/get/${response.data.FirstShow[i].movieId}`);
+            const response3 = await Axios.get(`/api/theater/screens/get/${response.data.FirstShow[i].screenId}`);
+            response.data.FirstShow[i].screen = response3.data.data.name
             response.data.FirstShow[i].moviename = response2.data.data.moviename
             response.data.FirstShow[i].image = response2.data.data.image
         }
@@ -94,6 +96,7 @@ const Show = () => {
                         <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${show.image}`} alt={show.moviename} className="rounded-sm mb-4" style={{ maxHeight: "130px", maxWidth: "120px", }} />
                         <div>
                             <h2 className="text-lg font-semibold">{show.moviename}</h2>
+                            <p>Screen: {show.screen}</p>
                             <p>Date: {new Date(show.date).toLocaleDateString()}</p>
                             <p>Time: {formatTime(show.startTime)} - {formatTime(show.endTime)}</p>
                             <p>Total Seats: {show.totalSeatCount}</p>

@@ -24,17 +24,27 @@ const AddMovie = () => {
 
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
+    const [previewImage, setPreviewImage] = useState(null);
 
     const handleChange = (e) => {
         handleInputChange(e, movieData, setMovieData, setServerResponse, setErrors);
     };
 
     const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        setMovieData(prevState => ({
-            ...prevState,
-            image: file
-        }));
+        if (e.target.name === 'image') {
+            const file = e.target.files[0];
+            setMovieData(prevState => ({
+                ...prevState,
+                image: file
+            }));
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => setPreviewImage(e.target.result);
+                reader.readAsDataURL(file);
+            } else {
+                setPreviewImage(null); // Clear preview if invalid file
+            }
+        }
     };
 
     const handleSubmit = async () => {
@@ -77,6 +87,9 @@ const AddMovie = () => {
                 {errors.image &&
                     <FormErrorDisplay error={errors.image} />
                 }
+                {previewImage && (
+                    <img src={previewImage} alt="Movie Preview" className="h-56 rounded-sm mt-2" />
+                )}
             </div>
             <div className="mb-4">
                 <label htmlFor="languages" className="block mb-1">Languages</label>

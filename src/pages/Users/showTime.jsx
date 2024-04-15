@@ -60,6 +60,8 @@ function ShowTime() {
 
         setSelectedDate(date);
 
+        console.log(groupedTheaters);
+
         setTheaters(groupedTheaters);
     }
 
@@ -111,7 +113,6 @@ function ShowTime() {
         const fetchMovie = async () => {
             try {
                 const response = await Axios.get(`/api/user/movie/get/${movieId}`);
-                console.log("mm:",response.data.data);
                 setMovie(response.data.data)
             } catch (error) {
                 console.log(error);
@@ -159,7 +160,6 @@ function ShowTime() {
                         const { month, day } = formatDate(dateString);
                         const isSelected = selectedDate === dateString;
                         const bgColor = isSelected ? 'bg-blue-500' : 'bg-blue-300';
-                        console.log(bgColor);
                         const dynamicClassName = `${bgColor} text-black text-white px-4 py-1 rounded-md cursor-pointer transition duration-300 hover:bg-blue-500`;
                         return (
                             <button
