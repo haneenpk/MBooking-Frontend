@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner'
 import { useNavigate, NavLink } from 'react-router-dom';
 import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
@@ -13,6 +14,7 @@ const Home = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedReleaseDate, setSelectedReleaseDate] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [toastShown, setToastShown] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,17 +34,24 @@ const Home = () => {
         setDistrict(district);
       } catch (error) {
         if (error && error.response && error.response.data.message === "You are blocked") {
-          localStorage.removeItem('userData');
-          localStorage.removeItem('userAccessToken');
-          dispatch(resetUserState());
-          console.log("Your account is blocked");
-          navigate("/login");
+          // Check if toast has already been shown
+          if (!toastShown) {
+            localStorage.removeItem('userData');
+            localStorage.removeItem('userAccessToken');
+            dispatch(resetUserState());
+            console.log("Your account is blocked");
+            toast.error('Your account is blocked');
+            setToastShown(true); // Update toastShown to true
+            navigate("/login");
+          }
         }
       }
     };
 
     fetchUserData();
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, toastShown]);
+
+
 
   const handleGenreChange = (genre) => {
     if (selectedGenres.includes(genre)) {

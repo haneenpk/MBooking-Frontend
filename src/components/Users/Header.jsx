@@ -14,6 +14,7 @@ const Header = () => {
       <div className="hidden md:flex gap-6 items-center">
         <NavLink to="/home" className="text-white hover:text-gray-300">Home</NavLink>
         <NavLink to="/theaters" className="text-white hover:text-gray-300">Shows</NavLink>
+        <NavLink to="/chat" className="text-white hover:text-gray-300">Chat</NavLink>
         {/* Circle Icon */}
         <NavLink to="/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>

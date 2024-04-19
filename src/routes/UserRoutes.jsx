@@ -7,6 +7,7 @@ const EditProfile = lazy(() => import("../pages/Users/EditProfile"));
 const Upcoming = lazy(() => import("../pages/Users/upcoming"));
 const ShowTime = lazy(() => import("../pages/Users/showTime"));
 const ShowSeats = lazy(() => import("../pages/Users/showSeats"));
+const Chat = lazy(() => import("../pages/Users/Chat"));
 
 import Login from "../pages/Users/Auth/Login";
 import SignUp from "../pages/Users/Auth/SignUp";
@@ -27,6 +28,7 @@ const UserRoutes = ({ isLoggedIn }) => {
         { path: "/upcoming", element: isLoggedIn ? <Upcoming /> : navigateToLogin() },
         { path: "/available", element: isLoggedIn ? <ShowTime /> : navigateToLogin() },
         { path: "/show/seats", element: isLoggedIn ? <ShowSeats /> : navigateToLogin() },
+        { path: "/chat", element: isLoggedIn ? <Chat /> : navigateToLogin() },
     ];
 
     const authRoutes = [
