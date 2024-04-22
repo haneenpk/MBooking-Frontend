@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from 'sonner'
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
@@ -24,14 +25,9 @@ const OTP = () => {
         setServerResponse("");
 
         try {
-            // Validate OTP and email against the schema
             await otpSchema.validate({ otp });
 
-            console.log(otp, email);
-
-            // If validation passes, proceed with OTP verification
             const response = await axios.post(`http://localhost:3000/api/user/validateOtp`, { otp, email });
-            // await verifyOtp({ otp, email });
 
             if (response) {
                 setServerResponse(response);
@@ -41,12 +37,12 @@ const OTP = () => {
                     if (purpose === "forgot-password") {
                         navigate("/reset-password");
                     } else if (purpose === "signup") {
+                        toast.success('Register successfully. Please login')
                         navigate("/login");
                     }
                 }
             }
         } catch (error) {
-            // Handle the validation error or set an appropriate server response
             if (error.name === "ValidationError") {
                 setErrors(error.errors[0]);
             } else {
@@ -57,16 +53,14 @@ const OTP = () => {
     };
 
     const handleResend = async () => {
-
         const response = await axios.post(`http://localhost:3000/api/user/resendOtp`, { email });
 
         setServerResponse("");
-        // await resendOtp({ email });
         if (response) {
             setServerResponse(response);
             if (response.status === 200) {
-                setTimer(60); // Reset the timer
-                setIsTimerActive(true); // Start the timer again
+                setTimer(60);
+                setIsTimerActive(true);
                 setShowSentButton(true);
             }
         }
@@ -83,7 +77,7 @@ const OTP = () => {
             intervalId = setInterval(() => {
                 setTimer((prevTimer) => {
                     if (prevTimer === 1) {
-                        setIsTimerActive(false); // Stop the timer when it reaches 0
+                        setIsTimerActive(false);
                         clearInterval(intervalId);
                     }
                     return prevTimer - 1;
@@ -91,36 +85,33 @@ const OTP = () => {
             }, 1000);
         }
 
-        return () => clearInterval(intervalId); // Cleanup the interval on component unmount
+        return () => clearInterval(intervalId);
     }, [isTimerActive]);
 
     useEffect(() => {
         if (timer === 0) {
-            setShowSentButton(false); // Hide the "Sent OTP" button after timeout
+            setShowSentButton(false);
         }
     }, [timer]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">OTP Verification</h2>
-                    <div className="rounded-md shadow-sm mt-3">
-                        <div className="mb-3">
-                            <input value={otp} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Enter the otp" />
-                            {errors &&
-                                <FormErrorDisplay error={errors} />
-                            }
+                    <div className="mt-3">
+                        <input value={otp} onChange={handleChange} type="text" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Enter the OTP" />
+                        {errors && <FormErrorDisplay error={errors} />}
+                    </div>
+                    {serverResponse.status === "failed" && (
+                        <div className="mt-3 bg-red-100 text-red-700 border border-solid border-gray-300 px-4 py-3 rounded" role="alert">
+                            {serverResponse.message}
                         </div>
-                    </div>
-                    <div className={`mt-3 ${serverResponse.status === "failed" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"} border border-solid border-gray-300 px-4 py-3 rounded`} role="alert">
-                        {serverResponse.message}
-                    </div>
+                    )}
+
                     {showSentButton && (
-                        <div>
-                            <button onClick={handleVerification} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                                Sent OTP
-                            </button>
+                        <div className="mt-3">
+                            <button onClick={handleVerification} className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sent OTP</button>
                         </div>
                     )}
                 </div>
@@ -128,9 +119,7 @@ const OTP = () => {
                     {timer > 0 ? (
                         <p>Resend OTP in {timer} seconds</p>
                     ) : (
-                        <button onClick={handleResend} className="text-blue-600 hover:text-blue-400 focus:outline-none">
-                            Resend OTP
-                        </button>
+                        <button onClick={handleResend} className="text-blue-600 hover:text-blue-400 focus:outline-none">Resend OTP</button>
                     )}
                 </div>
             </div>

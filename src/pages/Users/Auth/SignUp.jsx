@@ -16,7 +16,8 @@ const SignUp = () => {
         country: "",
         state: "",
         district: "",
-        password: ""
+        password: "",
+        confirmPassword: ""
     });
 
     const [errors, setErrors] = useState({});
@@ -48,109 +49,68 @@ const SignUp = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up</h2>
                 </div>
-                <div className="rounded-md shadow-sm ">
-                    <div className="mb-3">
-                        <label htmlFor="username">Username</label>
-                        <input name={"username"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Username" />
-                        {errors.username &&
-                            <FormErrorDisplay error={errors.username} />
-                        }
+                <form className="space-y-6" onSubmit={handleSignUp}>
+                    <div>
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+                        <input name={"username"} onChange={handleChange} type={"text"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Username" />
+                        {errors.username && <FormErrorDisplay error={errors.username} />}
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="email-address">Email</label>
-                        <input name={"email"} onChange={handleChange} type={"email"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Email" />
-                        {errors.email &&
-                            <FormErrorDisplay error={errors.email} />
-                        }
+                    <div>
+                        <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">Email</label>
+                        <input name={"email"} onChange={handleChange} type={"email"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Email" />
+                        {errors.email && <FormErrorDisplay error={errors.email} />}
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="phone">Phone</label>
-                        <input name={"mobile"} onChange={handleChange} type={"tel"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Phone" />
-                        {errors.phone &&
-                            <FormErrorDisplay error={errors.phone} />
-                        }
+                    <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+                        <input name={"mobile"} onChange={handleChange} type={"tel"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Phone" />
+                        {errors.mobile && <FormErrorDisplay error={errors.mobile} />}
                     </div>
-
-                    <div className="mb-3 flex flex-wrap justify-between">
-                        <div className="w-full md:w-52">
-                            <label htmlFor="country">Country</label>
-                            <input name={"country"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Country" />
-                            {errors.country &&
-                                <FormErrorDisplay error={errors.country} />
-                            }
+                    <div className="flex flex-wrap justify-between">
+                        <div className="w-full md:w-1/2">
+                            <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                            <input name={"country"} onChange={handleChange} type={"text"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Country" />
+                            {errors.country && <FormErrorDisplay error={errors.country} />}
                         </div>
-
-                        <div className="w-full md:w-56">
-                            <label htmlFor="state">State</label>
-                            <input name={"state"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="State" />
-                            {errors.state &&
-                                <FormErrorDisplay error={errors.state} />
-                            }
+                        <div className="w-full md:w-1/2">
+                            <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
+                            <input name={"state"} onChange={handleChange} type={"text"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="State" />
+                            {errors.state && <FormErrorDisplay error={errors.state} />}
                         </div>
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="district">District</label>
-                        <input name={"district"} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="District" />
-                        {errors.district &&
-                            <FormErrorDisplay error={errors.district} />
-                        }
+                    <div>
+                        <label htmlFor="district" className="block text-sm font-medium text-gray-700">District</label>
+                        <input name={"district"} onChange={handleChange} type={"text"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="District" />
+                        {errors.district && <FormErrorDisplay error={errors.district} />}
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="password">Password</label>
-                        <input name={"password"} onChange={handleChange} type={"password"} autoComplete="current-password" required className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Password" />
-                        {errors.password &&
-                            <FormErrorDisplay error={errors.password} />
-                        }
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                        <input name={"password"} onChange={handleChange} type={"password"} autoComplete="current-password" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Password" />
+                        {errors.password && <FormErrorDisplay error={errors.password} />}
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input name={"confirmPassword"} onChange={handleChange} type={"password"} autoComplete="current-password" required className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Confirm Password" />
-                        {errors.confirmPassword &&
-                            <FormErrorDisplay error={errors.confirmPassword} />
-                        }
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input name={"confirmPassword"} onChange={handleChange} type={"password"} autoComplete="current-password" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Confirm Password" />
+                        {errors.confirmPassword && <FormErrorDisplay error={errors.confirmPassword} />}
                     </div>
-
+                    {serverResponse && (
+                        <div className="p-3 text-center font-bold text-red-600" role="alert">
+                            {serverResponse.message}
+                        </div>
+                    )}
+                    <div>
+                        <button type="submit" className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sign up</button>
+                    </div>
+                </form>
+                <div className="text-center text-sm text-gray-600">
+                    <p className="mt-2">Already have an account? <Link to="/login" className="font-medium text-blue-600 hover:text-blue-400">Log in here</Link></p>
                 </div>
-
-                {serverResponse && (
-                    <div
-                        className={`mt-2 p-2 text-center font-bold text-red-600`}
-                        role="alert"
-                    >
-                        {serverResponse.message}
-                    </div>
-                )}
-
-                <div>
-                    <button onClick={handleSignUp} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                        Sign up
-                    </button>
-                </div>
-
-                <div>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        <Link to="/login" className="font-medium text-blue-600 hover:text-blue-400">
-                            I have already account
-                        </Link>
-                    </p>
-                </div>
-
             </div>
         </div>
     );
 };
 
 export default SignUp;
-
-
-
-

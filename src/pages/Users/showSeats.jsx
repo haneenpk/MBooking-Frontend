@@ -58,11 +58,7 @@ const MovieTicketBooking = () => {
                         category
                     }];
                 } else {
-                    // If 10 seats are already selected, show toast
-                    if (!toastShown) {
-                        toast.info('Maximum 10 tickets');
-                        toastShown = true;
-                    }
+                    toast.info('Maximum 10 tickets');
                     return prevSeats;
                 }
             }
@@ -94,9 +90,9 @@ const MovieTicketBooking = () => {
 
             return (
                 <div className='mx-auto' key={index}>
-                    {seat.isBooked === true ? (
+                    {seat.isBooked === true || seat.isTempBooked === true ? (
                         <div
-                            className="w-6 h-6 border border-gray-400 rounded-sm flex items-center justify-center bg-gray-500"
+                            className="w-6 h-6 border rounded-sm flex items-center justify-center bg-gray-500"
                         >
                         </div>
                     ) : (

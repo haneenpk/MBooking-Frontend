@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Axios from "../api/shared/instance";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import MainRouter from "../routes/MainRouter";
@@ -34,7 +35,7 @@ const Layout = () => {
     location
   );
 
-  useEffect(() => {
+  useEffect(async () => {
     if (localStorage.getItem(`${userRole}AccessToken`)) {
       if (userRole === "admin") {
         dispatch(setLoggedIn(true));
@@ -43,7 +44,8 @@ const Layout = () => {
       } else if (userRole === "user") {
         dispatch(setUserLoggedIn(true));
         console.log("changedU:", isUserLoggedIn);
-        dispatch(setUserData(localStorage.getItem("userData")));
+        const response = await Axios.get(`/api/user/get/${localStorage.getItem("userData")}`);
+        dispatch(setUserData(response.data.data));
       } else {
         dispatch(setTheaterLoggedIn(true));
         console.log("changedT:", isTheaterLoggedIn);
