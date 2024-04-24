@@ -46,7 +46,7 @@ const Chat = () => {
     }
 
     const fetchSelectedTheater = async (user) => {
-        const response = await Axios.get(`/api/theater/chat/history?theaterId=${theaterId}&userId=${user._id}`);
+        const response = await Axios.get(`/api/theater/chat/history?theaterId=${theaterId}&userId=${user._id}&role=Theater`);
         if (response.data.data !== null) {
             setSelectedUser(user)
             setChatHistory(response.data.data.messages);
@@ -146,6 +146,11 @@ const Chat = () => {
                                                 <div className="py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
                                                     {message.message}
                                                 </div>
+                                                {message.isRead !== true ? (
+                                                    <span>x</span>
+                                                ) : (
+                                                    <span>xx</span>
+                                                )}
                                                 <img
                                                     src="https://via.placeholder.com/150"
                                                     className="ml-2 object-cover h-8 w-8 rounded-full"

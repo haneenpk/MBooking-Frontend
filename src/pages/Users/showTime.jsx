@@ -148,7 +148,7 @@ function ShowTime() {
     };
 
     return (
-        <div className="container mx-auto mt-8 flex">
+        <div className="container mx-auto mt-24 flex">
             <div className="mr-8">
                 <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="w-64 rounded-md h-auto mb-4" />
                 <h1 className="text-2xl font-bold mb-2">{movie.moviename}</h1>
@@ -181,7 +181,7 @@ function ShowTime() {
                             </div>
                             <div className="ml-8 flex">
                                 {shows.map((show, index) => (
-                                    <NavLink to={`/show/seats?seatId=${show.seatId}`} key={index} className="p-4 bg-blue-500 text-white rounded-lg mr-3">
+                                    <NavLink to={`/show/seats?seatId=${show.seatId}&showId=${show._id}`} key={index} className="p-4 bg-blue-500 text-white rounded-lg mr-3">
                                         <p className="text-lg font-semibold">{formatTime(show.startTime)}</p>
                                     </NavLink>
                                 ))}

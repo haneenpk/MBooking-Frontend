@@ -8,6 +8,9 @@ export const userRoutesToCheck = [
     "/available",
     "/show/seats",
     "/chat",
+    "/show/checkout",
+    "/booking/success",
+    "/booking-history",
 ];
 
 // List of admin routes where Header and Footer should be displayed

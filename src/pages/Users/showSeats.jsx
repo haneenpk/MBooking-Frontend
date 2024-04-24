@@ -11,6 +11,8 @@ const MovieTicketBooking = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const seatId = queryParams.get("seatId");
+    const showId = queryParams.get("showId");
+    const userId = localStorage.getItem('userData');
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -71,8 +73,16 @@ const MovieTicketBooking = () => {
         }));
     };
 
-    const handleTicketBooking = () => {
-        console.log(selectedSeats);
+    const handleTicketBooking = async () => {
+        try {
+            console.log(selectedSeats);
+            let response = await Axios.post(`/api/user/show/booking/hold`, { seatId, selectedSeats, showId, userId });    
+            if(response){
+                navigate(`/show/checkout?tempTicketId=${response.data.data._id}`)
+            }    
+        } catch (error) {
+            
+        }
     }
 
     const renderSeats = (row, category) => {
@@ -115,9 +125,9 @@ const MovieTicketBooking = () => {
     }
 
     return (
-        <div>
+        <div className='mt-20'>
 
-            <div className="container mx-auto mt-8 px-1 pb-8">
+            <div className="container mx-auto px-1 pb-8">
                 {/* Diamond Seats */}
                 <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
                     <h2 className="text-lg font-bold mb-2 text-center">{screenData.diamond && screenData.diamond.name} ₹{screenData.diamond && screenData.diamond.price}</h2>

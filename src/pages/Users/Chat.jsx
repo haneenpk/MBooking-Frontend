@@ -47,7 +47,7 @@ const Chat = () => {
     }
 
     const fetchSelectedTheater = async (id) => {
-        const response = await Axios.get(`/api/user/chat/history?userId=${userId}&theaterId=${id}`);
+        const response = await Axios.get(`/api/user/chat/history?userId=${userId}&theaterId=${id}&role=Theater`);
         if (response.data.data !== null) {
             const response2 = await Axios.get(`/api/user/get/theater/${id}`);
             setSelectedTheater(response2.data.data)
@@ -101,7 +101,7 @@ const Chat = () => {
     }, [socket, userId, selectedTheater._id])
 
     return (
-        <div className="container mx-auto shadow-lg rounded-lg relative">
+        <div className="container mx-auto shadow-lg rounded-lg relative mt-16">
             {/* header */}
             <div className="px-5 py-3 flex justify-between items-center bg-white border-b-2">
                 <div className="font-semibold text-2xl">Chat With Theaters</div>
@@ -192,6 +192,11 @@ const Chat = () => {
                                                 <div className="py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
                                                     {message.message}
                                                 </div>
+                                                {message.isRead !== true ? (
+                                                    <span>x</span>
+                                                ) : (
+                                                    <span>xx</span>
+                                                )}
                                                 <img
                                                     src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${profile}`}
                                                     className="ml-2 object-cover h-8 w-8 rounded-full"
