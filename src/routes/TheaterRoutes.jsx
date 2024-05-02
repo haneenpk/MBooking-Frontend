@@ -10,6 +10,7 @@ const Show = lazy(() => import("../pages/Theater/Show"));
 const AddShow = lazy(() => import("../pages/Theater/AddShow"));
 const EditShow = lazy(() => import("../pages/Theater/EditShow"));
 const Chat = lazy(() => import("../pages/Theater/Chat"));
+const UserTickets = lazy(() => import("../pages/Theater/UserTickets"));
 
 import Login from "../pages/Users/Auth/Login";
 import OTP from "../pages/Theater/Auth/OTP";
@@ -34,6 +35,7 @@ const TheaterRoutes = ({ isLoggedIn }) => {
         { path: "/show", element: isLoggedIn ? <Show /> : navigateToLogin() },
         { path: "/show/edit", element: isLoggedIn ? <EditShow /> : navigateToLogin() },
         { path: "/chat", element: isLoggedIn ? <Chat /> : navigateToLogin() },
+        { path: "/tickets", element: isLoggedIn ? <UserTickets /> : navigateToLogin() },
     ];
 
     const authRoutes = [

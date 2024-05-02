@@ -5,7 +5,7 @@ import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
 import Axios from "../../api/shared/instance";
 
-const Home = () => {
+const Home = ({ decide }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [upcomingMovies, setUpcomingMovies] = useState([]);
@@ -69,9 +69,6 @@ const Home = () => {
     if (selectedGenres.length > 0 && !selectedGenres.some(g => movie.genre.includes(g))) {
       return false;
     }
-    // if (selectedReleaseDate && movie.date !== selectedReleaseDate) {
-    //   return false;
-    // }
     if (searchQuery && !movie.moviename.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
@@ -88,7 +85,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 mt-16">
+    <div className="flex min-h-screen mt-16">
       <aside className="w-1/5 px-4 py-6 bg-white shadow-sm">
         <h2 className="text-lg font-semibold mb-4 text-center">Filters</h2>
         <div className="mb-4">
@@ -131,7 +128,12 @@ const Home = () => {
                       <h3 className="text-gray-800 font-semibold text-lg">{movie.moviename}</h3>
                       <div className="flex space-x-4 mb-2">
                         <div className="flex justify-between items-center mt-2">
-                          <NavLink to={`/available?movieId=${movie._id}`} className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Book Ticket</NavLink>
+                          <NavLink
+                            to={`/available?movieId=${movie._id}`}
+                            className="px-3 py-2 text-blue-500 border font-medium border-blue-400 rounded hover:bg-blue-500 focus:outline-none hover:text-white hover:shadow-md transition duration-300 ease-in-out"
+                          >
+                            Book Ticket
+                          </NavLink>                          
                           {isMovieNewRelease(movie.releaseDate) && <p className="text-green-500 ml-2">New Release</p>}
                         </div>
                       </div>
@@ -143,7 +145,7 @@ const Home = () => {
               <p className="text-center text-red-500">No shows available</p>
             )}
           </div>
-          {upcomingMovies.length ? (
+          {decide === "home" && upcomingMovies.length ? (
             <div className="px-4 py-5 mt-6 bg-white shadow sm:rounded-lg">
               <h2 className="text-xl font-semibold text-center mb-4">Upcoming Movies</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

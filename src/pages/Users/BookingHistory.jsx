@@ -1,10 +1,11 @@
 import React, { useLayoutEffect, useState } from 'react';
+import { toast } from 'sonner';
 import Axios from "../../api/shared/instance";
 
 const BookingHistory = () => {
 
     const [tickets, setTickets] = useState([]);
-    const [cancelTicketId, setCancelTicketId] = useState(null); // State to store the ticket ID to cancel
+    const [cancelTicketId, setCancelTicketId] = useState(""); // State to store the ticket ID to cancel
 
     const formatTime = (time) => {
         if (!time) return ''; // Check if time is undefined
@@ -13,18 +14,18 @@ const BookingHistory = () => {
         return `${hours.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}${period}`;
     };
 
-    useLayoutEffect(() => {
-        const fetchTempTicket = async () => {
-            try {
-                const userId = localStorage.getItem('userData');
-                let response = await Axios.get(`/api/user/booking-history/${userId}`);
-                console.log(response.data.data);
-                setTickets(response.data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const fetchTempTicket = async () => {
+        try {
+            const userId = localStorage.getItem('userData');
+            let response = await Axios.get(`/api/user/booking-history/${userId}`);
+            console.log(response.data.data);
+            setTickets(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
+    useLayoutEffect(() => {
         fetchTempTicket();
     }, []);
 
@@ -35,25 +36,35 @@ const BookingHistory = () => {
         setCancelTicketId(ticketId);
     };
 
-    const handleConfirmCancel = () => {
-        // Handle confirmation logic here, e.g., make an API call to cancel the ticket
-        console.log("Cancelled ticket with ID:", cancelTicketId);
+    const handleConfirmCancel = async () => {
+        try {
+            // Handle confirmation logic here, e.g., make an API call to cancel the ticket
+            console.log("Cancelled ticket with ID:", cancelTicketId);
+            let response = await Axios.get(`/api/user/ticket/cancel/${cancelTicketId}`);
+            if (response) {
+                toast.success('Cancelled Successfully')
+                fetchTempTicket();
+            }
 
-        // After cancellation, close the modal and reset the cancelTicketId state
-        setCancelTicketId(null);
+            // After cancellation, close the modal and reset the cancelTicketId state
+
+        } catch (error) {
+
+        }
+        setCancelTicketId("");
     };
 
     const handleCloseModal = () => {
         // Reset the cancelTicketId state when the modal is closed without confirmation
-        setCancelTicketId(null);
+        setCancelTicketId("");
     };
 
     return (
-        <div className="container mx-auto py-8 mt-10">
-            <h1 className="text-3xl font-semibold mb-4 text-center">Booking History</h1>
+        <div className="container mx-auto py-8 mt-10 ">
+            <h1 className="text-3xl font-bold mb-4 text-center">Booking History</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {tickets.map((ticket) => (
-                    <div key={ticket.id} className={`border border-gray-200 rounded-lg shadow-md ${ticket.isCancelled ? 'bg-red-200' : ''}`}>
+                    <div key={ticket.id} className={`rounded-lg shadow-md ${ticket.isCancelled ? 'bg-red-200' : 'bg-white'}`}>
                         <div className='flex justify-center mt-3'>
                             <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className=" h-44 object-cover rounded-md " />
                         </div>
@@ -78,9 +89,9 @@ const BookingHistory = () => {
                             <div className='flex justify-center mt-3'>
                                 {(ticket.showId.date > todayDate && ticket.isCancelled === false) && (
                                     <>
-                                        <button className="hover:bg-blue-600 bg-blue-500 text-white border rounded-md p-2 cursor-pointer" onClick={() => handleCancelTicket(ticket.id)}>Cancel</button>
-                                        {cancelTicketId === ticket.id && (
-                                            <div className="absolute top-0 left-0 h-full w-full flex justify-center items-center bg-black bg-opacity-50">
+                                        <button className="hover:bg-blue-600 bg-blue-500 text-white border rounded-md p-2 cursor-pointer" onClick={() => handleCancelTicket(ticket._id)}>Cancel</button>
+                                        {cancelTicketId === ticket._id && (
+                                            <div className="fixed top-0 z-40 left-0 w-full flex justify-center items-center bg-black bg-opacity-60" style={{ height: '650px' }}>
                                                 <div className="bg-white p-5 rounded-md shadow-md">
                                                     <p className="text-xl font-semibold mb-3">Are you sure you want to cancel this ticket?</p>
                                                     <div className="flex justify-center">

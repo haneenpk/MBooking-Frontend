@@ -90,8 +90,8 @@ const EditProfile = () => {
 
     if (!isBlocked) {
         return (
-            <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
-                <h2 className="text-2xl font-semibold mb-6">Edit Profile</h2>
+            <div className="max-w-md mx-auto mt-28 p-6 bg-white rounded-md shadow-md">
+                <h2 className="text-2xl font-semibold mb-6 text-center">Edit Profile</h2>
                 <div className="mb-4">
                     <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">Username</label>
                     <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder='Username' />

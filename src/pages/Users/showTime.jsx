@@ -148,7 +148,7 @@ function ShowTime() {
     };
 
     return (
-        <div className="container mx-auto mt-24 flex">
+        <div className="container mx-auto mt-24 flex bg-gray-100">
             <div className="mr-8">
                 <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="w-64 rounded-md h-auto mb-4" />
                 <h1 className="text-2xl font-bold mb-2">{movie.moviename}</h1>
@@ -175,14 +175,15 @@ function ShowTime() {
                 </div>
                 <div>
                     {theaters.map(([theaterName, shows]) => (
-                        <div className="flex mt-5 w-full h-20 rounded-md bg-gray-200 p-3" key={theaterName}>
+                        <div className="flex mt-5 w-full h-20 rounded-md bg-white shadow-md p-3" key={theaterName}>
                             <div className='w-32'> 
                                 <h2 className="text-xl font-semibold mt-4">{theaterName}</h2>
                             </div>
                             <div className="ml-8 flex">
                                 {shows.map((show, index) => (
-                                    <NavLink to={`/show/seats?seatId=${show.seatId}&showId=${show._id}`} key={index} className="p-4 bg-blue-500 text-white rounded-lg mr-3">
-                                        <p className="text-lg font-semibold">{formatTime(show.startTime)}</p>
+                                    <NavLink to={`/show/seats?seatId=${show.seatId}&showId=${show._id}`} key={index} className="text-center px-3 py-1 bg-blue-500 text-white rounded-lg mr-3 hover:bg-blue-600 hover:shadow-md transition duration-10000 ease-in-out">
+                                        <p className="text-base font-semibold">{formatTime(show.startTime)}</p>
+                                        <span className="text-base">{show.screenId.name}</span>
                                     </NavLink>
                                 ))}
                             </div>

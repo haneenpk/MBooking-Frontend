@@ -2,6 +2,7 @@
 export const userRoutesToCheck = [
     "/",
     "/home",
+    "/show",
     "/profile",
     "/edit-profile",
     "/upcoming",
@@ -11,6 +12,7 @@ export const userRoutesToCheck = [
     "/show/checkout",
     "/booking/success",
     "/booking-history",
+    "/wallet",
 ];
 
 // List of admin routes where Header and Footer should be displayed
@@ -46,4 +48,5 @@ export const theaterRoutesToCheck = [
     "/theater/show/edit",
     "/theater/show",
     "/theater/chat",
+    "/theater/tickets",
 ];

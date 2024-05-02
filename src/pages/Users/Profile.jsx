@@ -83,7 +83,7 @@ const UserProfile = () => {
   if (!isBlocked) {
     return (
       <div className="flex justify-center items-center mt-24">
-        <div className="max-w-xl mx-auto px-11 rounded-md shadow-md bg-gray-300 py-20">
+        <div className="max-w-xl mx-auto px-11 rounded-md shadow-md bg-white py-20">
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="md:mr-8 flex flex-col items-center">
               <img src={userDetails?.profilePic ? `${import.meta.env.VITE_AXIOS_BASE_URL}/${userDetails.profilePic}` : 'https://via.placeholder.com/150'} alt="Profile" className="w-32 h-32 rounded-full mb-4" />
@@ -101,17 +101,23 @@ const UserProfile = () => {
               <p className="mb-2"><span className="font-semibold">Mobile:</span> {userDetails.mobile}</p>
               <div className='mt-7'>
                 <NavLink to="/edit-profile" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2">
-                  Edit Profile Details
+                  Edit Profile
                 </NavLink>
                 <NavLink to="/booking-history" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2 ">
                   Bookings
                 </NavLink>
               </div>
+              <div className='mt-6'>
+              <NavLink to="/wallet" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2 ">
+                Wallet
+              </NavLink>
+              </div>
+
             </div>
           </div>
           <div className='justify-center text-center'>
 
-            <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded mt-10">
+            <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded mt-10 shadow-md">
               Logout
             </button>
           </div>

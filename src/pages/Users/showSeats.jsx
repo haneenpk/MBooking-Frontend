@@ -76,12 +76,12 @@ const MovieTicketBooking = () => {
     const handleTicketBooking = async () => {
         try {
             console.log(selectedSeats);
-            let response = await Axios.post(`/api/user/show/booking/hold`, { seatId, selectedSeats, showId, userId });    
-            if(response){
+            let response = await Axios.post(`/api/user/show/booking/hold`, { seatId, selectedSeats, showId, userId });
+            if (response) {
                 navigate(`/show/checkout?tempTicketId=${response.data.data._id}`)
-            }    
+            }
         } catch (error) {
-            
+
         }
     }
 
@@ -93,7 +93,7 @@ const MovieTicketBooking = () => {
             if (seat.col === 0) {
                 return (
                     <div className='mx-auto' key={index}>
-                        <span className="text-xs ml-1 inline-block w-6 h-6"></span>
+                        <span className="text-xs ml-1 inline-block w-5 h-6"></span>
                     </div>
                 );
             }
@@ -125,35 +125,46 @@ const MovieTicketBooking = () => {
     }
 
     return (
-        <div className='mt-20'>
+        <div className='mt-36'>
+
+            <div className="fixed flex top-16 w-full text-center z-10 bg-white py-4 pl-10 shadow-md justify-center">
+                <div className='flex'>
+                    <div className="w-4 h-4 mt-1 border rounded-sm flex items-center justify-center border-black"></div>
+                    <span className="mx-4">AVAILABLE</span>
+                    <div className="w-4 h-4 mt-1 rounded-sm flex items-center justify-center bg-gray-500"></div>
+                    <span className="mx-4">BOOKED</span>
+                    <div className="w-4 h-4 mt-1 rounded-sm flex items-center justify-center bg-black"></div>
+                    <span className="mx-4">SELECTED</span>
+                </div>
+            </div>
 
             <div className="container mx-auto px-1 pb-8">
                 {/* Diamond Seats */}
-                <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
+                <div className="mb-4 bg-white rounded-lg shadow-md p-3">
                     <h2 className="text-lg font-bold mb-2 text-center">{screenData.diamond && screenData.diamond.name} ₹{screenData.diamond && screenData.diamond.price}</h2>
                     {Object.entries(diamondRows).map(row => (
-                        <div key={row[0]} className="flex items-center mb-2">
-                            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+                        <div key={row[0]} className="flex items-center mb-3">
+                            <span className="text-base mr-2 ml-1 font-bold w-4">{row[0]}</span>
                             {renderSeats(row, 'diamond')}
                         </div>
                     ))}
                 </div>
                 {/* Gold Seats */}
-                <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
+                <div className="mb-4 bg-white rounded-lg shadow-md p-3">
                     <h2 className="text-lg font-bold mb-2 text-center">{screenData.gold && screenData.gold.name} ₹{screenData.gold && screenData.gold.price}</h2>
                     {Object.entries(goldRows).map(row => (
-                        <div key={row[0]} className="flex items-center mb-2">
-                            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+                        <div key={row[0]} className="flex items-center mb-3">
+                            <span className="text-base mr-2 ml-1 font-bold w-4">{row[0]}</span>
                             {renderSeats(row, 'gold')}
                         </div>
                     ))}
                 </div>
                 {/* Silver Seats */}
-                <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
+                <div className="mb-4 bg-white rounded-lg shadow-md p-3">
                     <h2 className="text-lg font-bold mb-2 text-center">{screenData.silver && screenData.silver.name} ₹{screenData.silver && screenData.silver.price}</h2>
                     {Object.entries(silverRows).map(row => (
-                        <div key={row[0]} className="flex items-center mb-2">
-                            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+                        <div key={row[0]} className="flex items-center mb-3">
+                            <span className="text-base mr-2 ml-1 font-bold w-4">{row[0]}</span>
                             {renderSeats(row, 'silver')}
                         </div>
                     ))}
@@ -162,7 +173,7 @@ const MovieTicketBooking = () => {
                 <div className={`${selectedSeats.length >= 1 ? 'mb-7' : ''} text-center pt-1`}>
                     <div className="p-4 mx-auto" style={{ maxWidth: '408px' }}>
                         <svg width="376" height="44" viewBox="0 0 376 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="376" height="44" fill="white" />
+                            <rect width="376" height="44" />
                             <path d="M334.718 2.00062C228 10.0004 148 10.0004 39.6559 2.00062L16 30.9996C148 38.9999 228 38.9999 360 30.9996L334.718 2.00062Z" fill="white" />
                             <path d="M16 30.9996L39.6559 2.00062C148 10.0004 228 10.0004 334.718 2.00062L360 30.9996M16 30.9996L19.0003 35.9999C148 44 228 44 357 35.9999L360 30.9996M16 30.9996C148 38.9999 228 38.9999 360 30.9996" stroke="#101010" stroke-opacity="0.22" />
                             <path d="M332 5.49907C229 13.0005 145.5 13.0005 42.5 5.5009L23 28.5009C143 36.5005 232 36.501 351.923 28.4991L332 5.49907Z" fill="#E0F6FA" />
@@ -174,7 +185,7 @@ const MovieTicketBooking = () => {
             {/* Payment Summary */}
             {selectedSeats.length >= 1 && (
                 <div className="fixed bottom-0 left-0 w-full text-center">
-                    <div className="bg-gray-100 border-t-2 border-gray-500 pt-4 px-72 w-full z-10">
+                    <div className="bg-white border-t-2 border-gray-500 pt-4 px-72 w-full z-10">
                         <div className="flex justify-between">
                             <div>
                                 <span className="font-bold">Selected Tickets:</span> {selectedSeats.length}

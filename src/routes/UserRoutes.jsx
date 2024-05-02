@@ -11,6 +11,7 @@ const ShowCheckout = lazy(() => import("../pages/Users/showCheckout"));
 const Chat = lazy(() => import("../pages/Users/Chat"));
 const BookingSuccess = lazy(() => import("../pages/Users/BookingSuccess"));
 const BookingHistory = lazy(() => import("../pages/Users/BookingHistory"));
+const Wallet = lazy(() => import("../pages/Users/Wallet"));
 
 import Login from "../pages/Users/Auth/Login";
 import SignUp from "../pages/Users/Auth/SignUp";
@@ -24,8 +25,9 @@ const UserRoutes = ({ isLoggedIn }) => {
     const navigateToHome = () => <Navigate to="/" />;
 
     const protectedRoutes = [
-        { path: "/", element: isLoggedIn ? <Home /> : navigateToLogin() },
-        { path: "/home", element: isLoggedIn ? <Home /> : navigateToLogin() },
+        { path: "/", element: isLoggedIn ? <Home decide={"home"} /> : navigateToLogin() },
+        { path: "/home", element: isLoggedIn ? <Home decide={"home"} /> : navigateToLogin() },
+        { path: "/show", element: isLoggedIn ? <Home decide={"show"} /> : navigateToLogin() },
         { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
         { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
         { path: "/upcoming", element: isLoggedIn ? <Upcoming /> : navigateToLogin() },
@@ -36,6 +38,7 @@ const UserRoutes = ({ isLoggedIn }) => {
         { path: "/booking/success", element: isLoggedIn ? <BookingSuccess /> : navigateToLogin() },
         { path: "/booking/cancel", element: isLoggedIn ? <Chat /> : navigateToLogin() },
         { path: "/booking-history", element: isLoggedIn ? <BookingHistory /> : navigateToLogin() },
+        { path: "/wallet", element: isLoggedIn ? <Wallet /> : navigateToLogin() },
     ];
 
     const authRoutes = [

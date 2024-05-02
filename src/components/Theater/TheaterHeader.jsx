@@ -16,7 +16,7 @@ const TheaterHeader = () => {
         <NavLink to="/theater/screens" className="text-white hover:text-gray-300">Screens</NavLink>
         <NavLink to="/theater/show" className="text-white hover:text-gray-300">Shows</NavLink>
         <NavLink to="/theater/chat" className="text-white hover:text-gray-300">Chat</NavLink>
-        {/* <NavLink to="/theater/banner" className="text-white hover:text-gray-300">Banner</NavLink> */}
+        <NavLink to="/theater/tickets" className="text-white hover:text-gray-300">Tickets</NavLink>
         {/* Circle Icon */}
         <NavLink to="/theater/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
       </div>
