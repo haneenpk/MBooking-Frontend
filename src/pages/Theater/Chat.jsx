@@ -31,6 +31,9 @@ const Chat = () => {
         setMessage(""); // Clearing the message input after sending
 
         await fetchSelectedTheater(selectedUser);
+        const response3 = await Axios.get(`/api/theater/chat/users/${theaterId}`);
+        const sortedUsers = response3.data.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        setChatedUsers(sortedUsers)
     };
 
     const scrollDown = () => {
@@ -66,7 +69,8 @@ const Chat = () => {
                 }
 
                 const response = await Axios.get(`/api/theater/chat/users/${theaterId}`);
-                setChatedUsers(response.data.data)
+                const sortedUsers = response.data.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                setChatedUsers(sortedUsers)
 
             } catch (error) {
                 console.log(error);
@@ -81,8 +85,10 @@ const Chat = () => {
         socket.on('recieve-message', async (chatData) => {
             if (chatData.data.userId === selectedUser._id && chatData.data.theaterId === theaterId) {
                 await fetchSelectedTheater(selectedUser);
-                socket.emit("double-tick", selectedUser._id);
             }
+            const response3 = await Axios.get(`/api/theater/chat/users/${theaterId}`);
+            const sortedUsers = response3.data.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            setChatedUsers(sortedUsers)
         });
     }, [socket, theaterId, selectedUser._id])
 
@@ -106,19 +112,19 @@ const Chat = () => {
                             // Repeat user list elements
                             chatedUsers.map((theater, index) => (
                                 <div
-                                    onClick={() => fetchSelectedTheater(theater)}
+                                    onClick={() => fetchSelectedTheater(theater.userId)}
                                     key={index}
                                     className="flex flex-row py-2 px-2 justify-center items-center border-b-2 cursor-pointer hover:bg-gray-100"
                                 >
                                     <div className="w-1/4">
                                         <img
-                                            src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${theater.profilePic}`}
+                                            src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${theater.userId.profilePic}`}
                                             className="object-cover h-12 w-12 rounded-full"
                                             alt=""
                                         />
                                     </div>
                                     <div className="w-full">
-                                        <div className="text-lg font-semibold">{theater.username}</div>
+                                        <div className="text-lg font-semibold">{theater.userId.username}</div>
                                     </div>
                                 </div>
                             ))

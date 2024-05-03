@@ -28,16 +28,28 @@ function TheaterDashboard() {
   // Calculate today's booked tickets
   const today = new Date();
   const todayFormatted = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-  const todayBookedTickets = tickets.filter(ticket => ticket.createdAt.startsWith(todayFormatted)).length;
+  const todayBooked = tickets.filter(ticket => ticket.createdAt.startsWith(todayFormatted));
+
+  let todayBookedTickets = 0
+
+  for(let i=0; i<todayBooked.length; i++){
+    todayBookedTickets += todayBooked[i].seatCount
+  }
 
   // Calculate monthly booked tickets
   const thisMonth = new Date();
   const firstDayOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1);
   const lastDayOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1, 0); // Get the last day of the current month
-  const monthlyBookedTickets = tickets.filter(ticket => {
+  const monthlyTickets = tickets.filter(ticket => {
     const ticketDate = new Date(ticket.createdAt);
     return ticketDate >= firstDayOfMonth && ticketDate <= lastDayOfMonth;
-  }).length;
+  });
+
+  let monthlyBookedTickets = 0
+  
+  for(let i=0; i<monthlyTickets.length; i++){
+    monthlyBookedTickets += monthlyTickets[i].seatCount
+  }
 
   // Calculate profit for this month and total profit
   let profitThisMonth = 0;
