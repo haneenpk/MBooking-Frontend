@@ -18,6 +18,7 @@ const AddMovieForm = () => {
     description: '',
     releaseDate: null,
   });
+  const [previewImage, setPreviewImage] = useState(null);
 
   const [errors, setErrors] = useState({});
   const [serverResponse, setServerResponse] = useState("");
@@ -27,12 +28,21 @@ const AddMovieForm = () => {
   };
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setMovieData(prevState => ({
-      ...prevState,
-      image: file
-    }));
-  };
+    if (e.target.name === 'image') {
+        const file = e.target.files[0];
+        setMovieData(prevState => ({
+            ...prevState,
+            image: file
+        }));
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => setPreviewImage(e.target.result);
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewImage(null); // Clear preview if invalid file
+        }
+    }
+};
 
   const handleSubmit = async () => {
     try {
@@ -67,28 +77,31 @@ const AddMovieForm = () => {
       </div>
       <div className="mb-4">
         <label htmlFor="image" className="block mb-1">Image Upload</label>
-        <input type="file" accept="image/*" id="image" name="image" onChange={handleImageUpload} className="w-full border rounded px-3 py-2" required />
+        <input type="file" accept="image/*" id="image" name="image" onChange={handleImageUpload} className="w-full border rounded px-3 py-2 border-gray-400" required />
         {errors.image &&
           <FormErrorDisplay error={errors.image} />
         }
+        {previewImage && (
+          <img src={previewImage} alt="Movie Preview" className="h-56 rounded-md mt-2" />
+        )}
       </div>
       <div className="mb-4">
         <label htmlFor="languages" className="block mb-1">Languages</label>
-        <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma'/>
+        <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma' />
         {errors.languages &&
           <FormErrorDisplay error={errors.languages} />
         }
       </div>
       <div className="mb-4">
         <label htmlFor="genre" className="block mb-1">Genre</label>
-        <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma'/>
+        <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma' />
         {errors.genre &&
           <FormErrorDisplay error={errors.genre} />
         }
       </div>
       <div className="mb-4">
         <label htmlFor="description" className="block mb-1">Description</label>
-        <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie'/>
+        <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie' />
         {errors.description &&
           <FormErrorDisplay error={errors.description} />
         }

@@ -98,7 +98,7 @@ const TheaterScreensList = () => {
     if (!isBlocked) {
         console.log(role);
         return (
-            <div className='px-8 mt-'>
+            <div className='px-8'>
                 <h2 className="text-2xl font-bold mb-4 mt-5">{role === "admin" ? (<>{theaterName} Theater Screens List</>) : (<>Theater Screens List</>)}</h2>
                 {role === "theater" && (
                     <Link to="/theater/screens/add" className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -107,7 +107,7 @@ const TheaterScreensList = () => {
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
                     {listScreen.map((screen) => (
-                        <div key={screen._id} className="border p-4 rounded-md bg-white">
+                        <div key={screen._id} className="border p-4 rounded-md bg-white shadow-md">
                             <h3 className="text-lg font-semibold mb-2">{screen.name}</h3>
                             <p className="text-sm">Rows: {screen.rows}</p>
                             <p className="text-sm">Cols: {screen.cols}</p>

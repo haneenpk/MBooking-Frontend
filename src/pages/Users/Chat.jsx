@@ -122,7 +122,7 @@ const Chat = () => {
     }, [socket, userId, selectedTheater._id])
 
     return (
-        <div className="container mx-auto shadow-lg rounded-lg relative mt-16">
+        <div className="mx-auto shadow-lg rounded-lg relative mt-16 w-full">
             {/* header */}
             <div className="px-5 py-3 flex justify-between items-center bg-white border-b-2">
                 <div className="font-semibold text-2xl">Chat With Theaters</div>
@@ -154,7 +154,7 @@ const Chat = () => {
             <div className="flex flex-row justify-between bg-white relative">
                 {/* chat list */}
                 <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
-                    <div className="overflow-y-auto" style={{ height: '488px' }}>
+                    <div className="overflow-y-auto" style={{ height: '597px' }}>
                         {/* search component */}
                         <div className=" py-2 px-2">
                             <input
@@ -183,7 +183,10 @@ const Chat = () => {
                                         <div className="text-lg font-semibold">{theater.theaterId.name}</div>
                                     </div>
                                 </div>
+
+                                
                             ))
+                            
                         ) : (
                             // Display message when there are no chated theaters
                             <div className="text-gray-500 text-center mt-4">No chatted theaters</div>
@@ -203,7 +206,7 @@ const Chat = () => {
                                 />
                                 <div className="text-lg font-semibold mt-4 ml-3">{selectedTheater.name}</div>
                             </div>
-                            <div className="flex flex-col px-3 overflow-y-auto" style={{ height: '370px' }}>
+                            <div className="flex flex-col px-3 overflow-y-auto" style={{ height: '469px' }}>
 
                                 {chatHistory.map((message, index) => (
                                     message.sender === "User" ? (
@@ -250,7 +253,7 @@ const Chat = () => {
                                 ))}
 
                             </div>
-                            <div className="py-1 px-3">
+                            <div className="py-1 px-3 mb-2">
                                 <div className="flex items-center">
                                     <input
                                         className="w-full bg-gray-50 py-3 px-3 rounded-l-xl"

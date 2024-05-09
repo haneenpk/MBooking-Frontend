@@ -148,7 +148,7 @@ function ShowTime() {
     };
 
     return (
-        <div className="container mx-auto mt-24 flex bg-gray-100">
+        <div className="px-10 mt-24 flex bg-gray-100">
             <div className="mr-8">
                 <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="w-64 rounded-md h-auto mb-4" />
                 <h1 className="text-2xl font-bold mb-2">{movie.moviename}</h1>
@@ -160,7 +160,7 @@ function ShowTime() {
                         const { month, day } = formatDate(dateString);
                         const isSelected = selectedDate === dateString;
                         const bgColor = isSelected ? 'bg-blue-500' : 'bg-blue-300';
-                        const dynamicClassName = `${bgColor} text-black text-white px-4 py-1 rounded-md cursor-pointer transition duration-300 hover:bg-blue-500`;
+                        const dynamicClassName = `${bgColor} text-black text-white px-4 py-1 rounded-md cursor-pointer transition duration-100 hover:bg-blue-500`;
                         return (
                             <button
                                 key={index}

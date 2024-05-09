@@ -99,7 +99,7 @@ const MovieTicketBooking = () => {
             }
 
             return (
-                <div className='mx-auto' key={index}>
+                <div className='mx-auto my-1' key={index}>
                     {seat.isBooked === true || seat.isTempBooked === true ? (
                         <div
                             className="w-6 h-6 border rounded-sm flex items-center justify-center bg-gray-500"
@@ -138,7 +138,7 @@ const MovieTicketBooking = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto px-1 pb-8">
+            <div className="mx-auto px-8 pb-8">
                 {/* Diamond Seats */}
                 <div className="mb-4 bg-white rounded-lg shadow-md p-3">
                     <h2 className="text-lg font-bold mb-2 text-center">{screenData.diamond && screenData.diamond.name} ₹{screenData.diamond && screenData.diamond.price}</h2>

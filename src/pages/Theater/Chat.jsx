@@ -93,12 +93,12 @@ const Chat = () => {
     }, [socket, theaterId, selectedUser._id])
 
     return (
-        <div className="container mx-auto shadow-lg  relative border mt-4">
+        <div className=" mx-auto shadow-lg  relative border w-full">
             {/* Chatting */}
             <div className="flex flex-row justify-between bg-white relative">
                 {/* chat list */}
                 <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
-                    <div className="overflow-y-auto" style={{ height: '547px' }}>
+                    <div className="overflow-y-auto" style={{ height: '669px' }}>
                         {/* search component */}
                         <div className=" py-2 px-2">
                             <input
@@ -147,7 +147,7 @@ const Chat = () => {
                                 />
                                 <div className="text-lg font-semibold mt-4 ml-3">{selectedUser.username}</div>
                             </div>
-                            <div ref={chatContainerRef} className="flex flex-col px-3 overflow-y-auto" style={{ height: '427px' }}>
+                            <div ref={chatContainerRef} className="flex flex-col px-3 overflow-y-auto" style={{ height: '541px' }}>
                                 {chatHistory.map((message, index) => (
                                     message.sender === "Theater" ? (
                                         <div key={index} className="flex justify-end my-2">
@@ -192,7 +192,7 @@ const Chat = () => {
                                     )
                                 ))}
                             </div>
-                            <div className="py-1 px-3">
+                            <div className="py-1 px-3 mb-2">
                                 <div className="flex items-center">
                                     <input
                                         className="w-full bg-gray-50 py-3 px-3 rounded-l-xl"

@@ -1,32 +1,35 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 
 function UserTickets() {
-    // Dummy data for displaying tickets
     const [tickets, setTickets] = useState([]);
 
     const formatTime = (time) => {
-        if (!time) return ''; // Check if time is undefined
+        if (!time) return '';
         const hours = time.hour > 12 ? time.hour - 12 : time.hour;
         const period = time.hour >= 12 ? 'PM' : 'AM';
         return `${hours.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}${period}`;
     };
 
-    useLayoutEffect(async () => {
-        const theaterId = localStorage.getItem('theaterData');
-
-        const response = await Axios.get(`/api/theater/Tickets/${theaterId}`);
-        console.log(response.data.data);
-        setTickets(response.data.data)
-        // Check if the user is blocked and navigate to login if blocked
+    useEffect(() => {
+        const fetchTickets = async () => {
+            try {
+                const theaterId = localStorage.getItem('theaterData');
+                const response = await Axios.get(`/api/theater/Tickets/${theaterId}`);
+                setTickets(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchTickets();
     }, []);
 
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Users Tickets</h2>
+        <div className="px-8">
+            <h2 className="text-2xl font-bold mb-4 mt-5">Users Tickets</h2>
             <div className="overflow-x-auto">
-                <table className="table-auto w-full border-collapse border border-gray-200">
-                    <thead className="bg-gray-100">
+                <table className="table-auto w-full border-collapse border border-gray-200 bg-white rounded-md shadow-md">
+                    <thead className="bg-gray-500 text-white">
                         <tr>
                             <th className="border border-gray-200 px-1 py-2">Username</th>
                             <th className="border border-gray-200 px-1 py-2">Movie Image</th>
@@ -42,7 +45,7 @@ function UserTickets() {
                     </thead>
                     <tbody>
                         {tickets.map(ticket => (
-                            <tr key={ticket.id}>
+                            <tr key={ticket._id}> {/* Added key prop */}
                                 <td className="border border-gray-200 px-4 py-2">{ticket.userId.username}</td>
                                 <td className="border border-gray-200 px-4 py-2">
                                     <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className="w-16 h-auto" />

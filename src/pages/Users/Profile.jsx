@@ -82,7 +82,7 @@ const UserProfile = () => {
   // Conditionally render profile component only if user is not blocked
   if (!isBlocked) {
     return (
-      <div className="flex justify-center items-center mt-24">
+      <div className="flex justify-center items-center mt-32  ">
         <div className="max-w-xl mx-auto px-11 rounded-md shadow-md bg-white py-20">
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="md:mr-8 flex flex-col items-center">
@@ -117,7 +117,7 @@ const UserProfile = () => {
           </div>
           <div className='justify-center text-center'>
 
-            <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded mt-10 shadow-md">
+            <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-full mt-10 shadow-md">
               Logout
             </button>
           </div>

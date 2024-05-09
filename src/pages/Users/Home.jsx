@@ -90,7 +90,7 @@ const Home = ({ decide }) => {
         <h2 className="text-lg font-semibold mb-4 text-center">Filters</h2>
         <div className="mb-4">
           <h3 className="text-sm font-semibold mb-2">Genres</h3>
-          {["Action", "Comedy", "Drama", "Thriller"].map(genre => (
+          {["Action", "Comedy", "Drama", "Mystery", "Thriller"].map(genre => (
             <label key={genre} className="block mb-2">
               <input
                 type="checkbox"

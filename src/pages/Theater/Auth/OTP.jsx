@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from 'sonner'
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
@@ -6,8 +7,6 @@ import { otpSchema } from "../../../validations/userValidations/otpSchema";
 
 const OTP = () => {
     const navigate = useNavigate();
-    // const dispatch = useDispatch();
-
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get("email");
@@ -27,17 +26,14 @@ const OTP = () => {
             // Validate OTP and email against the schema
             await otpSchema.validate({ otp });
 
-            console.log(otp, email);
-
-            // If validation passes, proceed with OTP verification
             const response = await axios.post(`http://localhost:3000/api/theater/validateOTP`, { otp, email });
-            // await verifyOtp({ otp, email });
 
             if (response) {
                 setServerResponse(response);
 
                 if (response.status === 200) {
                     localStorage.removeItem("otpTimer");
+                    toast.success('Register successfully. Please login')
                     navigate("/theater/login");
                 }
             }
@@ -53,12 +49,9 @@ const OTP = () => {
     };
 
     const handleResend = async () => {
-        console.log(email);
-
         const response = await axios.post(`http://localhost:3000/api/theater/resendOTP`, { email });
 
         setServerResponse("");
-        // await resendOtp({ email });
         if (response) {
             setServerResponse(response);
             if (response.status === 200) {
@@ -99,25 +92,22 @@ const OTP = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">OTP Verification</h2>
-                    <div className="rounded-md shadow-sm mt-3">
-                        <div className="mb-3">
-                            <input value={otp} onChange={handleChange} type={"text"} className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Enter the otp" />
-                            {errors &&
-                                <FormErrorDisplay error={errors} />
-                            }
+                    <div className="mt-3">
+                        <input value={otp} onChange={handleChange} type="text" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Enter the OTP" />
+                        {errors && <FormErrorDisplay error={errors} />}
+                    </div>
+                    {serverResponse.status === "failed" && (
+                        <div className="mt-3 bg-red-100 text-red-700 border border-solid border-gray-300 px-4 py-3 rounded" role="alert">
+                            {serverResponse.message}
                         </div>
-                    </div>
-                    <div className={`mt-3 ${serverResponse.status === "failed" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"} border border-solid border-gray-300 px-4 py-3 rounded`} role="alert">
-                        {serverResponse.message}
-                    </div>
+                    )}
+
                     {showSentButton && (
-                        <div>
-                            <button onClick={handleVerification} className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                                Sent OTP
-                            </button>
+                        <div className="mt-3">
+                            <button onClick={handleVerification} className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sent OTP</button>
                         </div>
                     )}
                 </div>
@@ -125,9 +115,7 @@ const OTP = () => {
                     {timer > 0 ? (
                         <p>Resend OTP in {timer} seconds</p>
                     ) : (
-                        <button onClick={handleResend} className="text-blue-600 hover:text-blue-400 focus:outline-none">
-                            Resend OTP
-                        </button>
+                        <button onClick={handleResend} className="text-blue-600 hover:text-blue-400 focus:outline-none">Resend OTP</button>
                     )}
                 </div>
             </div>

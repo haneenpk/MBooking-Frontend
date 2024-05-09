@@ -323,15 +323,15 @@ const MovieTicketBooking = () => {
     for (let i = 0; i < row[1].length; i++) {
       const seatId = `${row[0]}${row[1][i]}`; // Concatenate row and seat number
       seats.push(
-        <div className="inline-block mr-4 mt-5 ">
+        <div className="inline-block mx-auto">
           <button
             onClick={() => handleSeatSelection(row[0], row[1][i], i, category)}
-            className={`w-6 h-6 border border-gray-300 rounded-full flex items-center justify-center ${row[1][i] === 0 ? 'bg-blue-500 text-white' : ''
+            className={`w-7 h-7 border rounded-md flex items-center justify-center ${row[1][i] === 0 ? 'bg-blue-500 text-white' : 'border-gray-300'
               }`}
           >
-            {row[1][i] === 0 ? '+' : '-'}
+            <span className='text-xl text-center mb-1'>{row[1][i] === 0 ? '+' : '-'}</span>
           </button>
-          <label htmlFor={seatId} className="text-xs ml-1 ">
+          <label htmlFor={seatId} className="text-xs ml-1 text-center ">
             {row[1][i]}
           </label>
         </div>
@@ -341,15 +341,15 @@ const MovieTicketBooking = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8 px-1">
+    <div className="container mx-auto mt-8 px-10">
       <button onClick={applyChange} className="px-2 py-1 mb-4 bg-blue-500 text-white rounded hover:bg-blue-400">Apply Changes</button>
       <span className='text-green-500 font-semibold ml-2'>{updated}</span>
-      <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
-        <h2 className="text-lg font-bold text-center">Diamond</h2>
+      <div className="mb-4 bg-white rounded-lg shadow-md p-3">
+        <h2 className="text-lg font-bold text-center mb-2">Diamond</h2>
 
         {Object.entries(diamondRows).map(row => (
-          <div key={row[0]} className="flex items-center mb-2">
-            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+          <div key={row[0]} className="flex items-center mb-4">
+            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
             {renderSeats(row, 'diamond')}
           </div>
         ))}
@@ -362,12 +362,12 @@ const MovieTicketBooking = () => {
           </button>
         </div>
       </div>
-      <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
+      <div className="mb-4 bg-white rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold mb-2 text-center">Gold</h2>
         {Object.entries(goldRows).map(row => (
-          <div key={row[0]} className="flex items-center mb-2">
+          <div key={row[0]} className="flex items-center mb-4">
 
-            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
             {renderSeats(row, 'gold')}
           </div>
         ))}
@@ -378,12 +378,12 @@ const MovieTicketBooking = () => {
           Add Row
         </button>
       </div>
-      <div className="mb-4 bg-gray-200 rounded-lg shadow-md p-3">
+      <div className="mb-4 bg-white rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold mb-2 text-center">Silver</h2>
         {Object.entries(silverRows).map(row => (
-          <div key={row[0]} className="flex items-center mb-2">
+          <div key={row[0]} className="flex items-center mb-4">
 
-            <span className="text-base mr-2 ml-1 font-bold">{row[0]}</span>
+            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
             {renderSeats(row, 'silver')}
           </div>
         ))}
@@ -395,9 +395,9 @@ const MovieTicketBooking = () => {
         </button>
       </div>
       <div className="mb-4 text-center pt-4">
-        <div className="bg-gray-200 p-4 rounded-lg shadow-md mx-auto" style={{ maxWidth: '408px' }}>
+        <div className=" p-4 mx-auto" style={{ maxWidth: '408px' }}>
           <svg width="376" height="44" viewBox="0 0 376 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="376" height="44" fill="white" />
+            <rect width="376" height="44" />
             <path d="M334.718 2.00062C228 10.0004 148 10.0004 39.6559 2.00062L16 30.9996C148 38.9999 228 38.9999 360 30.9996L334.718 2.00062Z" fill="white" />
             <path d="M16 30.9996L39.6559 2.00062C148 10.0004 228 10.0004 334.718 2.00062L360 30.9996M16 30.9996L19.0003 35.9999C148 44 228 44 357 35.9999L360 30.9996M16 30.9996C148 38.9999 228 38.9999 360 30.9996" stroke="#101010" stroke-opacity="0.22" />
             <path d="M332 5.49907C229 13.0005 145.5 13.0005 42.5 5.5009L23 28.5009C143 36.5005 232 36.501 351.923 28.4991L332 5.49907Z" fill="#E0F6FA" />

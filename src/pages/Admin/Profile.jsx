@@ -12,7 +12,6 @@ const UserProfile = () => {
     const [error, setError] = useState(null);
     const [adminDetails, setAdminDetails] = useState(null);
 
-    // Function to handle logout
     const handleLogout = () => {
         localStorage.removeItem('adminData');
         localStorage.removeItem('adminAccessToken');
@@ -40,21 +39,28 @@ const UserProfile = () => {
 
     useEffect(() => {
         fetchAdminData();
-    }, []); // Call only once when component mounts
+    }, []);
 
     return (
-        <div className="flex justify-center mt-10">
-            {/* User Details */}
+        <div className="flex justify-center mt-32">
             {adminDetails && (
-                <div className="ml-6">
-                    <h1 className="text-3xl font-bold mb-4">{adminDetails.name}</h1>
-                    <p className="mb-2"><span className="font-semibold">Email:</span> {adminDetails.email}</p>
-                    <NavLink to="/admin/edit-profile" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mx-2">
-                        Edit Profile Details
+                <div className="w-1/3 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+                    <div className="mb-4">
+                        <span className="text-sm font-semibold text-gray-600 mb-1">Name : </span>
+                        <span className="text-lg text-gray-800 mb-4">{adminDetails.name}</span>
+                    </div>
+                    <div className="mb-7">
+                        <span className="text-sm font-semibold text-gray-600 mb-1">Email : </span>
+                        <span className="text-lg text-gray-800 mb-4">{adminDetails.email}</span>
+                    </div>
+                    <NavLink to="/admin/edit-profile" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        Edit Profile
                     </NavLink>
-                    <button onClick={handleLogout} className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
-                        Logout
-                    </button>
+                    <div className="flex justify-center">
+                        <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full mt-5 shadow-md">
+                            Logout
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

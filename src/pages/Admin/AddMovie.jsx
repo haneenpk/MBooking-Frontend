@@ -83,12 +83,12 @@ const AddMovie = () => {
             </div>
             <div className="mb-4">
                 <label htmlFor="image" className="block mb-1">Image Upload</label>
-                <input type="file" accept="image/*" id="image" name="image" onChange={handleImageUpload} className="w-full border rounded px-3 py-2" required />
+                <input type="file" accept="image/*" id="image" name="image" onChange={handleImageUpload} className="w-full border border-gray-400 rounded px-3 py-2" required />
                 {errors.image &&
                     <FormErrorDisplay error={errors.image} />
                 }
                 {previewImage && (
-                    <img src={previewImage} alt="Movie Preview" className="h-56 rounded-sm mt-2" />
+                    <img src={previewImage} alt="Movie Preview" className="h-56 rounded-md mt-2" />
                 )}
             </div>
             <div className="mb-4">

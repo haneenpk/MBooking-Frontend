@@ -105,7 +105,7 @@ function ShowCheckout() {
     const seconds = remainingTime % 60;
 
     return (
-        <div className="flex justify-center items-center mt-24">
+        <div className="flex justify-center items-center mt-32">
             <div className="bg-white rounded-lg shadow-md w-full md:w-3/4 lg:w-1/2 xl:w-2/3 px-8">
                 {/* Left side - Booking Details */}
                 <div className="mt-6 flex justify-center mb-3">

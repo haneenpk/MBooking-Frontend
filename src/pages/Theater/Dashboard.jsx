@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
+import ChartOne from '../../components/Theater/Charts/ChartOne';
 
 function TheaterDashboard() {
   const [tickets, setTickets] = useState([]);
+  const [chartInstance, setChartInstance] = useState(null);
 
   const formatTime = (time) => {
     if (!time) return ''; // Check if time is undefined
@@ -30,10 +32,10 @@ function TheaterDashboard() {
   const todayFormatted = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
   const todayBooked = tickets.filter(ticket => ticket.createdAt.startsWith(todayFormatted));
 
-  let todayBookedTickets = 0
+  let todayBookedTickets = 0;
 
-  for(let i=0; i<todayBooked.length; i++){
-    todayBookedTickets += todayBooked[i].seatCount
+  for (let i = 0; i < todayBooked.length; i++) {
+    todayBookedTickets += todayBooked[i].seatCount;
   }
 
   // Calculate monthly booked tickets
@@ -45,10 +47,10 @@ function TheaterDashboard() {
     return ticketDate >= firstDayOfMonth && ticketDate <= lastDayOfMonth;
   });
 
-  let monthlyBookedTickets = 0
+  let monthlyBookedTickets = 0;
   
-  for(let i=0; i<monthlyTickets.length; i++){
-    monthlyBookedTickets += monthlyTickets[i].seatCount
+  for (let i = 0; i < monthlyTickets.length; i++) {
+    monthlyBookedTickets += monthlyTickets[i].seatCount;
   }
 
   // Calculate profit for this month and total profit
@@ -64,6 +66,49 @@ function TheaterDashboard() {
       profitThisMonth += ticket.totalPrice;
     }
   });
+
+  // Chart data
+  const chartData = {
+    labels: ['Booked Tickets'],
+    datasets: [{
+      label: 'Tickets',
+      data: [monthlyBookedTickets],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  useEffect(() => {
+    // Destroy previous chart instance
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
+    // Create new chart instance
+    const ctx = document.getElementById('myChart');
+    if (ctx) {
+      ctx.width = 400; // Set canvas width
+      ctx.height = 400; // Set canvas height
+      const newChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: chartOptions
+      });
+      setChartInstance(newChartInstance);
+    }
+  }, [monthlyBookedTickets]);
 
   return (
     <div className="p-6">
@@ -86,46 +131,10 @@ function TheaterDashboard() {
           <p className="text-4xl font-bold text-red-500">₹{totalProfit}</p>
         </div>
       </div>
-      <h2 className="text-2xl font-bold mb-4">Users Tickets</h2>
-      <div className="overflow-x-auto mb-4">
-        <table className="table-auto w-full border-collapse border border-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border border-gray-200 px-1 py-2">Username</th>
-              <th className="border border-gray-200 px-1 py-2">Movie Image</th>
-              <th className="border border-gray-200 px-4 py-2">Movie Name</th>
-              <th className="border border-gray-200 px-4 py-2">Screen Name</th>
-              <th className="border border-gray-200 px-4 py-2">Seats</th>
-              <th className="border border-gray-200 px-4 py-2">Tickets</th>
-              <th className="border border-gray-200 px-4 py-2">Date</th>
-              <th className="border border-gray-200 px-4 py-2">Starting Time</th>
-              <th className="border border-gray-200 px-4 py-2">Payment Method</th>
-              <th className="border border-gray-200 px-4 py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.map(ticket => (
-              <tr key={ticket.id}>
-                <td className="border border-gray-200 px-4 py-2">{ticket.userId.username}</td>
-                <td className="border border-gray-200 px-4 py-2">
-                  <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className="w-16 h-auto" />
-                </td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.movieId.moviename}</td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.screenId.name}</td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {ticket.seats.map((seat, index) => (
-                    <span key={seat.seatNumber}> {seat.seatNumber}{index !== ticket.seats.length - 1 ? ', ' : ''}</span>
-                  ))}
-                </td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.seatCount}</td>
-                <td className="border border-gray-200 px-4 py-2">{new Date(ticket.showId.date).toLocaleDateString()}</td>
-                <td className="border border-gray-200 px-4 py-2">{formatTime(ticket.showId.startTime)}</td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.paymentMethod}</td>
-                <td className={`border border-gray-200 px-4 py-2 ${ticket.isCancelled ? 'text-red-500' : 'text-black'}`}>{ticket.isCancelled ? "Cancelled" : "Booked"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Chart */}
+      <div className="bg-white shadow-lg rounded-md p-6">
+        <h3 className="text-lg font-semibold mb-2">This Year Booked Tickets</h3>
+        <ChartOne />
       </div>
     </div>
   );

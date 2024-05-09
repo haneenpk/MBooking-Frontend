@@ -13,7 +13,6 @@ const UserProfile = () => {
   const [theaterDetails, setTheater] = useState(null);
   const [isBlocked, setIsBlocked] = useState(false); // Default to false
 
-  // Sample user data
   const userData = {
     username: 'JohnDoe',
     email: 'johndoe@example.com',
@@ -21,12 +20,11 @@ const UserProfile = () => {
     profilePic: 'https://via.placeholder.com/150', // Sample URL for profile picture
   };
 
-  // Function to handle logout
   const handleLogout = () => {
     localStorage.removeItem('theaterData');
     localStorage.removeItem('theaterAccessToken');
     dispatch(resetTheaterState());
-    navigate('/theater/login')
+    navigate('/theater/login');
   };
 
   useEffect(() => {
@@ -34,7 +32,6 @@ const UserProfile = () => {
       try {
         const theaterId = localStorage.getItem('theaterData');
         if (!theaterId) {
-          // No theater ID found, navigate to login
           navigate("/theater/login");
           return;
         }
@@ -43,7 +40,6 @@ const UserProfile = () => {
         setTheater(response.data.data);
         setIsBlocked(response.data.data.isBlocked);
       } catch (error) {
-        // Handle network errors
         setError(error);
       }
     };
@@ -52,7 +48,6 @@ const UserProfile = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // Check if the user is blocked and navigate to login if blocked
     if (isBlocked) {
       navigate("/theater/login");
     }
@@ -69,31 +64,40 @@ const UserProfile = () => {
   }
 
   if (!theaterDetails) {
-    // Render loading state until theater details are fetched
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="flex justify-center mt-10">
-      {/* User Details */}
-      <div>
-        <h1 className="text-3xl font-bold mb-4">{theaterDetails.name}</h1>
-        <p className="mb-2"><span className="font-semibold">Email:</span> {theaterDetails.email}</p>
-        <p className="mb-2"><span className="font-semibold">Mobile:</span> {theaterDetails.mobile}</p>
-        <p className="mb-2"><span className="font-semibold">Screen Count:</span> {theaterDetails.screenCount}</p>
-        <p className="mb-2"><span className="font-semibold underline">Address:-</span></p>
-        <div className='ml-3'>
-          <p className="mb-2"><span className="font-semibold">Country:</span> {theaterDetails.address.country}</p>
-          <p className="mb-2"><span className="font-semibold">State:</span> {theaterDetails.address.state}</p>
-          <p className="mb-2"><span className="font-semibold">District:</span> {theaterDetails.address.district}</p>
-          <p className="mb-2"><span className="font-semibold">City:</span> {theaterDetails.address.city}</p>
+    <div className="flex justify-center mt-28">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/2">
+        <div className="mb-4">
+          <label className="text-gray-700 font-bold mb-2">Name : </label>
+          <span className="text-gray-700">{theaterDetails.name}</span>
         </div>
-        <NavLink to="/theater/edit-profile" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mx-2">
-          Edit Profile Details
-        </NavLink>
-        <button onClick={handleLogout} className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
-          Logout
-        </button>
+        <div className="mb-4">
+          <label className="text-gray-700 font-bold mb-2">Email : </label>
+          <span className="text-gray-700">{theaterDetails.email}</span>
+        </div>
+        <div className="mb-4">
+          <label className="text-gray-700 font-bold mb-2">Mobile : </label>
+          <span className="text-gray-700">{theaterDetails.mobile}</span>
+        </div>
+        <div className="mb-4">
+          <label className="text-gray-700 font-bold mb-2">Screen Count : </label>
+          <span className="text-gray-700">{theaterDetails.screenCount}</span>
+        </div>
+        <div className="mb-7">
+          <label className="text-gray-700 font-bold mb-2">Address :-</label>
+          <p className="text-gray-700">{theaterDetails.address.country}, {theaterDetails.address.state}, {theaterDetails.address.district}, {theaterDetails.address.city}</p>
+        </div>
+        <NavLink to="/theater/edit-profile" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+            Edit Profile Details
+          </NavLink>
+        <div className="flex justify-center items-center mt-8">
+          <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full shadow-md">
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ const BookingHistory = () => {
     };
 
     return (
-        <div className="container mx-auto py-8 mt-10 ">
+        <div className="mx-auto py-8 mt-10 px-10">
             <h1 className="text-3xl font-bold mb-4 text-center">Booking History</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {tickets.map((ticket) => (
@@ -91,7 +91,7 @@ const BookingHistory = () => {
                                     <>
                                         <button className="hover:bg-blue-600 bg-blue-500 text-white border rounded-md p-2 cursor-pointer" onClick={() => handleCancelTicket(ticket._id)}>Cancel</button>
                                         {cancelTicketId === ticket._id && (
-                                            <div className="fixed top-0 z-40 left-0 w-full flex justify-center items-center bg-black bg-opacity-60" style={{ height: '650px' }}>
+                                            <div className="fixed top-0 z-40 left-0 w-full flex justify-center items-center bg-black bg-opacity-60 h-screen" >
                                                 <div className="bg-white p-5 rounded-md shadow-md">
                                                     <p className="text-xl font-semibold mb-3">Are you sure you want to cancel this ticket?</p>
                                                     <div className="flex justify-center">

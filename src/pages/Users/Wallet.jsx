@@ -22,7 +22,7 @@ const Wallet = () => {
     }, []);
 
     return (
-        <div className="container mx-auto mt-24 mb-8">
+        <div className="mx-auto mt-24 mb-8 px-10">
             <div className="mx-auto bg-white rounded-lg overflow-hidden shadow-md">
                 {/* Wallet Amount */}
                 <div className="bg-blue-500 py-4 px-6 text-white">

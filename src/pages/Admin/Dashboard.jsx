@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
+import ChartOne from '../../components/Admin/Charts/ChartOne';
 
 function TheaterDashboard() {
   const [tickets, setTickets] = useState([]);
@@ -32,7 +33,7 @@ function TheaterDashboard() {
 
   let todayBookedTickets = 0
 
-  for(let i=0; i<todayBooked.length; i++){
+  for (let i = 0; i < todayBooked.length; i++) {
     todayBookedTickets += todayBooked[i].seatCount
   }
 
@@ -46,12 +47,12 @@ function TheaterDashboard() {
   });
 
   let monthlyBookedTickets = 0
-  
-  for(let i=0; i<monthlyTickets.length; i++){
+
+  for (let i = 0; i < monthlyTickets.length; i++) {
     monthlyBookedTickets += monthlyTickets[i].seatCount
   }
 
-  console.log("month :",monthlyBookedTickets);
+  console.log("month :", monthlyBookedTickets);
   // Calculate profit for this month and total profit
   let profitThisMonth = 0;
   let totalProfit = 0;
@@ -87,46 +88,10 @@ function TheaterDashboard() {
           <p className="text-4xl font-bold text-red-500">₹{totalProfit}</p>
         </div>
       </div>
-      <h2 className="text-2xl font-bold mb-4">Users Tickets</h2>
-      <div className="overflow-x-auto mb-4">
-        <table className="table-auto w-full border-collapse border border-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border border-gray-200 px-1 py-2">Username</th>
-              <th className="border border-gray-200 px-1 py-2">Movie Image</th>
-              <th className="border border-gray-200 px-4 py-2">Movie Name</th>
-              <th className="border border-gray-200 px-4 py-2">Screen Name</th>
-              <th className="border border-gray-200 px-4 py-2">Seats</th>
-              <th className="border border-gray-200 px-4 py-2">Tickets</th>
-              <th className="border border-gray-200 px-4 py-2">Date</th>
-              <th className="border border-gray-200 px-4 py-2">Starting Time</th>
-              <th className="border border-gray-200 px-4 py-2">Payment Method</th>
-              <th className="border border-gray-200 px-4 py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.map(ticket => (
-              <tr key={ticket.id}>
-                <td className="border border-gray-200 px-4 py-2">{ticket.userId.username}</td>
-                <td className="border border-gray-200 px-4 py-2">
-                  <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className="w-16 h-auto" />
-                </td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.movieId.moviename}</td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.screenId.name}</td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {ticket.seats.map((seat, index) => (
-                    <span key={seat.seatNumber}> {seat.seatNumber}{index !== ticket.seats.length - 1 ? ', ' : ''}</span>
-                  ))}
-                </td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.seatCount}</td>
-                <td className="border border-gray-200 px-4 py-2">{new Date(ticket.showId.date).toLocaleDateString()}</td>
-                <td className="border border-gray-200 px-4 py-2">{formatTime(ticket.showId.startTime)}</td>
-                <td className="border border-gray-200 px-4 py-2">{ticket.paymentMethod}</td>
-                <td className={`border border-gray-200 px-4 py-2 ${ticket.isCancelled ? 'text-red-500' : 'text-black'}`}>{ticket.isCancelled ? "Cancelled" : "Booked"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Chart */}
+      <div className="bg-white shadow-lg rounded-md p-6">
+        <h3 className="text-lg font-semibold mb-2">This Year Booked Tickets</h3>
+        <ChartOne />
       </div>
     </div>
   );
