@@ -37,7 +37,7 @@ const Login = ({ role }) => {
 
             const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/${role}/login`, formData);
 
-            console.log("response:", response);
+            console.log("response: ", response);
 
             if (response && response.status === 200) {
                 localStorage.setItem(`${role}AccessToken`, response?.data?.accessToken);
