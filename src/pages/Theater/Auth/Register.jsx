@@ -37,7 +37,7 @@ const Register = () => {
             setErrors({}); // Clear previous validation errors
 
             // If validation passes, proceed with signup
-            const response = await axios.post(`http://localhost:3000/api/theater/register`, formData);
+            const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/theater/register`, formData);
             console.log(response.data.message);
 
             navigate(`/theater/verify-otp?email=${formData.email}`);

@@ -349,7 +349,7 @@ const MovieTicketBooking = () => {
 
         {Object.entries(diamondRows).map(row => (
           <div key={row[0]} className="flex items-center mb-4">
-            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
+            <span className="text-base ml-1 font-bold mb-4 w-4">{row[0]}</span>
             {renderSeats(row, 'diamond')}
           </div>
         ))}
@@ -367,7 +367,7 @@ const MovieTicketBooking = () => {
         {Object.entries(goldRows).map(row => (
           <div key={row[0]} className="flex items-center mb-4">
 
-            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
+            <span className="text-base ml-1 font-bold mb-4 w-4">{row[0]}</span>
             {renderSeats(row, 'gold')}
           </div>
         ))}
@@ -383,7 +383,7 @@ const MovieTicketBooking = () => {
         {Object.entries(silverRows).map(row => (
           <div key={row[0]} className="flex items-center mb-4">
 
-            <span className="text-base mr-2 ml-1 font-bold mb-4">{row[0]}</span>
+            <span className="text-base ml-1 font-bold mb-4 w-4">{row[0]}</span>
             {renderSeats(row, 'silver')}
           </div>
         ))}

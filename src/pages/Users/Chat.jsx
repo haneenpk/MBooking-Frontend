@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "../../api/shared/instance";
 import io from 'socket.io-client'
 
-const socket = io("http://localhost:3000")
+const socket = io(`${import.meta.env.VITE_AXIOS_BASE_URL}`)
 
 const Chat = () => {
     const [message, setMessage] = useState("");

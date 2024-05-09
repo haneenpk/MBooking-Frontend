@@ -35,7 +35,7 @@ const Login = ({ role }) => {
             await loginSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
-            const response = await axios.post(`http://localhost:3000/api/${role}/login`, formData);
+            const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/${role}/login`, formData);
 
             console.log("response:", response);
 

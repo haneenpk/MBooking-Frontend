@@ -26,7 +26,7 @@ const OTP = () => {
             // Validate OTP and email against the schema
             await otpSchema.validate({ otp });
 
-            const response = await axios.post(`http://localhost:3000/api/theater/validateOTP`, { otp, email });
+            const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/theater/validateOTP`, { otp, email });
 
             if (response) {
                 setServerResponse(response);
@@ -49,7 +49,7 @@ const OTP = () => {
     };
 
     const handleResend = async () => {
-        const response = await axios.post(`http://localhost:3000/api/theater/resendOTP`, { email });
+        const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/theater/resendOTP`, { email });
 
         setServerResponse("");
         if (response) {

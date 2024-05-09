@@ -27,7 +27,7 @@ const OTP = () => {
         try {
             await otpSchema.validate({ otp });
 
-            const response = await axios.post(`http://localhost:3000/api/user/validateOtp`, { otp, email });
+            const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/user/validateOtp`, { otp, email });
 
             if (response) {
                 setServerResponse(response);
@@ -53,7 +53,7 @@ const OTP = () => {
     };
 
     const handleResend = async () => {
-        const response = await axios.post(`http://localhost:3000/api/user/resendOtp`, { email });
+        const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/user/resendOtp`, { email });
 
         setServerResponse("");
         if (response) {
