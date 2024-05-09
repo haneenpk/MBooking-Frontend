@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import Axios from "../../api/shared/instance";
 import io from 'socket.io-client'
+import LoadingSpinner from '../../components/Common/LoadingSpinner'; // Import LoadingSpinner component
 
 const socket = io(`${import.meta.env.VITE_AXIOS_BASE_URL}`)
 
 const Chat = () => {
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("");
     const [chatedUsers, setChatedUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState({});
     const [chatHistory, setChatHistory] = useState([]);
     const theaterId = localStorage.getItem('theaterData');
-    const chatContainerRef = useRef(null); // Ref for chat container
+    const chatContainerRef = useRef(null);
 
     const handleMessage = (e) => {
         const inputValue = e.target.value;
@@ -25,10 +26,9 @@ const Chat = () => {
             message
         };
 
-        // Emit the 'send-message' event with the message object
         socket.emit("send-message", obj);
 
-        setMessage(""); // Clearing the message input after sending
+        setMessage("");
 
         await fetchSelectedTheater(selectedUser);
         const response3 = await Axios.get(`/api/theater/chat/users/${theaterId}`);
@@ -37,7 +37,6 @@ const Chat = () => {
     };
 
     const scrollDown = () => {
-        // Scroll to the bottom of the chat container after updating chat history
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
 
@@ -50,7 +49,6 @@ const Chat = () => {
         }
     }
 
-    // Function to format time
     const formatTime = (timeString) => {
         const options = {
             hour: 'numeric',
@@ -151,9 +149,8 @@ const Chat = () => {
                                 {chatHistory.map((message, index) => (
                                     message.sender === "Theater" ? (
                                         <div key={index} className="flex justify-end my-2">
-                                            {/* Message sent by others */}
                                             <div className="flex items-center">
-                                            <span className="text-sm text-gray-500 mr-2 mt-2">{formatTime(message.time)}</span>
+                                                <span className="text-sm text-gray-500 mr-2 mt-2">{formatTime(message.time)}</span>
                                                 <div className="py-2 px-3 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white flex">
                                                     {message.message}
                                                     {message.isRead ? (
@@ -166,7 +163,6 @@ const Chat = () => {
                                                         </span>
                                                     )}
                                                 </div>
-
                                                 <img
                                                     src="https://via.placeholder.com/150"
                                                     className="ml-2 object-cover h-8 w-8 rounded-full"

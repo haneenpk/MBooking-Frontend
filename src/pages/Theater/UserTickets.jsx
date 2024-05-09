@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function UserTickets() {
     const [tickets, setTickets] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const formatTime = (time) => {
         if (!time) return '';
@@ -17,12 +19,18 @@ function UserTickets() {
                 const theaterId = localStorage.getItem('theaterData');
                 const response = await Axios.get(`/api/theater/Tickets/${theaterId}`);
                 setTickets(response.data.data);
+                setLoading(false); // Set loading to false once data is fetched
             } catch (error) {
                 console.log(error);
+                setLoading(false); // Set loading to false if there's an error
             }
         };
         fetchTickets();
     }, []);
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="px-8">

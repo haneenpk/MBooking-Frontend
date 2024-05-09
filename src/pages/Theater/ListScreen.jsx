@@ -5,14 +5,16 @@ import { useDispatch } from 'react-redux';
 import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const TheaterScreensList = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [error, setError] = useState(null);
-    const [listScreen, setListScreen] = useState([]); // Initialize as an empty array
+    const [listScreen, setListScreen] = useState([]);
     const [isBlocked, setIsBlocked] = useState(true);
+    const [isLoader, setLoader] = useState(true);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -41,8 +43,7 @@ const TheaterScreensList = () => {
                 setIsBlocked(response.data.data.isBlocked);
 
                 const responseScreen = await Axios.get(`/api/theater/screens/${theaterId}`);
-
-                setListScreen(responseScreen.data.data); // Correct the state variable name
+                setListScreen(responseScreen.data.data);
             } catch (error) {
                 setError(error);
             }
@@ -53,10 +54,7 @@ const TheaterScreensList = () => {
 
                 const responseScreen = await Axios.get(`/api/admin/screens/${theaterId}`);
                 setIsBlocked(false)
-
-                console.log(responseScreen);
-
-                setListScreen(responseScreen.data.data); // Correct the state variable name
+                setListScreen(responseScreen.data.data);
             } catch (error) {
                 setError(error);
             }
@@ -71,14 +69,13 @@ const TheaterScreensList = () => {
             fetchTheaterData(theaterId);
         }
 
-
+        setLoader(false)
 
     }, [navigate]);
 
     const handleDelete = async (screenId) => {
         try {
             await Axios.delete(`/api/theater/screens/delete/${screenId}`);
-            // If delete is successful, update the screen list
             setListScreen(listScreen.filter(screen => screen._id !== screenId));
         } catch (error) {
             setError(error);
@@ -95,7 +92,9 @@ const TheaterScreensList = () => {
         }
     }
 
-    if (!isBlocked) {
+    if (isLoader) {
+        return <LoadingSpinner />;
+    } else if (!isBlocked) {
         console.log(role);
         return (
             <div className='px-8'>
@@ -126,7 +125,7 @@ const TheaterScreensList = () => {
             </div>
         );
     }
-    return null; // return null if isBlocked
+    return null;
 };
 
 export default TheaterScreensList;

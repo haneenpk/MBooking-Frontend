@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const MovieTicketBooking = () => {
 
@@ -29,6 +30,8 @@ const MovieTicketBooking = () => {
   const [screenData, setScreenData] = useState({})
 
   const [updated, setUpdated] = useState('')
+
+  const [loading, setLoading] = useState(true);
 
   const applyChange = async () => {
     console.log("fir: ", screenData);
@@ -298,9 +301,11 @@ const MovieTicketBooking = () => {
         setGoldRows(responseScreen.data.data.gold.seats)
         setSilverRows(responseScreen.data.data.silver.seats)
         setScreenData(responseScreen.data.data)
+        setLoading(false); 
 
       } catch (error) {
         setError(error);
+        setLoading(false); 
       }
     };
 

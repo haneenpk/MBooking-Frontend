@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import ChartOne from '../../components/Theater/Charts/ChartOne';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TheaterDashboard() {
   const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [chartInstance, setChartInstance] = useState(null);
-
-  const formatTime = (time) => {
-    if (!time) return ''; // Check if time is undefined
-    const hours = time.hour > 12 ? time.hour - 12 : time.hour;
-    const period = time.hour >= 12 ? 'PM' : 'AM';
-    return `${hours.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}${period}`;
-  };
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -19,6 +14,7 @@ function TheaterDashboard() {
         const theaterId = localStorage.getItem('theaterData');
         const response = await Axios.get(`/api/theater/Tickets/${theaterId}`);
         setTickets(response.data.data);
+        setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching tickets:", error);
       }
@@ -113,24 +109,28 @@ function TheaterDashboard() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6">Theater Dashboard</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-7">
-        <div className="bg-white shadow-lg rounded-md p-6">
-          <h3 className="text-lg font-semibold mb-2">Today's Booked Tickets</h3>
-          <p className="text-4xl font-bold text-blue-500">{todayBookedTickets}</p>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-7">
+          <div className="bg-white shadow-lg rounded-md p-6">
+            <h3 className="text-lg font-semibold mb-2">Today's Booked Tickets</h3>
+            <p className="text-4xl font-bold text-blue-500">{todayBookedTickets}</p>
+          </div>
+          <div className="bg-white shadow-lg rounded-md p-6">
+            <h3 className="text-lg font-semibold mb-2">Monthly Booked Tickets</h3>
+            <p className="text-4xl font-bold text-green-500">{monthlyBookedTickets}</p>
+          </div>
+          <div className="bg-white shadow-lg rounded-md p-6">
+            <h3 className="text-lg font-semibold mb-2">Profit This Month</h3>
+            <p className="text-4xl font-bold text-yellow-500">₹{profitThisMonth}</p>
+          </div>
+          <div className="bg-white shadow-lg rounded-md p-6">
+            <h3 className="text-lg font-semibold mb-2">Total Profit</h3>
+            <p className="text-4xl font-bold text-red-500">₹{totalProfit}</p>
+          </div>
         </div>
-        <div className="bg-white shadow-lg rounded-md p-6">
-          <h3 className="text-lg font-semibold mb-2">Monthly Booked Tickets</h3>
-          <p className="text-4xl font-bold text-green-500">{monthlyBookedTickets}</p>
-        </div>
-        <div className="bg-white shadow-lg rounded-md p-6">
-          <h3 className="text-lg font-semibold mb-2">Profit This Month</h3>
-          <p className="text-4xl font-bold text-yellow-500">₹{profitThisMonth}</p>
-        </div>
-        <div className="bg-white shadow-lg rounded-md p-6">
-          <h3 className="text-lg font-semibold mb-2">Total Profit</h3>
-          <p className="text-4xl font-bold text-red-500">₹{totalProfit}</p>
-        </div>
-      </div>
+      )}
       {/* Chart */}
       <div className="bg-white shadow-lg rounded-md p-6">
         <h3 className="text-lg font-semibold mb-2">This Year Booked Tickets</h3>

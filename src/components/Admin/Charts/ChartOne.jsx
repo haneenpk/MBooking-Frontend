@@ -119,12 +119,13 @@ const ChartOne = () => {
     series: [
       {
         name: 'Ticket',
-        data: [],
+        data: [0,0,0,0,0,0,0,0,0,0,0,0],
       },
     ],
   });
 
   useEffect(() => {
+    const theaterId = localStorage.getItem('theaterData');
     const fetchTheaterTickets = async () => {
       try {
         console.log("hallo1");

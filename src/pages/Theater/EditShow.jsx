@@ -5,7 +5,7 @@ import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function EditShow() {
 
@@ -30,7 +30,8 @@ function EditShow() {
     const [movies, setMovies] = useState([]);
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
-    const [updateResponse, setUpdateResponse] = useState("")
+    const [updateResponse, setUpdateResponse] = useState("");
+    const [loading, setLoading] = useState(true); // State to manage loading spinner
 
     const formatTime = (time) => {
         const hours = time.hour > 12 ? time.hour - 12 : time.hour;
@@ -105,6 +106,7 @@ function EditShow() {
                 }
                 console.log(obj);
                 setNewShow(obj)
+                setLoading(false); // Set loading to false once data is fetched
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
@@ -114,6 +116,10 @@ function EditShow() {
         fetchScreens();
         fetchMovies();
     }, []);
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className='px-14 my-5'>

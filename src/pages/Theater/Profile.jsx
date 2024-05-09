@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [theaterDetails, setTheater] = useState(null);
   const [isBlocked, setIsBlocked] = useState(false); // Default to false
+  const [loading, setLoading] = useState(true); // State to manage loading spinner
 
   const userData = {
     username: 'JohnDoe',
@@ -39,6 +41,7 @@ const UserProfile = () => {
         const response = await Axios.get(`/api/theater/get/${theaterId}`);
         setTheater(response.data.data);
         setIsBlocked(response.data.data.isBlocked);
+        setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         setError(error);
       }
@@ -61,6 +64,10 @@ const UserProfile = () => {
       console.log("Your account is blocked");
       navigate("/theater/login")
     }
+  }
+
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
   if (!theaterDetails) {

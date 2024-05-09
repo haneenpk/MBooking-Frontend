@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const Show = () => {
     const theaterId = localStorage.getItem("theaterData");
     const [dates, setDates] = useState([]);
     const [shows, setShows] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null); // State to keep track of the selected date
+    const [selectedDate, setSelectedDate] = useState(null); 
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -15,7 +17,6 @@ const Show = () => {
         return { month, day };
     };
 
-    // Function to format time to 12-hour format with AM/PM
     const formatTime = (time) => {
         const hours = time.hour > 12 ? time.hour - 12 : time.hour;
         const period = time.hour >= 12 ? 'PM' : 'AM';
@@ -32,27 +33,26 @@ const Show = () => {
             response.data.FirstShow[i].image = response2.data.data.image
         }
         setShows(response.data.FirstShow);
-        setSelectedDate(date); // Set the selected date
+        setSelectedDate(date);
     };
 
     async function fetchDate() {
         try {
             const response = await Axios.get(`/api/theater/shows/first/${theaterId}`);
             setDates(response.data.dates);
-            // Select the first date by default
             if (response.data.dates.length > 0) {
                 handleDate(response.data.dates[0]);
             }
         } catch (error) {
             console.error("Error fetching theaters:", error);
+        } finally {
+            setLoading(false); // Set loading to false once data is fetched
         }
     }
 
     async function handleDelete(showId) {
         try {
-            console.log("Delete movie:", showId);
             const response = await Axios.delete(`/api/theater/show/delete/${showId}`);
-            console.log(response);
             fetchDate();
         } catch (error) {
             console.error("Error fetching theaters:", error);
@@ -62,6 +62,10 @@ const Show = () => {
     useEffect(() => {
         fetchDate();
     }, [theaterId]);
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="container mx-auto px-8">
@@ -74,7 +78,6 @@ const Show = () => {
                     const { month, day } = formatDate(dateString);
                     const isSelected = selectedDate === dateString;
                     const bgColor = isSelected ? 'bg-blue-500' : 'bg-blue-300';
-                    console.log(bgColor);
                     const dynamicClassName = `${bgColor} text-white px-4 py-1 rounded-md  cursor-pointer transition duration-100 hover:bg-blue-500`;
                     return (
                         <button
@@ -88,8 +91,6 @@ const Show = () => {
                     );
                 })}
             </div>
-
-            {/* Show listings */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {shows.map((show) => (
                     <div key={show._id} className="border bg-white shadow-md rounded-lg p-4 flex space-x-4 mb-4">
@@ -101,7 +102,6 @@ const Show = () => {
                             <p>Time: {formatTime(show.startTime)} - {formatTime(show.endTime)}</p>
                             <p>Total Seats: {show.totalSeatCount}</p>
                             <p>Available Seats: {show.availableSeatCount}</p>
-                            {/* Add more details as needed */}
                             <div className="flex justify-between mt-12">
                                 <NavLink to={`/theater/show/edit?showId=${show._id}`} className="text-blue-500 hover:underline font-semibold">
                                     Edit show

@@ -7,6 +7,7 @@ import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
 import { useDispatch } from 'react-redux';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ const EditProfile = () => {
     const [isBlocked, setIsBlocked] = useState(true); // New state to track user block status
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
+    const [loading, setLoading] = useState(true); // State to manage loading spinner
 
     const handleChange = (e) => {
         handleInputChange(e, formData, setFormData, setServerResponse, setErrors);
@@ -76,12 +78,17 @@ const EditProfile = () => {
                 const response = await Axios.get(`/api/theater/get/${theaterId}`);
                 setFormData(response.data.data);
                 setIsBlocked(response.data.data.isBlocked);
+                setLoading(false); // Set loading to false once data is fetched
             } catch (error) {
                 setError(error);
             }
         };
         fetchTheaterData();
     }, [navigate]);
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     if (error) {
         if (error.response && error.response.data.message === "You are blocked") {

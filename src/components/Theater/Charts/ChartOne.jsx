@@ -119,7 +119,7 @@ const ChartOne = () => {
     series: [
       {
         name: 'Ticket',
-        data: [],
+        data: [0,0,0,0,0,0,0,0,0,0,0,0],
       },
     ],
   });
