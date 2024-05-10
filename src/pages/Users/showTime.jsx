@@ -102,6 +102,8 @@ function ShowTime() {
                 setSelectedDate(response2.data.dates[0]);
 
                 setTheaters(groupedTheaters);
+
+                setLoading(false)
             } catch (error) {
                 if (error && error.response && error.response.data.message === "You are blocked") {
                     localStorage.removeItem('userData');
@@ -110,6 +112,7 @@ function ShowTime() {
                     console.log("Your account is blocked");
                     navigate("/login");
                 }
+                setLoading(false)
             }
         };
 
