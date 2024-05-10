@@ -30,9 +30,13 @@ const Register = () => {
     const handleRegistre = async (e) => {
         e.preventDefault();
 
+        const trimmedFormData = Object.fromEntries(
+            Object.entries(formData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+        );
+
         try {
             // Validate formData against the signup schema
-            await registerTheaterSchema.validate(formData, { abortEarly: false });
+            await registerTheaterSchema.validate(trimmedFormData, { abortEarly: false });
 
             setErrors({}); // Clear previous validation errors
 

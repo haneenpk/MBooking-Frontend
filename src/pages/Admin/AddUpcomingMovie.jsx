@@ -29,25 +29,28 @@ const AddMovieForm = () => {
 
   const handleImageUpload = (e) => {
     if (e.target.name === 'image') {
-        const file = e.target.files[0];
-        setMovieData(prevState => ({
-            ...prevState,
-            image: file
-        }));
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => setPreviewImage(e.target.result);
-            reader.readAsDataURL(file);
-        } else {
-            setPreviewImage(null); // Clear preview if invalid file
-        }
+      const file = e.target.files[0];
+      setMovieData(prevState => ({
+        ...prevState,
+        image: file
+      }));
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => setPreviewImage(e.target.result);
+        reader.readAsDataURL(file);
+      } else {
+        setPreviewImage(null); // Clear preview if invalid file
+      }
     }
-};
+  };
 
   const handleSubmit = async () => {
+    const trimmedFormData = Object.fromEntries(
+      Object.entries(movieData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+    );
     try {
 
-      await addUpcomingSchema.validate(movieData, { abortEarly: false });
+      await addUpcomingSchema.validate(trimmedFormData, { abortEarly: false });
 
       const formData = new FormData();
       formData.append('moviename', movieData.moviename);

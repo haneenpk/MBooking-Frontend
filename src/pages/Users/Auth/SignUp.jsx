@@ -30,9 +30,14 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
         e.preventDefault();
 
+        // Trim whitespace from form data
+        const trimmedFormData = Object.fromEntries(
+            Object.entries(formData).map(([key, value]) => [key, value.trim()])
+        );
+
         try {
             // Validate formData against the signup schema
-            await signupSchema.validate(formData, { abortEarly: false });
+            await signupSchema.validate(trimmedFormData, { abortEarly: false });
 
             setErrors({}); // Clear previous validation errors
 

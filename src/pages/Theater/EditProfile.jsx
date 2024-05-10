@@ -51,9 +51,13 @@ const EditProfile = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+
+        const trimmedFormData = Object.fromEntries(
+            Object.entries(formData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+        );
+
         try {
-            await editTheaterSchema.validate(formData, { abortEarly: false });
+            await editTheaterSchema.validate(trimmedFormData, { abortEarly: false });
             setErrors({}); // Clear previous validation errors
             const response = await Axios.put(`/api/theater/update/${formData._id}`, formData);
             console.log(response.data.message);

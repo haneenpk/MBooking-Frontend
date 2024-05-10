@@ -62,9 +62,13 @@ function AddShow() {
     const handleAddShow = async (e) => {
         e.preventDefault();
 
+        const trimmedFormData = Object.fromEntries(
+            Object.entries(newShow).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+        );
+
         try {
             // Validate formData against the signup schema
-            await addShowSchema.validate(newShow, { abortEarly: false });
+            await addShowSchema.validate(trimmedFormData, { abortEarly: false });
 
             setErrors({}); // Clear previous validation errors
 

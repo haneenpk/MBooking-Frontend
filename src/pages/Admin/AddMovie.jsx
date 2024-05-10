@@ -48,9 +48,12 @@ const AddMovie = () => {
     };
 
     const handleSubmit = async () => {
+        const trimmedFormData = Object.fromEntries(
+            Object.entries(movieData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+        );
         try {
 
-            await addMovieSchema.validate(movieData, { abortEarly: false });
+            await addMovieSchema.validate(trimmedFormData, { abortEarly: false });
 
             const formData = new FormData();
             formData.append('moviename', movieData.moviename);

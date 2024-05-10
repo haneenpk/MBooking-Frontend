@@ -25,8 +25,12 @@ const AddScreen = () => {
     const handleAddScreen = async (e) => {
         e.preventDefault();
 
+        const trimmednewScreen = Object.fromEntries(
+            Object.entries(newScreen).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
+        );
+
         try {
-            await addScreenSchema.validate(newScreen, { abortEarly: false });
+            await addScreenSchema.validate(trimmednewScreen, { abortEarly: false });
             setErrors({});
 
             const theaterId = localStorage.getItem("theaterData");
