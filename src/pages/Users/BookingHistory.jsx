@@ -1,11 +1,13 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { toast } from 'sonner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Axios from "../../api/shared/instance";
 
 const BookingHistory = () => {
 
     const [tickets, setTickets] = useState([]);
     const [cancelTicketId, setCancelTicketId] = useState(""); // State to store the ticket ID to cancel
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const formatTime = (time) => {
         if (!time) return ''; // Check if time is undefined
@@ -20,8 +22,10 @@ const BookingHistory = () => {
             let response = await Axios.get(`/api/user/booking-history/${userId}`);
             console.log(response.data.data);
             setTickets(response.data.data);
+            setLoading(false)
         } catch (error) {
             console.error(error);
+            setLoading(false)
         }
     };
 
@@ -58,6 +62,10 @@ const BookingHistory = () => {
         // Reset the cancelTicketId state when the modal is closed without confirmation
         setCancelTicketId("");
     };
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="mx-auto py-8 mt-10 px-10">

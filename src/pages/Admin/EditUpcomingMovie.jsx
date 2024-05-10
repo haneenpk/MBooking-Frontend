@@ -5,6 +5,7 @@ import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { useNavigate, useLocation } from 'react-router-dom';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const EditUpcomingMovie = () => {
 
@@ -19,6 +20,8 @@ const EditUpcomingMovie = () => {
 
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
+
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const handleChange = (e) => {
         handleInputChange(e, movieData, setMovieData, setServerResponse, setErrors);
@@ -41,19 +44,19 @@ const EditUpcomingMovie = () => {
     const handleImageChange = async (event) => {
 
         try {
-      
+
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
-      
+
             const response = await Axios.patch(`/api/admin/upcoming/edit/image/${upcomingId}`, formData);
-      
+
             fetchUpcomingMovieData()
-      
+
             console.log(response);
-      
-          } catch (error) {
+
+        } catch (error) {
             console.error("Error updating profile picture:", error);
-          }
+        }
 
     }
 
@@ -75,8 +78,11 @@ const EditUpcomingMovie = () => {
 
             console.log(upcoming);
 
+            setLoading(false)
+
         } catch (error) {
             setErrors(error);
+            setLoading(false)
         }
     };
 
@@ -85,6 +91,10 @@ const EditUpcomingMovie = () => {
         fetchUpcomingMovieData();
 
     }, [])
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="max-w-md mx-auto py-5">
@@ -98,21 +108,21 @@ const EditUpcomingMovie = () => {
             </div>
             <div className="mb-4">
                 <label htmlFor="languages" className="block mb-1">Languages</label>
-                <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma'/>
+                <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma' />
                 {errors.languages &&
                     <FormErrorDisplay error={errors.languages} />
                 }
             </div>
             <div className="mb-4">
                 <label htmlFor="genre" className="block mb-1">Genre</label>
-                <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma'/>
+                <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma' />
                 {errors.genre &&
                     <FormErrorDisplay error={errors.genre} />
                 }
             </div>
             <div className="mb-4">
                 <label htmlFor="description" className="block mb-1">Description</label>
-                <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie'/>
+                <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie' />
                 {errors.description &&
                     <FormErrorDisplay error={errors.description} />
                 }

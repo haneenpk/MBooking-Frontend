@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { useNavigate, NavLink } from 'react-router-dom';
 import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Axios from "../../api/shared/instance";
 
 const Home = ({ decide }) => {
@@ -14,6 +15,7 @@ const Home = ({ decide }) => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [toastShown, setToastShown] = useState(false);
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,6 +33,7 @@ const Home = ({ decide }) => {
         setUpcomingMovies(response1.data.data);
         setAvailMovies(response2.data.data);
         setDistrict(district);
+        setLoading(false)
       } catch (error) {
         if (error && error.response && error.response.data.message === "You are blocked") {
           // Check if toast has already been shown
@@ -44,6 +47,7 @@ const Home = ({ decide }) => {
             navigate("/login");
           }
         }
+        setLoading(false)
       }
     };
 
@@ -83,6 +87,10 @@ const Home = ({ decide }) => {
     const newReleaseThreshold = 1; // Threshold for considering a movie as a new release (e.g., within the last 7 days)
     return daysDifference <= newReleaseThreshold;
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex min-h-screen mt-16">
@@ -133,7 +141,7 @@ const Home = ({ decide }) => {
                             className="px-3 py-2 text-blue-500 border font-medium border-blue-400 rounded hover:bg-blue-500 focus:outline-none hover:text-white hover:shadow-md transition duration-300 ease-in-out"
                           >
                             Book Ticket
-                          </NavLink>                          
+                          </NavLink>
                           {isMovieNewRelease(movie.releaseDate) && <p className="text-green-500 ml-2">New Release</p>}
                         </div>
                       </div>

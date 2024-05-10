@@ -1,18 +1,22 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import { NavLink } from 'react-router-dom';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UpcomingMovies = () => {
 
   const [upcomings, setUpcomings] = useState([]);
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   const fetchTheaterData = async () => {
     try {
       const response = await Axios.get(`/api/admin/upcomings`);
       console.log(response);
       setUpcomings(response.data.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       // Handle error
     }
   };
@@ -34,6 +38,10 @@ const UpcomingMovies = () => {
     // Add logic to handle deleting the movie at the specified index
     
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-1">

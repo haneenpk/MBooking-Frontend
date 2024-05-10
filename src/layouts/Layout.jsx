@@ -35,24 +35,33 @@ const Layout = () => {
     location
   );
 
-  useEffect(async () => {
-    if (localStorage.getItem(`${userRole}AccessToken`)) {
-      if (userRole === "admin") {
-        dispatch(setLoggedIn(true));
-        console.log("changedA:", isAdminLoggedIn);
-        dispatch(setAdminData(localStorage.getItem("adminData")));
-      } else if (userRole === "user") {
-        dispatch(setUserLoggedIn(true));
-        console.log("changedU:", isUserLoggedIn);
-        const response = await Axios.get(`/api/user/get/${localStorage.getItem("userData")}`);
-        dispatch(setUserData(response.data.data));
-      } else {
-        dispatch(setTheaterLoggedIn(true));
-        console.log("changedT:", isTheaterLoggedIn);
-        dispatch(setTheaterData(localStorage.getItem("theaterData")));
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(userRole, localStorage.getItem(`${userRole}AccessToken`));
+      if (localStorage.getItem(`${userRole}AccessToken`)) {
+        if (userRole === "admin") {
+          dispatch(setLoggedIn(true));
+          console.log("changedA:", isAdminLoggedIn);
+          dispatch(setAdminData(localStorage.getItem("adminData")));
+        } else if (userRole === "user") {
+          dispatch(setUserLoggedIn(true));
+          console.log("changedU:", isUserLoggedIn);
+          try {
+            const response = await Axios.get(`/api/user/get/${localStorage.getItem("userData")}`);
+            dispatch(setUserData(response.data.data));
+          } catch (error) {
+            // Handle error
+          }
+        } else {
+          dispatch(setTheaterLoggedIn(true));
+          console.log("changedT:", isTheaterLoggedIn);
+          dispatch(setTheaterData(localStorage.getItem("theaterData")));
+        }
       }
-    }
-  }, [isUserLoggedIn, isAdminLoggedIn, isTheaterLoggedIn])
+    };
+
+    fetchData();
+  }, [isUserLoggedIn, isAdminLoggedIn, isTheaterLoggedIn]);
 
   return (
     <div className="flex flex-col min-h-screen">

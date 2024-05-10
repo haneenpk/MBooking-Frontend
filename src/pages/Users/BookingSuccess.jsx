@@ -1,6 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { NavLink } from 'react-router-dom';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Axios from "../../api/shared/instance";
 import { useLocation } from 'react-router-dom';
 
@@ -10,19 +11,27 @@ function BookingSuccess() {
     const queryParams = new URLSearchParams(location.search);
     const tempTicketId = queryParams.get("tempTicketId");
 
+    const [isLoading, setLoading] = useState(true); // State to track loading status
+
     useLayoutEffect(() => {
         const fetchTempTicket = async () => {
             try {
                 let response = await Axios.get(`/api/user/booking/save/${tempTicketId}`);
                 toast.success('Successfully Booking')
                 // setTempTicket(response.data.data);
+                setLoading(false)
             } catch (error) {
                 console.error(error);
+                setLoading(false)
             }
         };
 
         fetchTempTicket();
     }, []);
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="mt-16 flex justify-center items-center">

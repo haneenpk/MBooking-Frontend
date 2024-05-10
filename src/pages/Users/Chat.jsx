@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "../../api/shared/instance";
 import io from 'socket.io-client'
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const socket = io(`${import.meta.env.VITE_AXIOS_BASE_URL}`)
 
@@ -14,6 +15,8 @@ const Chat = () => {
     const [filteredTheaters, setFilteredTheaters] = useState([]);
     const [theaters, setTheaters] = useState([]);
     const [profile, setProfile] = useState("");
+    const [isLoading, setLoading] = useState(true); // State to track loading status
+
     const userId = localStorage.getItem('userData');
 
     const handleInputChange = (e) => {
@@ -52,7 +55,7 @@ const Chat = () => {
 
     const fetchSelectedTheater = async (id) => {
         const response = await Axios.get(`/api/user/chat/history?userId=${userId}&theaterId=${id}&role=Theater`);
-        console.log("res : ",response);
+        console.log("res : ", response);
         if (response.data.data !== null) {
             const response2 = await Axios.get(`/api/user/get/theater/${id}`);
             setSelectedTheater(response2.data.data)
@@ -61,7 +64,7 @@ const Chat = () => {
             const response2 = await Axios.get(`/api/user/get/theater/${id}`);
             setSelectedTheater(response2.data.data)
             console.log(response2.data.data);
-            setChatedTheaters(prev => [{theaterId:response2.data.data}, ...prev])
+            setChatedTheaters(prev => [{ theaterId: response2.data.data }, ...prev])
             setChatHistory([])
         }
     }
@@ -100,9 +103,12 @@ const Chat = () => {
 
                 const response3 = await Axios.get(`/api/user/get/${userId}`);
                 setProfile(response3.data.data.profilePic);
+
+                setLoading(false)
             } catch (error) {
                 console.log(error);
                 setError(error);
+                setLoading(false)
             }
         };
 
@@ -120,6 +126,10 @@ const Chat = () => {
             setChatedTheaters(sortedTheaters);
         });
     }, [socket, userId, selectedTheater._id])
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="mx-auto shadow-lg rounded-lg relative mt-16 w-full">
@@ -184,9 +194,9 @@ const Chat = () => {
                                     </div>
                                 </div>
 
-                                
+
                             ))
-                            
+
                         ) : (
                             // Display message when there are no chated theaters
                             <div className="text-gray-500 text-center mt-4">No chatted theaters</div>

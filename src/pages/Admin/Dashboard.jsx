@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import ChartOne from '../../components/Admin/Charts/ChartOne';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 function TheaterDashboard() {
   const [tickets, setTickets] = useState([]);
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   const formatTime = (time) => {
     if (!time) return ''; // Check if time is undefined
@@ -18,8 +20,10 @@ function TheaterDashboard() {
         const response = await Axios.get(`/api/admin/tickets`);
         console.log(response.data.data);
         setTickets(response.data.data);
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching tickets:", error);
+        setLoading(false)
       }
     };
 
@@ -66,6 +70,10 @@ function TheaterDashboard() {
       profitThisMonth += (ticket.total - ticket.totalPrice);
     }
   });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="p-6">

@@ -6,6 +6,7 @@ import { setUserData } from "../../redux/slices/userSlice";
 import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetUserState } from '../../redux/slices/userSlice';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [isBlocked, setIsBlocked] = useState(true); // New state to track user block status
+
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   // Function to handle logout
   const handleLogout = () => {
@@ -70,14 +73,20 @@ const UserProfile = () => {
       const userData = response.data.data;
       setUserDetails(userData);
       setIsBlocked(userData.isBlocked);
+      setLoading(false)
     } catch (error) {
       setError(error);
+      setLoading(false)
     }
   };
 
   useLayoutEffect(() => {
     fetchUserData();
   }, [navigate]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   // Conditionally render profile component only if user is not blocked
   if (!isBlocked) {
@@ -108,9 +117,9 @@ const UserProfile = () => {
                 </NavLink>
               </div>
               <div className='mt-6'>
-              <NavLink to="/wallet" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2 ">
-                Wallet
-              </NavLink>
+                <NavLink to="/wallet" className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2 ">
+                  Wallet
+                </NavLink>
               </div>
 
             </div>

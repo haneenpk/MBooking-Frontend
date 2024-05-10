@@ -1,16 +1,20 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UserList = () => {
 
   const [users, setUsers] = useState([]);
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   const fetchUserData = async () => {
     try {
       const response = await Axios.get(`/api/admin/users`);
       setUsers(response.data.data.users);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       // Handle error
     }
   };
@@ -27,6 +31,10 @@ const UserList = () => {
       console.log(error);
       // Handle error
     }
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (

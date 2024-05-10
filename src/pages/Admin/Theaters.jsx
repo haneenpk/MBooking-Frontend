@@ -1,19 +1,23 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import { useNavigate, NavLink } from 'react-router-dom';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UserList = () => {
   const navigate = useNavigate();
 
   const [theaters, setTheaters] = useState([]);
+  const [isLoading, setLoading] = useState(true); // State to track loading status
 
   const fetchTheaterData = async () => {
     try {
       const response = await Axios.get(`/api/admin/theaters`);
       console.log(response);
       setTheaters(response.data.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       // Handle error
     }
   };
@@ -34,6 +38,10 @@ const UserList = () => {
 
   const handleNavigation = () => {
     navigate('/admin/theaters');
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (

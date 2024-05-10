@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
@@ -12,6 +12,13 @@ const MainRouter = () => {
   const isAdminLoggedIn = useSelector(state => state.admin.isLoggedIn);
   const isUserLoggedIn = useSelector(state => state.user.isLoggedIn);
   const isTheaterLoggedIn = useSelector(state => state.theater.isLoggedIn);
+
+  useEffect(() => {
+    console.log(isAdminLoggedIn,isUserLoggedIn,isTheaterLoggedIn);
+  
+
+  }, [])
+  
 
 
   if (isLoading) {

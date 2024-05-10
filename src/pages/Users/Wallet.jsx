@@ -1,8 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const Wallet = () => {
     const [userDetails, setUserDetails] = useState({});
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -13,13 +15,19 @@ const Wallet = () => {
                 // Sort wallet history based on date in descending order
                 userData.walletHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
                 setUserDetails(userData);
+                setLoading(false)
             } catch (error) {
                 console.error(error);
+                setLoading(false)
             }
         };
-    
+
         fetchUserData();
     }, []);
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="mx-auto mt-24 mb-8 px-10">

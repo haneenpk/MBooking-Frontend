@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const MovieTicketBooking = () => {
     const navigate = useNavigate();
@@ -121,7 +122,7 @@ const MovieTicketBooking = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     return (

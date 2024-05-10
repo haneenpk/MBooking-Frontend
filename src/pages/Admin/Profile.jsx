@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetAdminState } from '../../redux/slices/adminSlice';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UserProfile = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const UserProfile = () => {
 
     const [error, setError] = useState(null);
     const [adminDetails, setAdminDetails] = useState(null);
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const handleLogout = () => {
         localStorage.removeItem('adminData');
@@ -31,15 +33,21 @@ const UserProfile = () => {
             const response = await Axios.get(`/api/admin/get/${adminId}`);
             const adminData = response.data.data;
             setAdminDetails(adminData);
+            setLoading(false)
 
         } catch (error) {
             setError(error);
+            setLoading(false)
         }
     };
 
     useEffect(() => {
         fetchAdminData();
     }, []);
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="flex justify-center mt-32">

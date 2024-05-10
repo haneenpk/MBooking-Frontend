@@ -3,6 +3,7 @@ import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
 import Axios from "../../api/shared/instance";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 function ShowTime() {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ function ShowTime() {
     const [selectedDate, setSelectedDate] = useState(null); // State to keep track of the selected date
     const [userLocation, setUserLocation] = useState({})
     const [movie, setMovie] = useState({})
+
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -42,7 +45,7 @@ function ShowTime() {
     };
 
     const handleDate = async (date) => {
-        
+
         const response = await Axios.get(`/api/user/selectShowTime?country=${userLocation.country}&district=${userLocation.district}&movieId=${movieId}&date=${date}`);
 
         const theaterPromises = response.data.selectedShow.map(show => handleTheaterId(show.theaterId));
@@ -75,8 +78,8 @@ function ShowTime() {
                 }
                 const response = await Axios.get(`/api/user/get/${userId}`);
                 setUserLocation({
-                    district : response.data.data.district,
-                    country : response.data.data.country
+                    district: response.data.data.district,
+                    country: response.data.data.country
                 })
                 const response2 = await Axios.get(`/api/user/showTime?country=${response.data.data.country}&district=${response.data.data.district}&movieId=${movieId}`);
 
@@ -121,6 +124,7 @@ function ShowTime() {
 
         fetchShowData();
         fetchMovie();
+        
     }, [navigate, dispatch, movieId]);
 
     const groupShowsByTheater = async (shows) => {
@@ -146,6 +150,10 @@ function ShowTime() {
         // Convert the map to an array of entries
         return Array.from(theatersMap.entries());
     };
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="px-10 mt-24 flex bg-gray-100">
@@ -176,7 +184,7 @@ function ShowTime() {
                 <div>
                     {theaters.map(([theaterName, shows]) => (
                         <div className="flex mt-5 w-full h-20 rounded-md bg-white shadow-md p-3" key={theaterName}>
-                            <div className='w-32'> 
+                            <div className='w-32'>
                                 <h2 className="text-xl font-semibold mt-4">{theaterName}</h2>
                             </div>
                             <div className="ml-8 flex">

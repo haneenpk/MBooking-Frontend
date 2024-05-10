@@ -7,6 +7,7 @@ import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const EditProfile = () => {
 
@@ -25,6 +26,8 @@ const EditProfile = () => {
 
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
+
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
 
     const handleChange = (e) => {
@@ -69,8 +72,10 @@ const EditProfile = () => {
                 const response = await Axios.get(`/api/user/get/${userId}`);
                 setFormData(response.data.data);
                 setIsBlocked(response.data.data.isBlocked); // Set isBlocked based on user data
+                setLoading(false)
             } catch (error) {
                 setError(error);
+                setLoading(false)
             }
         };
 
@@ -86,6 +91,10 @@ const EditProfile = () => {
             console.log("Your account is blocked");
             navigate("/login")
         }
+    }
+
+    if (isLoading) {
+        return <LoadingSpinner />;
     }
 
     if (!isBlocked) {

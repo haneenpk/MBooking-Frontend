@@ -5,6 +5,7 @@ import { editSchema } from "../../validations/adminValidations/editSchema";
 import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const EditProfile = () => {
 
@@ -20,6 +21,7 @@ const EditProfile = () => {
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
 
+    const [isLoading, setLoading] = useState(true); // State to track loading status
 
     const handleChange = (e) => {
         handleInputChange(e, formData, setFormData, setServerResponse, setErrors);
@@ -62,13 +64,19 @@ const EditProfile = () => {
 
                 const response = await Axios.get(`/api/admin/get/${adminId}`);
                 setFormData(response.data.data);
+                setLoading(false)
             } catch (error) {
                 setError(error);
+                setLoading(false)
             }
         };
 
         fetchAdminData();
     }, [navigate]);
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">

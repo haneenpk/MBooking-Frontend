@@ -15,7 +15,7 @@ const ErrorContent = ({ status, message }) => {
                 </div>
                 <div className="mt-5">
                     <p className="font-medium">
-                        Copyright © All rights reserved | made by Sm15700
+                        Copyright © All rights reserved | made by MBooking
                     </p>
                 </div>
             </div>
