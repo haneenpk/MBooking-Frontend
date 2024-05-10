@@ -19,7 +19,7 @@ import ErrorPage from "../pages/ErrorPage";
 const AdminRoutes = ({ isLoggedIn }) => {
 
     const navigateToLogin = () => <Navigate to="/admin/login" />;
-    const navigateDashboard = () => <Navigate to="/admin" />;
+    const navigateDashboard = () => <Navigate to="/admin/" />;
 
     const routes = [
         { path: "/", element: isLoggedIn ? <Dashboard /> : navigateToLogin() },
