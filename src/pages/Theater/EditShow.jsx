@@ -5,7 +5,7 @@ import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { useNavigate, useLocation } from 'react-router-dom';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 function EditShow() {
 

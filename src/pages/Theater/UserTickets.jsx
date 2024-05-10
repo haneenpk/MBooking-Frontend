@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 function UserTickets() {
     const [tickets, setTickets] = useState([]);

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const UserProfile = () => {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const MovieTicketBooking = () => {
 
@@ -36,20 +36,20 @@ const MovieTicketBooking = () => {
   const applyChange = async () => {
     console.log("fir: ", screenData);
     try {
-      if(role === "theater"){
+      if (role === "theater") {
         const responseScreen = await Axios.put(`/api/theater/screens/seat/update/${seatId}`, { screenData });
         console.log(responseScreen);
         setUpdated('Updated Successfully')
         setTimeout(() => {
           navigate('/theater/screens')
-        },1000)
-      }else{
+        }, 1000)
+      } else {
         const responseScreen = await Axios.put(`/api/admin/screens/seat/update/${seatId}`, { screenData });
         console.log(responseScreen);
         setUpdated('Updated Successfully')
         setTimeout(() => {
           navigate(`/admin/theater-screens?theaterId=${theaterId}`)
-        },1000)
+        }, 1000)
       }
 
     } catch (error) {
@@ -291,9 +291,9 @@ const MovieTicketBooking = () => {
       try {
 
         let responseScreen;
-        if(role === "theater"){
+        if (role === "theater") {
           responseScreen = await Axios.get(`/api/theater/screens/seat/${seatId}`);
-        }else{
+        } else {
           responseScreen = await Axios.get(`/api/admin/screens/seat/${seatId}`);
         }
 
@@ -301,11 +301,11 @@ const MovieTicketBooking = () => {
         setGoldRows(responseScreen.data.data.gold.seats)
         setSilverRows(responseScreen.data.data.silver.seats)
         setScreenData(responseScreen.data.data)
-        setLoading(false); 
+        setLoading(false);
 
       } catch (error) {
         setError(error);
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -344,6 +344,10 @@ const MovieTicketBooking = () => {
     }
     return seats;
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="container mx-auto mt-8 px-10">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import ChartOne from '../../components/Theater/Charts/ChartOne';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 function TheaterDashboard() {
   const [tickets, setTickets] = useState([]);

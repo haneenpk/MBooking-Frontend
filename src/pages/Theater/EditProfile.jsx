@@ -7,7 +7,7 @@ import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
 import { useDispatch } from 'react-redux';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 
 const EditProfile = () => {
     const navigate = useNavigate();
