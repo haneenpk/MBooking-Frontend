@@ -5,6 +5,7 @@ import LoadingSpinner from '../../components/Common/LoadingSpinner';
 function UserTickets() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedStatus, setSelectedStatus] = useState('all'); // State to track selected status
 
     const formatTime = (time) => {
         if (!time) return '';
@@ -28,6 +29,9 @@ function UserTickets() {
         fetchTickets();
     }, []);
 
+    // Filter tickets based on selected status
+    const filteredTickets = selectedStatus === 'all' ? tickets : tickets.filter(ticket => ticket.isCancelled === (selectedStatus === 'cancelled'));
+
     if (loading) {
         return <LoadingSpinner />;
     }
@@ -35,6 +39,20 @@ function UserTickets() {
     return (
         <div className="px-8">
             <h2 className="text-2xl font-bold mb-4 mt-5">Users Tickets</h2>
+            <div className="mb-4">
+                <label htmlFor="status" className="block text-gray-700 font-semibold mb-2">Filter by Status:</label>
+                <select
+                    id="status"
+                    name="status"
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                >
+                    <option value="all">All</option>
+                    <option value="booked">Booked</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
             <div className="overflow-x-auto">
                 <table className="table-auto w-full border-collapse border border-gray-200 bg-white rounded-md shadow-md">
                     <thead className="bg-gray-500 text-white">
@@ -52,8 +70,8 @@ function UserTickets() {
                         </tr>
                     </thead>
                     <tbody>
-                        {tickets.map(ticket => (
-                            <tr key={ticket._id}> {/* Added key prop */}
+                        {filteredTickets.map(ticket => (
+                            <tr key={ticket._id}>
                                 <td className="border border-gray-200 px-4 py-2">{ticket.userId.username}</td>
                                 <td className="border border-gray-200 px-4 py-2">
                                     <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className="w-16 h-auto" />
