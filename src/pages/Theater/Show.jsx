@@ -68,7 +68,7 @@ const Show = () => {
     }
 
     return (
-        <div className="container mx-auto px-8">
+        <div className="container mx-auto px-8 pb-5">
             <h2 className="text-2xl font-bold mb-4 mt-5">Shows</h2>
             <NavLink to="/theater/show/add" className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Add Show

@@ -2,22 +2,31 @@ import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import { useNavigate, NavLink } from 'react-router-dom';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const UserList = () => {
   const navigate = useNavigate();
 
   const [theaters, setTheaters] = useState([]);
   const [isLoading, setLoading] = useState(true); // State to track loading status
+  const [open, setOpen] = useState(false);
+  const [selectedTheater, setSelectedTheater] = useState(null); // State to track the selected theater for action
 
   const fetchTheaterData = async () => {
     try {
       const response = await Axios.get(`/api/admin/theaters`);
       console.log(response);
       setTheaters(response.data.data);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false)
+      setLoading(false);
       // Handle error
     }
   };
@@ -26,19 +35,22 @@ const UserList = () => {
     fetchTheaterData();
   }, []);
 
-  const handleAction = async (userId) => {
+  const handleOpen = (theater) => {
+    setSelectedTheater(theater);
+    setOpen(!open);
+  };
+
+  const handleAction = async () => {
     try {
-      const response = await Axios.patch(`/api/admin/theaters/block/${userId}`);
-      fetchTheaterData(); // Refetch user data after action
+      const response = await Axios.patch(`/api/admin/theaters/block/${selectedTheater._id}`);
+      console.log(response);
+      fetchTheaterData(); // Refetch theater data after action
+      setOpen(false); // Close the modal after action
     } catch (error) {
       console.log(error);
       // Handle error
     }
-  }
-
-  const handleNavigation = () => {
-    navigate('/admin/theaters');
-  }
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -67,14 +79,18 @@ const UserList = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{theater.mobile}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {theater.screenCount}
-                    <NavLink to={`/admin/theater-screens?theaterId=${theater._id}&name=${theater.name}`} className="ml-2 text-blue-500 hover:underline">
-                      Edit screens
+                    <NavLink to={`/admin/theater-screens?theaterId=${theater._id}&name=${theater.name}`} className="ml-3 text-blue-500 hover:underline">
+                      <Button variant="outlined" color='blue' size='sm'>Edit Screen</Button>
                     </NavLink>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button onClick={() => handleAction(theater._id)} className={theater.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-red-600 hover:text-red-900'}>
+                  <td className=" py-4 whitespace-nowrap">
+                    <Button
+                      variant="text"
+                      onClick={() => handleOpen(theater)}
+                      color={theater.isBlocked ? 'green' : 'red'}
+                    >
                       {theater.isBlocked ? 'Unblock' : 'Block'}
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -82,6 +98,27 @@ const UserList = () => {
           </table>
         </div>
       </div>
+      {selectedTheater && (
+        <Dialog open={open} handler={handleOpen} size='sm'>
+          <DialogHeader>Confirm Action</DialogHeader>
+          <DialogBody>
+            Are you sure you want to {selectedTheater.isBlocked ? 'unblock' : 'block'} the theater "{selectedTheater.name}"?
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              color="red"
+              onClick={() => handleOpen(null)}
+              className="mr-1"
+            >
+              <span>Cancel</span>
+            </Button>
+            <Button variant="gradient" color="green" onClick={handleAction}>
+              <span>Confirm</span>
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      )}
     </div>
   );
 };

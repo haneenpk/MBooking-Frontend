@@ -5,6 +5,10 @@ import Axios from "../../api/shared/instance";
 import { useNavigate } from 'react-router-dom';
 import { resetAdminState } from '../../redux/slices/adminSlice';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import { IoLogOutOutline } from "react-icons/io5";
+import {
+    Button,
+} from "@material-tailwind/react";
 
 const UserProfile = () => {
     const navigate = useNavigate();
@@ -65,9 +69,9 @@ const UserProfile = () => {
                         Edit Profile
                     </NavLink>
                     <div className="flex justify-center">
-                        <button onClick={handleLogout} className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full mt-5 shadow-md">
-                            Logout
-                        </button>
+                        <Button onClick={handleLogout} variant="text" className='rounded-full mt-4'>
+                            <IoLogOutOutline size={25} />
+                        </Button>
                     </div>
                 </div>
             )}

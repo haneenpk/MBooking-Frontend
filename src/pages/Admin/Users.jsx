@@ -1,21 +1,28 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const UserList = () => {
-
   const [users, setUsers] = useState([]);
-  const [isLoading, setLoading] = useState(true); // State to track loading status
+  const [isLoading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchUserData = async () => {
     try {
       const response = await Axios.get(`/api/admin/users`);
       setUsers(response.data.data.users);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false)
-      // Handle error
+      setLoading(false);
     }
   };
 
@@ -23,15 +30,20 @@ const UserList = () => {
     fetchUserData();
   }, []);
 
-  const handleAction = async (userId) => {
+  const handleOpen = (user) => {
+    setSelectedUser(user);
+    setOpen(!open);
+  };
+
+  const handleAction = async () => {
     try {
-      const response = await Axios.patch(`/api/admin/users/block/${userId}`);
-      fetchUserData(); // Refetch user data after action
+      const response = await Axios.patch(`/api/admin/users/block/${selectedUser._id}`);
+      fetchUserData();
+      setOpen(false);
     } catch (error) {
       console.log(error);
-      // Handle error
     }
-  }
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -57,10 +69,14 @@ const UserList = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{user.mobile}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button onClick={() => handleAction(user._id)} className={user.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-red-600 hover:text-red-900'}>
+                  <td className="py-4 whitespace-nowrap">
+                    <Button
+                      variant="text"
+                      onClick={() => handleOpen(user)}
+                      color={user.isBlocked ? 'green' : 'red'}
+                    >
                       {user.isBlocked ? 'Unblock' : 'Block'}
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -68,6 +84,27 @@ const UserList = () => {
           </table>
         </div>
       </div>
+      {selectedUser && (
+        <Dialog open={open} handler={() => handleOpen(null)} size='sm'>
+          <DialogHeader>Confirm Action</DialogHeader>
+          <DialogBody>
+            Are you sure you want to {selectedUser.isBlocked ? 'unblock' : 'block'} the user "{selectedUser.username}"?
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              color="red"
+              onClick={() => handleOpen(null)}
+              className="mr-1"
+            >
+              <span>Cancel</span>
+            </Button>
+            <Button variant="gradient" color="green" onClick={handleAction}>
+              <span>Confirm</span>
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      )}
     </div>
   );
 };

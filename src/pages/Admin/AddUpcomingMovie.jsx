@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Axios from "../../api/shared/instance";
+import { toast } from 'sonner'
 import { addUpcomingSchema } from "../../validations/adminValidations/addUpcoming";
 import handleInputChange from "../../utils/formUtils/handleInputChange";
 import handleFormErrors from "../../utils/formUtils/handleFormErrors";
 import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import { useNavigate } from 'react-router-dom';
+import { Button } from "@material-tailwind/react";
 
 const AddMovieForm = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [movieData, setMovieData] = useState({
     moviename: '',
@@ -19,7 +20,6 @@ const AddMovieForm = () => {
     releaseDate: null,
   });
   const [previewImage, setPreviewImage] = useState(null);
-
   const [errors, setErrors] = useState({});
   const [serverResponse, setServerResponse] = useState("");
 
@@ -49,7 +49,6 @@ const AddMovieForm = () => {
       Object.entries(movieData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
     );
     try {
-
       await addUpcomingSchema.validate(trimmedFormData, { abortEarly: false });
 
       const formData = new FormData();
@@ -62,70 +61,110 @@ const AddMovieForm = () => {
 
       const response = await Axios.post(`/api/admin/upcoming/add`, formData);
       console.log(response);
-      navigate('/admin/upcoming')
+      toast.success('Added successful');
+      navigate('/admin/upcoming');
     } catch (error) {
       handleFormErrors(error, setErrors, setServerResponse);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-5">
-      <h2 className="text-xl font-semibold mb-4 text-center">Add Upcoming Movies</h2>
-      <div className="mb-4">
-        <label htmlFor="moviename" className="block mb-1">Movie Name</label>
-        <input type="text" id="moviename" name="moviename" value={movieData.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Name' />
-        {errors.moviename &&
-          <FormErrorDisplay error={errors.moviename} />
-        }
-      </div>
-      <div className="mb-4">
-        <label htmlFor="image" className="block mb-1">Image Upload</label>
-        <input type="file" accept="image/*" id="image" name="image" onChange={handleImageUpload} className="w-full border rounded px-3 py-2 border-gray-400" required />
-        {errors.image &&
-          <FormErrorDisplay error={errors.image} />
-        }
-        {previewImage && (
-          <img src={previewImage} alt="Movie Preview" className="h-56 rounded-md mt-2" />
-        )}
-      </div>
-      <div className="mb-4">
-        <label htmlFor="languages" className="block mb-1">Languages</label>
-        <input type="text" id="languages" name="languages" value={movieData.languages} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Languages seperated by coma' />
-        {errors.languages &&
-          <FormErrorDisplay error={errors.languages} />
-        }
-      </div>
-      <div className="mb-4">
-        <label htmlFor="genre" className="block mb-1">Genre</label>
-        <input type="text" id="genre" name="genre" value={movieData.genre} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Movie Genre seperated by coma' />
-        {errors.genre &&
-          <FormErrorDisplay error={errors.genre} />
-        }
-      </div>
-      <div className="mb-4">
-        <label htmlFor="description" className="block mb-1">Description</label>
-        <textarea id="description" name="description" value={movieData.description} onChange={handleChange} className="w-full border rounded px-3 py-2" required placeholder='Short Description of the movie' />
-        {errors.description &&
-          <FormErrorDisplay error={errors.description} />
-        }
-      </div>
-      <div className="mb-4">
-        <label htmlFor="releaseDate" className="block mb-1">Release Date</label>
-        <input type="date" id="releaseDate" name="releaseDate" value={movieData.releaseDate} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
-        {errors.releaseDate &&
-          <FormErrorDisplay error={errors.releaseDate} />
-        }
-      </div>
-      {serverResponse && (
-        <div
-          className={`mt-2 p-2 text-center font-bold text-red-600`}
-          role="alert"
-        >
-          {serverResponse.message}
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md my-10">
+      <h2 className="text-2xl font-semibold mb-6 text-center">Add Upcoming Movie</h2>
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="moviename" className="block text-sm font-medium text-gray-600">Movie Name</label>
+          <input
+            type="text"
+            id="moviename"
+            name="moviename"
+            value={movieData.name}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+            required
+            placeholder="Movie Name"
+          />
+          {errors.moviename && <FormErrorDisplay error={errors.moviename} />}
         </div>
-      )}
-      <button onClick={handleSubmit} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add Movie</button>
-
+        <div>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-600">Image Upload</label>
+          <input
+            type="file"
+            accept="image/*"
+            id="image"
+            name="image"
+            onChange={handleImageUpload}
+            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+            required
+          />
+          {errors.image && <FormErrorDisplay error={errors.image} />}
+          {previewImage && (
+            <img src={previewImage} alt="Movie Preview" className="h-56 mt-2 rounded-md" />
+          )}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="languages" className="block text-sm font-medium text-gray-600">Languages</label>
+            <input
+              type="text"
+              id="languages"
+              name="languages"
+              value={movieData.languages}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+              required
+              placeholder="Languages"
+            />
+            {errors.languages && <FormErrorDisplay error={errors.languages} />}
+          </div>
+          <div>
+            <label htmlFor="genre" className="block text-sm font-medium text-gray-600">Genre</label>
+            <input
+              type="text"
+              id="genre"
+              name="genre"
+              value={movieData.genre}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+              required
+              placeholder="Genres"
+            />
+            {errors.genre && <FormErrorDisplay error={errors.genre} />}
+          </div>
+        </div>
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-600">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={movieData.description}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+            required
+            placeholder="Short description of the movie"
+          />
+          {errors.description && <FormErrorDisplay error={errors.description} />}
+        </div>
+        <div>
+          <label htmlFor="releaseDate" className="block text-sm font-medium text-gray-600">Release Date</label>
+          <input
+            type="date"
+            id="releaseDate"
+            name="releaseDate"
+            value={movieData.releaseDate}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+            required
+          />
+          {errors.releaseDate && <FormErrorDisplay error={errors.releaseDate} />}
+        </div>
+        {serverResponse && (
+          <div className="mt-2 p-2 text-center font-bold text-red-600" role="alert">
+            {serverResponse.message}
+          </div>
+        )}
+        <Button onClick={handleSubmit} fullWidth color='blue'>Add Upcoming Movie</Button>
+      </div>
     </div>
   );
 };

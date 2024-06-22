@@ -15,12 +15,8 @@ const MainRouter = () => {
 
   useEffect(() => {
     console.log(isAdminLoggedIn,isUserLoggedIn,isTheaterLoggedIn);
-  
-
   }, [])
   
-
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
