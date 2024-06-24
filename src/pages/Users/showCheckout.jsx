@@ -3,6 +3,10 @@ import { toast } from 'sonner';
 import Axios from "../../api/shared/instance";
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+    Button,
+    Checkbox
+} from "@material-tailwind/react";
 
 function ShowCheckout() {
 
@@ -113,17 +117,19 @@ function ShowCheckout() {
     }
 
     return (
-        <div className="flex justify-center items-center mt-32">
+        <div className="flex justify-center items-center mt-14">
             <div className="bg-white rounded-lg shadow-md w-full md:w-3/4 lg:w-1/2 xl:w-2/3 px-8">
                 {/* Left side - Booking Details */}
                 <div className="mt-6 flex justify-center mb-3">
-                    <p className="text-red-500 font-semibold bg-red-200 rounded-lg w-44 text-center">Remaining Time: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
+                    <p className="text-red-500 font-semibold bg-red-100 rounded-lg w-44 text-center">Remaining Time: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
                 </div>
                 <div className='flex flex-col md:flex-row '>
                     <div className="mb-6 md:w-1/2 pr-4">
                         <h3 className="text-lg font-semibold mb-2">Booking Details</h3>
                         <div className="flex  mb-2">
-                            <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${tempTicket.movieId?.image}`} alt="Movie Poster" className="w-auto h-52 mr-4 rounded-md shadow-md" />
+                            <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${tempTicket.movieId?.image}`} alt="Movie Poster"
+                                className="w-auto h-52 mr-4 rounded-lg object-cover object-center shadow-xl shadow-blue-gray-900/50"
+                            />
                             <div>
                                 <p className="font-semibold text-xl">{tempTicket.movieId?.moviename}</p>
                                 <p className="text-gray-600 mt-2"><span className="font-semibold text-black">Date :</span> {formatDate(tempTicket.showId?.date)}</p>
@@ -137,7 +143,7 @@ function ShowCheckout() {
                                 )}
                             </div>
                         </div>
-                        <div>
+                        <div className='mt-5'>
                             <p className="text-gray-600"><span className="font-semibold text-black">Theater:</span> {`${tempTicket.theaterId?.name} (${tempTicket.theaterId?.address.district},${tempTicket.theaterId?.address.country})`}</p>
                             <div className="bg-gray-300 text-gray-600 py-1 rounded-md h-20 w-20 text-center mt-5">
                                 <div className='font-semibold text-3xl my-1'>{tempTicket.seatCount}</div>
@@ -176,34 +182,41 @@ function ShowCheckout() {
                             <h3 className="text-lg font-semibold mb-2">Select Payment Option</h3>
                             <div className="">
                                 <div>
-                                    <label>
-                                        <input
+                                    <label className='flex'>
+                                        <Checkbox
+                                            color="teal"
                                             type="radio"
                                             value="Stripe"
                                             checked={paymentOption === 'Stripe'}
                                             onChange={() => setPaymentOption('Stripe')}
-                                            className="mr-2"
                                         />
-                                        Pay with Stripe
+                                        <div className='mt-3'>Pay with Stripe</div>
+
                                     </label>
                                 </div>
                                 {userDetails && ( // Check if userDetails is not null
                                     <div>
-                                        <label>
-                                            <input
+                                        <label className='flex'>
+                                            <Checkbox
+                                                color="teal"
                                                 type="radio"
                                                 value="Wallet"
                                                 checked={paymentOption === 'Wallet'}
                                                 onChange={() => setPaymentOption('Wallet')}
-                                                className="mr-2"
                                             />
-                                            Pay with Wallet (₹{userDetails.wallet})
+                                            <div className='mt-3'>Pay with Wallet (₹{userDetails.wallet})</div>
+
                                         </label>
                                     </div>
                                 )}
-                                <button onClick={handleProceedPay} className="mt-5 bg-blue-500 text-white py-2 px-4 rounded-md w-full">
+                                <Button
+                                    variant="gradient"
+                                    onClick={handleProceedPay}
+                                    fullWidth
+                                    className='mt-5'
+                                >
                                     Proceed to Pay
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>

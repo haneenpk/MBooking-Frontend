@@ -4,7 +4,7 @@ import Layout from "./layouts/Layout";
 
 function App() {
   return (
-    <div className='bg-gray-100'>
+    <div className='bg-gray-200'>
       <Toaster richColors position="top-center"/>
       <Layout />
     </div>

@@ -11,6 +11,11 @@ import { setLoading } from "../../../redux/slices/commonSlice";
 import { setLoggedIn, setAdminData } from "../../../redux/slices/adminSlice";
 import { setLoggedIn as setUserLoggedIn, setUserData } from "../../../redux/slices/userSlice";
 import { setLoggedIn as setTheaterLoggedIn, setTheaterData } from "../../../redux/slices/theaterSlice";
+import {
+    Button,
+    Input,
+    Typography
+} from "@material-tailwind/react";
 
 const Login = ({ role }) => {
     const dispatch = useDispatch();
@@ -40,7 +45,7 @@ const Login = ({ role }) => {
             await loginSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
-            console.log("back:",import.meta.env.VITE_AXIOS_BASE_URL);
+            console.log("back:", import.meta.env.VITE_AXIOS_BASE_URL);
 
             const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/${role}/login`, formData);
 
@@ -85,22 +90,33 @@ const Login = ({ role }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+        <div
+            className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+            style={{ backgroundImage: "url('/public/movieTicketImg-transformed.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+            <div className="max-w-md w-full space-y-8 bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Log in to {role} account</h2>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Log in to {role} account</h2>
                 </div>
                 <form className="space-y-6" onSubmit={handleLogin}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                        <input name={"email"} onChange={handleChange} type={"text"} className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Email" />
-                        {errors.email && <FormErrorDisplay error={errors.email} />}
+                        <Typography className='mb-1' variant="h6" color="white">
+                            Email
+                        </Typography>
+                        <Input name={"email"} onChange={handleChange} type={"text"} label="Email" color="white" />
+                        {errors.email && (
+                            <div className="mt-2 w-fit bg-red-100 p-1 px-2 h-8 rounded-full">
+                                <FormErrorDisplay error={errors.email} />
+                            </div>
+                        )}
                     </div>
                     <div className="relative">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                        <input name="password" onChange={handleChange} type={showPassword ? "text" : "password"} autoComplete="current-password" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Password" />
-                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <button type="button" onClick={togglePasswordVisibility} className="text-gray-500 focus:outline-none mt-5">
+                        <Typography className='mb-1' variant="h6" color="white">
+                            Password
+                        </Typography>
+                        <input name="password" onChange={handleChange} type={showPassword ? "text" : "password"} autoComplete="current-password" className="text-white h-10 mt-1 p-3 w-full border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-transparent" placeholder="Password" />
+                        <div className="absolute top-11 right-0 pr-3 flex items-center">
+                            <button type="button" onClick={togglePasswordVisibility} className="text-gray-300 focus:outline-none">
                                 {showPassword ? (
                                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -113,24 +129,31 @@ const Login = ({ role }) => {
                                 )}
                             </button>
                         </div>
-                        {errors.password && <FormErrorDisplay error={errors.password} />}
+                        {errors.password && (
+                            <div className="mt-2 w-fit bg-red-100 p-1 px-2 h-8 rounded-full">
+                                <FormErrorDisplay error={errors.password} />
+                            </div>
+                        )}
                     </div>
                     {serverResponse && (
-                        <div className={`p-3 text-center font-bold ${serverResponse.status === "failed" ? "text-red-600 " : "text-green-500"}`}>
-                            {serverResponse.message}
+                        <div className="flex justify-center items-center">
+                            <div className={`text-center font-bold p-1 px-2 h-8 rounded-full w-fit ${serverResponse.status === "failed" ? "text-red-600 bg-red-100 " : "text-green-600 bg-green-100"}`}>
+                                {serverResponse.message}
+                            </div>
                         </div>
                     )}
                     <div>
-                        <button type="submit" className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sign in</button>
+                        {/* <button type="submit" className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sign in</button> */}
+                        <Button type="submit" size="lg" fullWidth color="yellow">Sign in</Button>
                     </div>
                 </form>
                 {role !== "admin" && (
-                    <div className="text-center text-sm text-gray-600">
+                    <div className="text-center text-sm text-white">
                         {role === "user" && (
-                            <p className="mt-2">Don't have an account? <Link to="/sign-up" className="font-medium text-blue-600 hover:text-blue-400">Sign up for a new account</Link></p>
+                            <p className="mt-2">Don't have an account? <Link to="/sign-up" className="font-medium text-white hover:bg-gray-800 bg-gray-700 p-1 rounded-md transition duration-100 ease-in-out hover:underline">Sign up for a new account</Link></p>
                         )}
                         {role === "theater" && (
-                            <p className="mt-2">Don't have an account? <Link to="/theater/register" className="font-medium text-blue-600 hover:text-blue-400">Register for a theatre account</Link></p>
+                            <p className="mt-2">Don't have an account? <Link to="/theater/register" className="font-medium text-white hover:bg-gray-900 bg-gray-800 p-1 rounded-md transition duration-200 ease-in-out hover:underline">Register for a theatre account</Link></p>
                         )}
                     </div>
                 )}

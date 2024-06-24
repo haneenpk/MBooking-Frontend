@@ -132,7 +132,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="mx-auto shadow-lg rounded-lg relative mt-16 w-full">
+        <div className="mx-auto shadow-lg rounded-lg relative    w-full">
             {/* header */}
             <div className="px-5 py-3 flex justify-between items-center bg-white border-b-2">
                 <div className="font-semibold text-2xl">Chat With Theaters</div>

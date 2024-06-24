@@ -95,7 +95,7 @@ const EditProfile = () => {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-36 p-6 bg-white rounded-md shadow-md">
+        <div className="max-w-md mx-auto mt-28 p-6 bg-white rounded-md shadow-md">
             <h2 className="text-2xl font-semibold mb-6 text-center">Edit Profile</h2>
             <div className="mb-4">
                 <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">Username</label>

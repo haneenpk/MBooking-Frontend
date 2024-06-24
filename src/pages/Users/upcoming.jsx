@@ -42,7 +42,7 @@ function UpcomingDetail() {
     }
 
     return (
-        <div className="mx-auto px-4 py-8 mt-24">
+        <div className="mx-auto px-4 py-8 mt-8">
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden flex">
                 <div className="w-1/3 m-10">
                     <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${upcomingMovie.image}`} alt={upcomingMovie.moviename} className="w-full h-auto rounded-md" />

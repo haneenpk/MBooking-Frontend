@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
+import { Avatar } from "@material-tailwind/react";
+import { VscAccount } from "react-icons/vsc";
 
 const Header = () => {
   const userData = useSelector(state => state.user.userData);
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <header className="bg-gray-800 py-4 px-6 flex justify-between items-center fixed top-0 w-full z-10 shadow-md">
+    <header className="bg-gray-900 py-4 px-6 flex justify-between items-center sticky top-0 w-full z-50 shadow-md h-20">
       <h1 className="text-white text-2xl font-bold">MBooking</h1>
       <div className="hidden md:flex gap-6 items-center">
         <NavLink
@@ -32,9 +34,18 @@ const Header = () => {
           Chat
         </NavLink>
         {/* Circle Icon */}
-        <NavLink to="/profile" className="w-8 h-8 bg-gray-500 rounded-full">
-          {userData && userData.profilePic && (
-            <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${userData.profilePic}`} alt="Profile" className="w-8 h-8 rounded-full" />
+        <NavLink to="/profile" className={'w-12'}>
+          {userData && userData.profilePic ? (
+            <Avatar
+              src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${userData.profilePic}`}
+              alt="avatar"
+              withBorder={true}
+              className="p-0.5"
+              color='white'
+              size='md'
+            />
+          ) : (
+            <VscAccount color='white' size={41} />
           )}
         </NavLink>
       </div>

@@ -191,8 +191,8 @@ const UpcomingMovies = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 py-6 sm:px-6 lg:px-8 mt-0">
-      <div className="w-full max-w-7xl mx-auto bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div className="bg-gray-100 pt-6 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto bg-white shadow-sm sm:rounded-lg">
         <div className="p-6 bg-white border-b border-gray-200">
           <h2 className="text-2xl font-semibold mb-4">Upcoming Movies</h2>
           <Button color="blue" onClick={handleOpen}>Add Upcoming Movie</Button>
@@ -234,7 +234,7 @@ const UpcomingMovies = () => {
                     </td>
                   </tr>
                 ))}
-                                {upcomings.map((movie, index) => (
+                 {upcomings.map((movie, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">{movie.moviename}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -259,7 +259,7 @@ const UpcomingMovies = () => {
                     </td>
                   </tr>
                 ))}
-                                {upcomings.map((movie, index) => (
+                 {upcomings.map((movie, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">{movie.moviename}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -284,32 +284,7 @@ const UpcomingMovies = () => {
                     </td>
                   </tr>
                 ))}
-                                {upcomings.map((movie, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">{movie.moviename}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="h-20 w-16 object-cover rounded-sm" />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {movie.languages.map((language, index) => (
-                        <div key={index}>{language}</div>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {movie.genre.map((genre, index) => (
-                        <div key={index}>{genre}</div>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {new Date(movie.releaseDate).toLocaleDateString('en-GB')}
-                    </td>
-                    <td className=" py-4 whitespace-nowrap">
-                      <Button variant="text" onClick={() => handleOpenEdit(movie._id)} color='blue'>Edit</Button>
-                      <Button className='-ml-3' onClick={() => handleDelOpen(movie)} variant="text" color='red'>Delete</Button>
-                    </td>
-                  </tr>
-                ))}
-                                {upcomings.map((movie, index) => (
+                 {upcomings.map((movie, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">{movie.moviename}</td>
                     <td className="px-6 py-4 whitespace-nowrap">

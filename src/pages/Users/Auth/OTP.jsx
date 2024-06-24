@@ -4,6 +4,10 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormErrorDisplay from "../../../components/Common/FormErrorDisplay";
 import { otpSchema } from "../../../validations/userValidations/otpSchema";
+import {
+    Button,
+    Input,
+} from "@material-tailwind/react";
 
 const OTP = () => {
     const navigate = useNavigate();
@@ -26,6 +30,8 @@ const OTP = () => {
 
         try {
             await otpSchema.validate({ otp });
+
+            setErrors("")
 
             const response = await axios.post(`${import.meta.env.VITE_AXIOS_BASE_URL}/api/user/validateOtp`, { otp, email });
 
@@ -95,31 +101,40 @@ const OTP = () => {
     }, [timer]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+        <div
+            className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+            style={{ backgroundImage: "url('/public/movieTicketImg-transformed.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+            <div className="max-w-md w-full space-y-8 bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">OTP Verification</h2>
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-white">OTP Verification</h2>
                     <div className="mt-3">
-                        <input value={otp} onChange={handleChange} type="text" className="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400" placeholder="Enter the OTP" />
-                        {errors && <FormErrorDisplay error={errors} />}
+                        <Input value={otp} onChange={handleChange} type={"text"} label="Enter the OTP" color="white" />
+                        {errors && (
+                            <div className="mt-2 w-fit bg-red-100 p-1 px-2 h-8 rounded-full">
+                                <FormErrorDisplay error={errors} />
+                            </div>
+                        )}
                     </div>
                     {serverResponse.status === "failed" && (
-                        <div className="mt-3 bg-red-100 text-red-700 border border-solid border-gray-300 px-4 py-3 rounded" role="alert">
-                            {serverResponse.message}
+                        <div className="flex justify-center items-center mt-2">
+                            <div className={`text-center font-bold p-1 px-2 h-8 rounded-full w-fit ${serverResponse.status === "failed" ? "text-red-600 bg-red-100 " : "text-green-600 bg-green-100"}`}>
+                                {serverResponse.message}
+                            </div>
                         </div>
                     )}
 
                     {showSentButton && (
                         <div className="mt-3">
-                            <button onClick={handleVerification} className="w-full py-3 px-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800">Sent OTP</button>
+                            <Button onClick={handleVerification} size="lg" fullWidth color="yellow">Send OTP</Button>
                         </div>
                     )}
                 </div>
                 <div className="text-center font-bold text-lg">
                     {timer > 0 ? (
-                        <p>Resend OTP in {timer} seconds</p>
+                        <p className="text-white">Resend OTP in {timer} seconds</p>
                     ) : (
-                        <button onClick={handleResend} className="text-blue-600 hover:text-blue-400 focus:outline-none">Resend OTP</button>
+                        <Button onClick={handleResend} color="blue">Resend OTP</Button>
                     )}
                 </div>
             </div>

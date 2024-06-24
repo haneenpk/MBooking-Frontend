@@ -1,21 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Axios from "../../api/shared/instance";
+import { useNavigate } from 'react-router-dom';
+import { resetAdminState } from '../../redux/slices/adminSlice';
 import { VscAccount } from "react-icons/vsc";
+import { IoLogOutOutline } from "react-icons/io5";
+import { editSchema } from "../../validations/adminValidations/editSchema";
+import handleInputChange from "../../utils/formUtils/handleInputChange";
+import handleFormErrors from "../../utils/formUtils/handleFormErrors";
+import FormErrorDisplay from "../../components/Common/FormErrorDisplay";
 import {
   Popover,
-  PopoverHandler,
-  PopoverContent,
-  Avatar,
   Button,
   Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Card,
+  CardBody,
+  CardFooter,
+  Input,
 } from "@material-tailwind/react";
 
 const AdminHeader = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [showMenu, setShowMenu] = useState(false);
   const [about, setAbout] = useState(false);
+  const [adminDetails, setAdminDetails] = useState({ name: '', email: '' });
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [serverResponse, setServerResponse] = useState("");
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: ''
+  });
+
   const aboutRef = useRef(null);
 
   const toggleMenu = () => {
@@ -32,6 +57,10 @@ const AdminHeader = () => {
     }
   };
 
+  const handleChange = (e) => {
+    handleInputChange(e, formData, setFormData, setServerResponse, setErrors);
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -39,8 +68,72 @@ const AdminHeader = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('adminData');
+    localStorage.removeItem('adminAccessToken');
+    dispatch(resetAdminState());
+    navigate("/admin/login");
+    toast.success('Logout successful');
+  };
+
+  const fetchAdminData = async () => {
+    try {
+      const adminId = localStorage.getItem('adminData');
+
+      if (!adminId) {
+        navigate('/admin/login');
+        return;
+      }
+
+      const response = await Axios.get(`/api/admin/get/${adminId}`);
+      const adminData = response.data.data;
+      setAdminDetails(adminData);
+      setFormData(adminData)
+
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  // Handle form submission
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    // Add logic to submit form data
+    console.log(formData);
+    try {
+      // Validate formData against the signup schema
+      await editSchema.validate(formData, { abortEarly: false });
+
+      setErrors({}); // Clear previous validation errors
+
+      // If validation passes, proceed with signup
+      const response = await Axios.put(`/api/admin/update/${formData._id}`, formData);
+      console.log(response.data.message);
+      toast.success('Updated successful');
+      handleClose()
+      fetchAdminData()
+
+    } catch (error) {
+      handleFormErrors(error, setErrors, setServerResponse);
+    }
+  };
+
+  const handleOpen = () => {
+    setOpen((cur) => !cur);
+  }
+
+  const handleClose = () => {
+    setOpen((cur) => !cur);
+    setFormData(adminDetails)
+
+  }
+
+  useEffect(() => {
+    fetchAdminData();
+  }, []);
+
   return (
-    <header className="bg-gray-800 py-4 px-6 flex justify-between items-center sticky top-0 w-full z-10 shadow-md">
+    <header className="bg-gray-900 py-4 px-6 flex justify-between items-center sticky top-0 w-full z-10 shadow-md">
       <h1 className="text-white text-2xl font-bold">MBooking</h1>
       <div className="hidden md:flex gap-6 items-center">
         <NavLink to="/admin/" className="text-white hover:text-gray-300">Dashboard</NavLink>
@@ -48,17 +141,6 @@ const AdminHeader = () => {
         <NavLink to="/admin/theaters" className="text-white hover:text-gray-300">Theaters</NavLink>
         <NavLink to="/admin/upcoming" className="text-white hover:text-gray-300">Upcoming</NavLink>
         <NavLink to="/admin/movie" className="text-white hover:text-gray-300">Movie</NavLink>
-        {/* Circle Icon */}
-        <NavLink to="/admin/profile">
-          <VscAccount color='white' size={32} />
-        </NavLink>
-      </div>
-      <div className="md:hidden">
-        <button onClick={toggleMenu} className="text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
       </div>
       <Popover placement="bottom-end">
         <div className="relative">
@@ -67,12 +149,12 @@ const AdminHeader = () => {
           </div>
           {about && (
             <div className='fixed top-14 right-6 z-20' ref={aboutRef}>
-              <div className="w-72 fixed top-18 bg-white p-3 rounded-lg shadow-lg right-6 z-20">
+              <div className="w-80 fixed top-18 bg-white p-3 rounded-lg shadow-lg right-6 z-20">
                 <div className="mb-4 flex items-center gap-4 border-b border-blue-gray-50 pb-4">
                   <VscAccount size={40} />
-                  <div>
-                    <Typography variant="h6" color="blue-gray">
-                      Tania Andrew
+                  <div className="flex-grow">
+                    <Typography variant="h6" color="blue-gray" className="break-words">
+                      {adminDetails && adminDetails.name}
                     </Typography>
                     <Typography
                       variant="small"
@@ -82,6 +164,14 @@ const AdminHeader = () => {
                       Admin
                     </Typography>
                   </div>
+                  <Button
+                    variant="gradient"
+                    size="sm"
+                    className="font-medium capitalize ml-auto mt-2"
+                    onClick={handleOpen}
+                  >
+                    Edit
+                  </Button>
                 </div>
                 <div>
                   <div className='flex ml-2'>
@@ -102,12 +192,18 @@ const AdminHeader = () => {
                       />
                     </svg>
                     <Typography variant="small" color="gray" className="font-medium text-blue-gray-500 ml-2">
-                      person@example.com
+                      {adminDetails && adminDetails.email}
                     </Typography>
+                  </div>
+                  <div className="flex justify-center items-center mt-4">
+                    <Button onClick={handleLogout} variant="text" className='rounded-full'>
+                      <IoLogOutOutline size={20} color='gray' />
+                    </Button>
                   </div>
                 </div>
               </div>
             </div>
+
           )}
         </div>
       </Popover>
@@ -122,6 +218,63 @@ const AdminHeader = () => {
           </ul>
         </div>
       )}
+      <Dialog
+        size="md"
+        open={open}
+        handler={handleClose}
+        className="bg-transparent shadow-none max-h-screen overflow-y-auto"
+      >
+        <Card className="mx-auto w-full max-w-[25rem] ">
+          <CardBody className="flex flex-col gap-4">
+            <Typography variant="h4" className='text-center' color="blue-gray">
+              Edit Profile
+            </Typography>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            </div>
+            {adminDetails && (
+              <>
+                <div>
+                  <Typography className='mb-2' variant="h6">
+                    Name
+                  </Typography>
+                  <Input
+                    label="Name"
+                    size="lg"
+                    name="name"
+                    onChange={handleChange}
+                    value={formData.name}
+                    autoFocus={false}
+                  />
+                  {errors.name &&
+                    <FormErrorDisplay error={errors.name} />
+                  }
+                </div>
+                <div>
+                  <Typography className='' variant="h6">
+                    Email
+                  </Typography>
+                  <Input label={formData.email} disabled />
+                </div>
+              </>
+            )}
+          </CardBody>
+          <CardFooter className="pt-0">
+            {serverResponse && (
+              <div className="mt-2 p-2 text-center font-bold text-red-600" role="alert">
+                {serverResponse.message}
+              </div>
+            )}
+            <Button
+              variant="gradient"
+              onClick={handleEditSubmit}
+              fullWidth
+            >
+              Edit
+            </Button>
+          </CardFooter>
+        </Card>
+      </Dialog>
     </header>
   );
 };

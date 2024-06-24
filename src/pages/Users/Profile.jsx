@@ -91,7 +91,7 @@ const UserProfile = () => {
   // Conditionally render profile component only if user is not blocked
   if (!isBlocked) {
     return (
-      <div className="flex justify-center items-center mt-32  ">
+      <div className="flex justify-center items-center mt-20">
         <div className="max-w-xl mx-auto px-11 rounded-md shadow-md bg-white py-20">
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="md:mr-8 flex flex-col items-center">

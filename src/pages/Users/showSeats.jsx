@@ -4,6 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+    Button
+} from "@material-tailwind/react";
 
 const MovieTicketBooking = () => {
     const navigate = useNavigate();
@@ -126,9 +129,9 @@ const MovieTicketBooking = () => {
     }
 
     return (
-        <div className='mt-36'>
+        <div className='mt-20'>
 
-            <div className="fixed flex top-16 w-full text-center z-10 bg-white py-4 pl-10 shadow-md justify-center">
+            <div className="fixed flex top-20 w-full text-center z-10 bg-white py-4 pl-10 shadow-md justify-center">
                 <div className='flex'>
                     <div className="w-4 h-4 mt-1 border rounded-sm flex items-center justify-center border-black"></div>
                     <span className="mx-4">AVAILABLE</span>
@@ -195,9 +198,9 @@ const MovieTicketBooking = () => {
                                 <span className="font-bold">Total Amount:</span> ₹{totalAmount.diamond + totalAmount.gold + totalAmount.silver}
                             </div>
                         </div>
-                        <button onClick={handleTicketBooking} className="mb-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <Button onClick={handleTicketBooking} className="mb-4 hover:bg-gray-800 ease-in-out duration-200">
                             Book Tickets
-                        </button>
+                        </Button>
                     </div>
                 </div>
             )}

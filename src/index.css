@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    /* Change scrollbar width */
+    scrollbar-color: #232323 #f1f1f1;
+    /* Thumb and track color */
+}

@@ -4,6 +4,14 @@ import { resetUserState } from '../../redux/slices/userSlice';
 import { useDispatch } from "react-redux";
 import Axios from "../../api/shared/instance";
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    Typography,
+    Tooltip,
+} from "@material-tailwind/react";
 
 function ShowTime() {
     const navigate = useNavigate();
@@ -127,7 +135,7 @@ function ShowTime() {
 
         fetchShowData();
         fetchMovie();
-        
+
     }, [navigate, dispatch, movieId]);
 
     const groupShowsByTheater = async (shows) => {
@@ -159,11 +167,21 @@ function ShowTime() {
     }
 
     return (
-        <div className="px-10 mt-24 flex bg-gray-100">
-            <div className="mr-8">
-                <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} className="w-64 rounded-md h-auto mb-4" />
-                <h1 className="text-2xl font-bold mb-2">{movie.moviename}</h1>
-            </div>
+        <div className="px-10 mt-8 flex">
+            <Card className="w-80 mr-5">
+                <CardHeader floated={false}>
+                    <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${movie.image}`} alt={movie.moviename} />
+                </CardHeader>
+                <CardBody className="text-center">
+                    <Typography variant="h4" color="blue-gray" className="mb-2">
+                        {movie.moviename}
+                    </Typography>
+                    <Typography color="blue-gray" className="font-medium" textGradient>
+                        {`Duration: (${movie.duration})`}
+                    </Typography>
+                </CardBody>
+            </Card>
+            
             <div className="w-full">
                 <h1 className="text-2xl font-bold mb-4">Select Showtime</h1>
                 <div className="flex space-x-4 mb-4">
