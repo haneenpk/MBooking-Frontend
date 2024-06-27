@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { VscAccount } from "react-icons/vsc";
 
 const TheaterHeader = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -9,7 +10,7 @@ const TheaterHeader = () => {
   };
 
   return (
-    <header className="bg-gray-800 py-4 px-6 flex justify-between items-center">
+    <header className="bg-gray-900 py-4 px-6 flex justify-between items-center">
       <h1 className="text-white text-2xl font-bold">MBooking</h1>
       <div className="hidden md:flex gap-6 items-center">
         <NavLink to="/theater/dashboard" className="text-white hover:text-gray-300">Dashboard</NavLink>
@@ -18,13 +19,13 @@ const TheaterHeader = () => {
         <NavLink to="/theater/chat" className="text-white hover:text-gray-300">Chat</NavLink>
         <NavLink to="/theater/tickets" className="text-white hover:text-gray-300">Tickets</NavLink>
         {/* Circle Icon */}
-        <NavLink to="/theater/profile" className="w-8 h-8 bg-gray-500 rounded-full"></NavLink>
+        <NavLink to="/theater/profile">
+        <VscAccount size={35} color='white' />
+        </NavLink>
       </div>
       <div className="md:hidden">
         <button onClick={toggleMenu} className="text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          <img src='/public/theaterProfile.webp' alt="" />
         </button>
       </div>
       {showMenu && (

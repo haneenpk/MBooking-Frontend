@@ -4,6 +4,10 @@ import Axios from "../../api/shared/instance";
 import { useDispatch } from 'react-redux';
 import { resetTheaterState } from '../../redux/slices/theaterSlice';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import { toast } from 'sonner'
+import {
+  Button
+} from "@material-tailwind/react";
 
 const MovieTicketBooking = () => {
 
@@ -39,19 +43,14 @@ const MovieTicketBooking = () => {
       if (role === "theater") {
         const responseScreen = await Axios.put(`/api/theater/screens/seat/update/${seatId}`, { screenData });
         console.log(responseScreen);
-        setUpdated('Updated Successfully')
-        setTimeout(() => {
-          navigate('/theater/screens')
-        }, 1000)
+        toast.success('Updated Successfully');
+        navigate('/theater/screens')
       } else {
         const responseScreen = await Axios.put(`/api/admin/screens/seat/update/${seatId}`, { screenData });
         console.log(responseScreen);
-        setUpdated('Updated Successfully')
-        setTimeout(() => {
-          navigate(`/admin/theater-screens?theaterId=${theaterId}`)
-        }, 1000)
+        toast.success('Updated Successfully');
+        navigate(`/admin/theater-screens?theaterId=${theaterId}`)
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -331,10 +330,10 @@ const MovieTicketBooking = () => {
         <div className="inline-block mx-auto">
           <button
             onClick={() => handleSeatSelection(row[0], row[1][i], i, category)}
-            className={`w-7 h-7 border rounded-md flex items-center justify-center ${row[1][i] === 0 ? 'bg-blue-500 text-white' : 'border-gray-300'
+            className={`w-7 h-7 border rounded-md flex items-center justify-center ${row[1][i] === 0 ? 'bg-black text-white' : 'border-gray-300'
               }`}
           >
-            <span className='text-xl text-center mb-1'>{row[1][i] === 0 ? '+' : '-'}</span>
+            <span className='text-xl text-center'>{row[1][i] === 0 ? '+' : '-'}</span>
           </button>
           <label htmlFor={seatId} className="text-xs ml-1 text-center ">
             {row[1][i]}
@@ -350,8 +349,8 @@ const MovieTicketBooking = () => {
   }
 
   return (
-    <div className="container mx-auto mt-8 px-10">
-      <button onClick={applyChange} className="px-2 py-1 mb-4 bg-blue-500 text-white rounded hover:bg-blue-400">Apply Changes</button>
+    <div className="mt-8 px-10">
+      <Button onClick={applyChange} className='mb-4'>Apply Changes</Button>
       <span className='text-green-500 font-semibold ml-2'>{updated}</span>
       <div className="mb-4 bg-white rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold text-center mb-2">Diamond</h2>
@@ -362,14 +361,12 @@ const MovieTicketBooking = () => {
             {renderSeats(row, 'diamond')}
           </div>
         ))}
-        <div className='ml-4 mt-4'>
-          <button onClick={() => deleteRow('diamond')} className="mr-2 px-1 py-1 bg-red-500 text-white rounded">
-            Delete Row
-          </button>
-          <button onClick={() => addRow('diamond')} className="px-2 py-1 bg-green-500 text-white rounded">
-            Add Row
-          </button>
-        </div>
+        <Button onClick={() => deleteRow('diamond')} color='red' size='sm' variant='gradient'>
+          Delete Row
+        </Button>
+        <Button onClick={() => addRow('diamond')} color='green' size='sm' className='ml-2' variant='gradient'>
+          Add Row
+        </Button>
       </div>
       <div className="mb-4 bg-white rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold mb-2 text-center">Gold</h2>
@@ -380,12 +377,12 @@ const MovieTicketBooking = () => {
             {renderSeats(row, 'gold')}
           </div>
         ))}
-        <button onClick={() => deleteRow('gold')} className="mr-2 px-1 py-1 bg-red-500 text-white rounded">
+        <Button onClick={() => deleteRow('gold')} color='red' size='sm' variant='gradient'>
           Delete Row
-        </button>
-        <button onClick={() => addRow('gold')} className="px-2 py-1 bg-green-500 text-white rounded">
+        </Button>
+        <Button onClick={() => addRow('gold')} color='green' size='sm' className='ml-2' variant='gradient'>
           Add Row
-        </button>
+        </Button>
       </div>
       <div className="mb-4 bg-white rounded-lg shadow-md p-3">
         <h2 className="text-lg font-bold mb-2 text-center">Silver</h2>
@@ -396,12 +393,12 @@ const MovieTicketBooking = () => {
             {renderSeats(row, 'silver')}
           </div>
         ))}
-        <button onClick={() => deleteRow('silver')} className="mr-2 px-1 py-1 bg-red-500 text-white rounded">
+        <Button onClick={() => deleteRow('silver')} color='red' size='sm' variant='gradient'>
           Delete Row
-        </button>
-        <button onClick={() => addRow('silver')} className="px-2 py-1 bg-green-500 text-white rounded">
+        </Button>
+        <Button onClick={() => addRow('silver')} color='green' size='sm' className='ml-2' variant='gradient'>
           Add Row
-        </button>
+        </Button>
       </div>
       <div className="mb-4 text-center pt-4">
         <div className=" p-4 mx-auto" style={{ maxWidth: '408px' }}>

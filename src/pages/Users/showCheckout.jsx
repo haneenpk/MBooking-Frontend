@@ -20,6 +20,7 @@ function ShowCheckout() {
     const [remainingTime, setRemainingTime] = useState(600); // 10 minutes in seconds
     const [paymentOption, setPaymentOption] = useState('Stripe'); // Default: 'stripe'
     const [userDetails, setUserDetails] = useState(null);
+    const [load, setLoad] = useState(false)
 
     const [isLoading, setLoading] = useState(true); // State to track loading status
 
@@ -39,9 +40,11 @@ function ShowCheckout() {
     const handleProceedPay = async () => {
         try {
             if (paymentOption === 'Stripe') {
+                setLoad(true)
                 const response = await Axios.post(`/api/user/booking/ticket/${tempTicketId}?payment=${paymentOption}`);
                 console.log(response.data.session);
                 const session = response.data.session;
+
 
                 if (session && session.url) {
                     window.location.href = session.url; // Redirect the user to the Stripe checkout URL
@@ -209,14 +212,26 @@ function ShowCheckout() {
                                         </label>
                                     </div>
                                 )}
-                                <Button
-                                    variant="gradient"
-                                    onClick={handleProceedPay}
-                                    fullWidth
-                                    className='mt-5'
-                                >
-                                    Proceed to Pay
-                                </Button>
+                                {load != true ? (
+                                    <Button
+                                        variant="gradient"
+                                        onClick={handleProceedPay}
+                                        fullWidth
+                                        className='mt-5'
+                                    >
+                                        Proceed to Pay
+                                    </Button>
+                                ) : (
+                                    <Button 
+                                    className='mt-5 flex justify-center' 
+                                    variant='gradient' 
+                                    loading={true} fullWidth 
+                                    >
+                                        Loading
+                                    </Button>
+                                )}
+
+
                             </div>
                         </div>
                     </div>

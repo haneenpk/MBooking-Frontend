@@ -132,7 +132,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="mx-auto shadow-lg rounded-lg relative    w-full">
+        <div className="mx-auto shadow-lg rounded-lg relative w-full">
             {/* header */}
             <div className="px-5 py-3 flex justify-between items-center bg-white border-b-2">
                 <div className="font-semibold text-2xl">Chat With Theaters</div>
@@ -164,7 +164,7 @@ const Chat = () => {
             <div className="flex flex-row justify-between bg-white relative">
                 {/* chat list */}
                 <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
-                    <div className="overflow-y-auto" style={{ height: '597px' }}>
+                    <div className="overflow-y-auto" style={{ height: '581px' }}>
                         {/* search component */}
                         <div className=" py-2 px-2">
                             <input
@@ -184,7 +184,7 @@ const Chat = () => {
                                 >
                                     <div className="w-1/4">
                                         <img
-                                            src="https://via.placeholder.com/150"
+                                            src='/public/theaterProfile.webp'
                                             className="object-cover h-12 w-12 rounded-full"
                                             alt=""
                                         />
@@ -210,13 +210,13 @@ const Chat = () => {
                         <>
                             <div className="w-full h-15 bg-white flex">
                                 <img
-                                    src="https://via.placeholder.com/150"
+                                    src='/public/theaterProfile.webp'
                                     className="object-cover h-12 w-12 rounded-full m-2 ml-5"
                                     alt=""
                                 />
                                 <div className="text-lg font-semibold mt-4 ml-3">{selectedTheater.name}</div>
                             </div>
-                            <div className="flex flex-col px-3 overflow-y-auto" style={{ height: '469px' }}>
+                            <div className="flex flex-col px-3 overflow-y-auto" style={{ height: '453px' }}>
 
                                 {chatHistory.map((message, index) => (
                                     message.sender === "User" ? (
@@ -247,7 +247,7 @@ const Chat = () => {
                                         <div key={index} className="justify-end my-2">
                                             <div className="flex items-center">
                                                 <img
-                                                    src="https://via.placeholder.com/150"
+                                                    src='/public/theaterProfile.webp'
                                                     className="object-cover h-8 w-8 rounded-full"
                                                     alt=""
                                                 />

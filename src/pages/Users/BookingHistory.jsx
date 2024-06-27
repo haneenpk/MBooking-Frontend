@@ -2,12 +2,21 @@ import React, { useLayoutEffect, useState } from 'react';
 import { toast } from 'sonner';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Axios from "../../api/shared/instance";
+import {
+    Button,
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter
+} from "@material-tailwind/react";
+import { GiTicket } from "react-icons/gi";
 
 const BookingHistory = () => {
-
     const [tickets, setTickets] = useState([]);
     const [cancelTicketId, setCancelTicketId] = useState(""); // State to store the ticket ID to cancel
     const [isLoading, setLoading] = useState(true); // State to track loading status
+    const [open, setOpen] = useState(false);
+    const [selectedTheater, setSelectedTheater] = useState(null); // State to track the selected theater for action
 
     const formatTime = (time) => {
         if (!time) return ''; // Check if time is undefined
@@ -38,6 +47,7 @@ const BookingHistory = () => {
     const handleCancelTicket = (ticketId) => {
         // Set the ticket ID to cancel when the cancel button is clicked
         setCancelTicketId(ticketId);
+        setOpen(true);
     };
 
     const handleConfirmCancel = async () => {
@@ -49,18 +59,17 @@ const BookingHistory = () => {
                 toast.success('Cancelled Successfully')
                 fetchTempTicket();
             }
-
-            // After cancellation, close the modal and reset the cancelTicketId state
-
         } catch (error) {
-
+            console.error(error);
         }
         setCancelTicketId("");
+        setOpen(false);
     };
 
     const handleCloseModal = () => {
         // Reset the cancelTicketId state when the modal is closed without confirmation
         setCancelTicketId("");
+        setOpen(false);
     };
 
     if (isLoading) {
@@ -69,12 +78,16 @@ const BookingHistory = () => {
 
     return (
         <div className="mx-auto py-5 px-10">
-            <h1 className="text-3xl font-bold mb-4 text-center">Booking History</h1>
+            <div className='flex justify-center gap-x-2 bg-white w-fit p-2 px-4 h-12 rounded-full shadow-md mx-auto'>
+                <GiTicket size={30} />
+                <h1 className="text-3xl font-bold">Tickets</h1>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {tickets.map((ticket) => (
-                    <div key={ticket.id} className={`rounded-lg shadow-md ${ticket.isCancelled ? 'bg-red-200' : 'bg-white'}`}>
+                    <div key={ticket.id} className={`rounded-lg shadow-md ${ticket.isCancelled ? 'bg-red-100' : 'bg-white'}`}>
                         <div className='flex justify-center mt-3'>
-                            <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className=" h-44 object-cover rounded-md " />
+                            <img src={`${import.meta.env.VITE_AXIOS_BASE_URL}/${ticket.movieId.image}`} alt={ticket.movieName} className=" h-44 object-cover rounded-md shadow-xl shadow-blue-gray-900/50" />
                         </div>
                         <div className="p-4">
                             {ticket.isCancelled && (
@@ -93,22 +106,11 @@ const BookingHistory = () => {
                             <p className="text-gray-600">Tickets : {ticket.seatCount}</p>
                             <p className="text-gray-600">Date : {new Date(ticket.showId.date).toLocaleDateString()}</p>
                             <p className="text-gray-600">Starting Time : {formatTime(ticket.showId.startTime)}</p>
-                            <p className="text-gray-600">payment Method : {ticket.paymentMethod}</p>
+                            <p className="text-gray-600">Payment Method : {ticket.paymentMethod}</p>
                             <div className='flex justify-center mt-3'>
                                 {(ticket.showId.date > todayDate && ticket.isCancelled === false) && (
                                     <>
-                                        <button className="hover:bg-blue-600 bg-blue-500 text-white border rounded-md p-2 cursor-pointer" onClick={() => handleCancelTicket(ticket._id)}>Cancel</button>
-                                        {cancelTicketId === ticket._id && (
-                                            <div className="fixed top-0 z-40 left-0 w-full flex justify-center items-center bg-black bg-opacity-60 h-screen" >
-                                                <div className="bg-white p-5 rounded-md shadow-md">
-                                                    <p className="text-xl font-semibold mb-3">Are you sure you want to cancel this ticket?</p>
-                                                    <div className="flex justify-center">
-                                                        <button className="bg-red-500 text-white rounded-md px-4 py-2 mr-2" onClick={handleConfirmCancel}>Confirm</button>
-                                                        <button className="bg-gray-400 text-black rounded-md px-4 py-2" onClick={handleCloseModal}>Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
+                                        <Button onClick={() => handleCancelTicket(ticket._id)}>Cancel</Button>
                                     </>
                                 )}
                             </div>
@@ -116,6 +118,25 @@ const BookingHistory = () => {
                     </div>
                 ))}
             </div>
+            <Dialog open={open} handler={handleCloseModal} size='sm'>
+                <DialogHeader>Confirm Cancellation</DialogHeader>
+                <DialogBody>
+                    Are you sure you want to cancel this ticket?
+                </DialogBody>
+                <DialogFooter>
+                    <Button
+                        variant="text"
+                        color="red"
+                        onClick={handleCloseModal}
+                        className="mr-1"
+                    >
+                        <span>Close</span>
+                    </Button>
+                    <Button variant="gradient" color="green" onClick={handleConfirmCancel}>
+                        <span>Confirm</span>
+                    </Button>
+                </DialogFooter>
+            </Dialog>
         </div>
     );
 };

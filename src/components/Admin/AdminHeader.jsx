@@ -16,9 +16,6 @@ import {
   Button,
   Typography,
   Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
   Card,
   CardBody,
   CardFooter,
@@ -125,7 +122,6 @@ const AdminHeader = () => {
   const handleClose = () => {
     setOpen((cur) => !cur);
     setFormData(adminDetails)
-
   }
 
   useEffect(() => {

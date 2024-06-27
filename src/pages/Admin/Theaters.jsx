@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import {
   Button,
@@ -11,7 +11,6 @@ import {
 } from "@material-tailwind/react";
 
 const UserList = () => {
-  const navigate = useNavigate();
 
   const [theaters, setTheaters] = useState([]);
   const [isLoading, setLoading] = useState(true); // State to track loading status

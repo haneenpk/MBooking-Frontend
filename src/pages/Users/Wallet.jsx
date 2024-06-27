@@ -1,6 +1,9 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Axios from "../../api/shared/instance";
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+    IoWalletSharp
+} from "react-icons/io5";
 
 const Wallet = () => {
     const [userDetails, setUserDetails] = useState({});
@@ -33,8 +36,8 @@ const Wallet = () => {
         <div className="mx-auto mt-8 mb-8 px-10">
             <div className="mx-auto bg-white rounded-lg overflow-hidden shadow-md">
                 {/* Wallet Amount */}
-                <div className="bg-blue-500 py-4 px-6 text-white">
-                    <h2 className="text-lg font-semibold">Your Wallet</h2>
+                <div className="bg-gray-900 py-4 px-6 text-white flex gap-x-3">
+                    <IoWalletSharp size={35} />
                     <p className="text-3xl font-bold">{`₹${userDetails.wallet}`}</p>
                 </div>
 

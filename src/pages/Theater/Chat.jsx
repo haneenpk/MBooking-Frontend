@@ -164,7 +164,7 @@ const Chat = () => {
                                                     )}
                                                 </div>
                                                 <img
-                                                    src="https://via.placeholder.com/150"
+                                                    src='/public/theaterProfile.webp'
                                                     className="ml-2 object-cover h-8 w-8 rounded-full"
                                                     alt=""
                                                 />

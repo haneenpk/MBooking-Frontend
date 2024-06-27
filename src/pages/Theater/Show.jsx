@@ -2,13 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Axios from "../../api/shared/instance";
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import {
+    Button,
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
+} from "@material-tailwind/react";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const Show = () => {
     const theaterId = localStorage.getItem("theaterData");
     const [dates, setDates] = useState([]);
     const [shows, setShows] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null); 
+    const [selectedDate, setSelectedDate] = useState(null);
     const [isLoading, setLoading] = useState(true); // State to track loading status
+    const [open, setOpen] = useState(false);
+    const [selectedShow, setSelectedShow] = useState(null); // State to track the selected show for action
+
+    const handleOpen = (show) => {
+        setSelectedShow(show);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setSelectedShow(null);
+        setOpen(false);
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -28,9 +49,9 @@ const Show = () => {
         for (let i = 0; i < response.data.FirstShow.length; i++) {
             const response2 = await Axios.get(`/api/theater/movie/get/${response.data.FirstShow[i].movieId}`);
             const response3 = await Axios.get(`/api/theater/screens/get/${response.data.FirstShow[i].screenId}`);
-            response.data.FirstShow[i].screen = response3.data.data.name
-            response.data.FirstShow[i].moviename = response2.data.data.moviename
-            response.data.FirstShow[i].image = response2.data.data.image
+            response.data.FirstShow[i].screen = response3.data.data.name;
+            response.data.FirstShow[i].moviename = response2.data.data.moviename;
+            response.data.FirstShow[i].image = response2.data.data.image;
         }
         setShows(response.data.FirstShow);
         setSelectedDate(date);
@@ -50,12 +71,13 @@ const Show = () => {
         }
     }
 
-    async function handleDelete(showId) {
+    async function handleDelete() {
         try {
-            const response = await Axios.delete(`/api/theater/show/delete/${showId}`);
+            await Axios.delete(`/api/theater/show/delete/${selectedShow._id}`);
             fetchDate();
+            handleClose(); // Close the modal after deletion
         } catch (error) {
-            console.error("Error fetching theaters:", error);
+            console.error("Error deleting show:", error);
         }
     }
 
@@ -68,17 +90,17 @@ const Show = () => {
     }
 
     return (
-        <div className="container mx-auto px-8 pb-5">
+        <div className="px-8">
             <h2 className="text-2xl font-bold mb-4 mt-5">Shows</h2>
-            <NavLink to="/theater/show/add" className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Add Show
+            <NavLink to="/theater/show/add">
+                <Button>Add Show</Button>
             </NavLink>
             <div className="flex space-x-4 mb-4 mt-5">
                 {dates.map((dateString, index) => {
                     const { month, day } = formatDate(dateString);
                     const isSelected = selectedDate === dateString;
                     const bgColor = isSelected ? 'bg-blue-500' : 'bg-blue-300';
-                    const dynamicClassName = `${bgColor} text-white px-4 py-1 rounded-md  cursor-pointer transition duration-100 hover:bg-blue-500`;
+                    const dynamicClassName = `${bgColor} text-white px-4 py-1 rounded-md cursor-pointer transition duration-100 hover:bg-blue-500`;
                     return (
                         <button
                             key={index}
@@ -102,17 +124,38 @@ const Show = () => {
                             <p>Time: {formatTime(show.startTime)} - {formatTime(show.endTime)}</p>
                             <p>Total Seats: {show.totalSeatCount}</p>
                             <p>Available Seats: {show.availableSeatCount}</p>
-                            <div className="flex justify-between mt-12">
-                                <NavLink to={`/theater/show/edit?showId=${show._id}`} className="text-blue-500 hover:underline font-semibold">
-                                    Edit show
+                            <div className="flex mt-3">
+                                <NavLink to={`/theater/show/edit?showId=${show._id}`}>
+                                    <Button size='sm' color='blue' variant='text'><FaEdit className='ml-1' size={22} /></Button>
                                 </NavLink>
-                                <button onClick={() => handleDelete(show._id)} className="text-red-500 hover:underline font-semibold">Delete</button>
+                                <Button className='flex justify-end' size='sm' color='red' variant='text' onClick={() => handleOpen(show)}><MdDelete size={22} /></Button>
                             </div>
                         </div>
                     </div>
                 ))}
                 {shows.length === 0 && <p>No shows available for the selected date.</p>}
             </div>
+            {selectedShow && (
+                <Dialog open={open} handler={handleClose} size='sm'>
+                    <DialogHeader>Confirm Action</DialogHeader>
+                    <DialogBody>
+                        Are you sure you want to delete the "{selectedShow.moviename}"?
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button
+                            variant="text"
+                            color="red"
+                            onClick={handleClose}
+                            className="mr-1"
+                        >
+                            <span>Cancel</span>
+                        </Button>
+                        <Button variant="gradient" color="green" onClick={handleDelete}>
+                            <span>Confirm</span>
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
+            )}
         </div>
     );
 };
